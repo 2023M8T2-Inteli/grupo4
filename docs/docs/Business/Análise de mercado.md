@@ -8,8 +8,10 @@ A estratégia TAM-SAM-SOM é uma abordagem de marketing que divide o mercado em 
 
 O TAM, ou Mercado Total Endereçável, representa o tamanho do mercado total para o nosso robô autônomo em almoxarifados no Brasil. Nesse sentido, consideramos nosso mercado como o de empresas de médio e grande porte, pois assume-se que todas elas possuem um almoxarifado de tamanho relevante para o uso de um AMR (autonomous mobile robot). Assim, de acordo com dados do Instituto Brasileiro de Planejamento e Tributação (IBPT), estimamos que existam aproximadamente 1.935.678 empresas de médio a grande porte no país, o que corresponde a 15% do mercado. Para calcular o TAM, multiplicamos esse número pelo preço estimado de R$ 1.000 por robô:
 
-TAM = Número de Empresas no Mercado x Preço do Produto
-TAM = 1.935.678 empresas x R$ 1.000 = R$ 1.935.678.000 
+<div style="background-color: #FFFFE0; padding: 10px; border: 1px solid #E6DB55;">
+    TAM = Número de Empresas no Mercado x Preço do Produto
+    TAM = 1.935.678 empresas x R$ 1.000 = R$ 1.935.678.000
+</div>
 
 ## SAM
 
