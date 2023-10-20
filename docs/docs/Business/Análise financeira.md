@@ -2,22 +2,13 @@
 
 Os tópicos analisados serão:
 
-- **Desenvolvimenlto:** Inclui o custo de pesquisa, design, e programação.
-- **Produção:** Inclui o custo de produtos, materiais, fabricação, e montagem.
-- **Operação:** Inclui o custo de manutenção, energia, e possíveis atualizações do software.
+- **Desenvolvimento:** Custo de pesquisa, design, e programação.
+- **Produção:** Custo de produtos, materiais, fabricação, e montagem.
+- **Preço de venda:** Preço cobrado pela solução desenvolvida.
+- **Operação:** Custo de manutenção, energia, e possíveis atualizações do software.
 
-> Os custos estimados nos tópicos acima são líquidos, antes de imposto. O calculo de encargos será feito no último tópico.  
 
 ## Desenvolvimento
-Os custos para o desenvolvimento futuro do sistema dependerão fortemente do resultado entregue ao final da semana 10. É provável a necessidade de um desenvolvedor de software (nível pleno) para infraestrutura e programação no geral.
-
-O certo sobre desenvolvimento é que a programação do robô terá que ser alterada para o ambiente da Ambev. Os itens do almoxarifado (e suas localizações) terão que ser inseridas no sistema por uma pessoa com habilidades em data science. Estimamos que um bom freelancer (nivel pleno) possa fazer as alterações necessárias para o início da operação em 1 mês de trabalho.
- 
-> Alterações posteriores à organização dos itens do almoxarifado e etc. serão calculados nos custos de Operação
-
-**Preço mensal para um Data Scientist: R$ 40.000** 
-
-**Preço mensal para um Desenvolvedor: R$ 12.000** 
 
 ## Produção
 Produtos necessários:
@@ -44,3 +35,12 @@ Como mencionado anteriormente, o principal custo da operação vem de uma causa 
 - IRRF - 19,54% - R$ 2.173,87
 - Valor salário líquido: R$ 8.949,16
 
+Os custos para o desenvolvimento futuro do sistema dependerão fortemente do resultado entregue ao final da semana 10. É provável a necessidade de um desenvolvedor de software (nível pleno) para infraestrutura e programação no geral.
+
+O certo sobre desenvolvimento é que a programação do robô terá que ser alterada para o ambiente da Ambev. Os itens do almoxarifado (e suas localizações) terão que ser inseridas no sistema por uma pessoa com habilidades em data science. Estimamos que um bom freelancer (nivel pleno) possa fazer as alterações necessárias para o início da operação em 1 mês de trabalho.
+ 
+> Alterações posteriores à organização dos itens do almoxarifado e etc. serão calculados nos custos de Operação
+
+**Preço mensal para um Data Scientist: R$ 40.000** 
+
+**Preço mensal para um Desenvolvedor: R$ 12.000** 
