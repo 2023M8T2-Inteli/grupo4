@@ -1,46 +1,81 @@
 # Análise financeira
 
-Os tópicos analisados serão:
+Os tópicos apresentados são:
 
 - **Desenvolvimento:** Custo de pesquisa, design, e programação.
 - **Produção:** Custo de produtos, materiais, fabricação, e montagem.
-- **Preço de venda:** Preço cobrado pela solução desenvolvida.
-- **Operação:** Custo de manutenção, energia, e possíveis atualizações do software.
-
+- **Preço de venda:** Valor solução desenvolvida.
+- **Operação:** Custo de manutenção, energia, e possíveis atualizações.
+- **Custo total para o cliente**
 
 ## Desenvolvimento
+Analisando o projeto como uma contratação terceirizada para desenvolvimento de software, podemos calcular o custo de tal. 
+
+É claro que 7 profissionais do ramo de robótica não levariam 10 semanas para entregar o mesmo que entregaremos. Logo, vamos calcular esse custo como se o projeto fosse executado por 7 estagiários. 
+
+*Bolsa-auxilio média para estágio em Eng. Computação: R$ 1.157*
+
+>Bolsa auxílio abaixo de R$ 1.903,99. Isento de IRRF
+
+R$ 1.157 * 7 estágiarios * 2,5 meses
+
+**Custo total:  R$ 20.250**
 
 ## Produção
 Produtos necessários:
 
-- **TurtleBot3 Burguer:** R$ 7.000
-- **Câmera**: R$ 100
-- **Display Touch**: R$ 700
-- **Microfone e alto-falante**: R$ 350
-- **Componentes eletrônicos:** R$ 100
+- **TurtleBot3 Burguer :** R$ 7.000
+- **Câmera USB 5MP** :  R$ 100
+- **Display Touch 7pol.** : R$ 700
+- **Microfone e alto-falante** : R$ 350
+- **Componentes eletrônicos (Jumpers, switches) :** R$ 100
 
 O projeto também necessita de peças personalizadas, que podem ser fabricadas com torneamento ou impressão 3D. Custo estimado em R$ 200 para peças em PLA.
 
-**Total: R$ 8.450**
+**Custo total: R$ 8.450**
+
+## Preço de venda
+Custo total do produto: R$ 28.700
+
+Margem de lucro: ~30%
+
+**Preço de venda: R$ 37.000**
 
 ## Operação
 
-Os custos fixos da operação, como energia, são desprezíveis.
+É certo que a programação do robô terá que ser alterada para o ambiente da Ambev. Os itens do almoxarifado (e suas localizações) terão que ser inseridas no sistema por uma pessoa com habilidades em data science. Estimamos que um bom freelancer (nivel senior) possa fazer as alterações necessárias para o início da operação em 1 mês de trabalho.
 
-Como mencionado anteriormente, o principal custo da operação vem de uma causa variável e tem relação com possíveis atualizações do software. Alterações no estoque, organização dos itens e localidade requerem intervenção técnica no sistema. Essas atualizações variam em complexidade dependendo das alterações necessárias, mas parece seguro estimar que será necessário um desenvolvedor full-stack, com ênfase em cloud engineering, full-time para manutenção do sistema. 
+**Custo freelance Data Scientist: R$ 40.000**
 
-**Salário para Desenvolvedor: R$ 12.000**
+> O custo acima está previsto apenas para o primeiro mês de projeto.
+
+Após essa adaptação inicial, que é naturalmente mais intensiva, ainda serão necessárias manutenções e atualizações regulares. Essas atualizações variam em complexidade dependendo das alterações necessárias, mas parece seguro estimar que será necessário um desenvolvedor full-time para manutenção do sistema.
+
+**Custo com Desenvolvedor: R$ 12.000/mês**
 
 - INSS - teto - R$ 876,97
 - IRRF - 19,54% - R$ 2.173,87
 - Valor salário líquido: R$ 8.949,16
 
-Os custos para o desenvolvimento futuro do sistema dependerão fortemente do resultado entregue ao final da semana 10. É provável a necessidade de um desenvolvedor de software (nível pleno) para infraestrutura e programação no geral.
+Outros custos de operação, como energia, são desprezíveis.
 
-O certo sobre desenvolvimento é que a programação do robô terá que ser alterada para o ambiente da Ambev. Os itens do almoxarifado (e suas localizações) terão que ser inseridas no sistema por uma pessoa com habilidades em data science. Estimamos que um bom freelancer (nivel pleno) possa fazer as alterações necessárias para o início da operação em 1 mês de trabalho.
- 
-> Alterações posteriores à organização dos itens do almoxarifado e etc. serão calculados nos custos de Operação
+## Custo total para o cliente
 
-**Preço mensal para um Data Scientist: R$ 40.000** 
+Custo inicial:
 
-**Preço mensal para um Desenvolvedor: R$ 12.000** 
+- Preço da solução:  R$ 37.000
+- Adaptação: R$ 40.000
+
+Despesa fixa:
+
+- Desenvolvedor: R$ 12.000/mês
+
+---
+
+***Custo total em um ano de aplicação: R$ 221.000***
+
+*Diluído: R$ 18.416/mês*
+
+***Custo total em três anos de aplicação: R$ 509.000***
+
+*Diluído: R$ 14.138/mês*
