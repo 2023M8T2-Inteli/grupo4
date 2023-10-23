@@ -8,8 +8,6 @@ on:
       - main
 
   pull_request: # When a pull request is closed for the specified branches.
-    types:
-      - closed
     branches:
       - main
 
