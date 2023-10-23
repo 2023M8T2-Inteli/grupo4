@@ -8,20 +8,22 @@ A estratégia TAM-SAM-SOM é uma abordagem de marketing que divide o mercado em 
 
 O TAM, ou Mercado Total Endereçável, representa o tamanho do mercado total para o nosso robô autônomo em almoxarifados no Brasil. Nesse sentido, consideramos nosso mercado como o de empresas de médio e grande porte, pois assume-se que todas elas possuem um almoxarifado de tamanho relevante para o uso de um AMR (autonomous mobile robot). Assim, de acordo com dados do Instituto Brasileiro de Planejamento e Tributação (IBPT), estimamos que existam aproximadamente 1.935.678 empresas de médio a grande porte no país, o que corresponde a 15% do mercado. Para calcular o TAM, multiplicamos esse número pelo preço estimado de R$ 37.000,00 por robô:
 
-:::tip Cálculo do TAM
+:::tip Cálculo do SAM
 
-    TAM = Número de Empresas no Mercado x Preço do Produto
-    TAM = 1.935.678 empresas x R$ 37.000,00 = **R$ 71.620.086.000,00**
+TAM = Número de Empresas no Mercado x Preço do Produto
+
+TAM = 1.935.678 empresas x R$ 37.000,00 = **R$ 71.620.086.000,00**
 
 :::
 
 ## SAM
 
-O SAM, ou Mercado Endereçável Servível, é um segmento do mercado mais acessível e viável para o nosso produto. Focando na região de São Paulo, o maior centro econômico do Brasil, onde estima-se que 15% das empresas de médio a grande porte estejam localizadas, o total é de aproximadamente 328.215 empresas. Para determinar o SAM, multiplicamos esse número pelo preço de cada robô, que é R$ 37.000:
+O SAM, ou Mercado Endereçável Servível, é um segmento do mercado mais acessível e viável para o nosso produto. Focando na região de São Paulo, o maior centro econômico do Brasil, onde estima-se que 15% das empresas de médio a grande porte estejam localizadas, o total é de aproximadamente 328.215 empresas. Para determinar o SAM, multiplicamos esse número pelo preço de cada robô, que é R$ 37.000,00:
 
 :::tip Cálculo do SAM
 
 SAM = Número de Empresas no Mercado-Alvo x Preço do Produto
+
 SAM = 328.215 empresas x R$ 37.000,00 = **R$ 328.215.000,00**
 
 :::
@@ -35,6 +37,7 @@ Assumindo que a ARV Systems representa um caso bem-sucedido e que nossa empresa 
 :::tip Cálculo do SOM 
 
 SOM = Número de Empresas Atendidas x Preço do Produto
+
 SOM = 40 empresas x R$ 37.000,00 = **R$ 1.480.000,00**
 
 :::
