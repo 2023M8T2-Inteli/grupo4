@@ -1,61 +1,66 @@
+# Name of the GitHub Actions workflow.
 name: Deploy Docusaurus
 
+# Define the events that trigger this workflow.
 on:
-  push:
+  push: # When a commit is pushed to the specified branches.
     branches:
       - main
-  pull_request:
+  pull_request: # When a pull request is opened for the specified branches.
     branches:
       - main
-# Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# Allows you to manually trigger this workflow from the GitHub Actions tab.
+workflow_dispatch:
+
+# Sets permissions for the GITHUB_TOKEN to enable deployment to GitHub Pages.
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow one concurrent deployment
+# Configure concurrent deployments.
 concurrency:
   group: "pages"
   cancel-in-progress: true
 
+# Define environment variables.
 env:
-  # Hosted GitHub runners have 7 GB of memory available, let's use 6 GB
+  # Hosted GitHub runners have 7 GB of memory available, so we allocate 6 GB.
   NODE_OPTIONS: --max-old-space-size=6144
 
+# Define the jobs to be executed in this workflow.
 jobs:
   build:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Use the latest Ubuntu runner.
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4 # Check out the repository code.
 
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v3 # Set up the required Node.js version.
       with:
         node-version: latest
 
     - name: Install and Build
       run: |
-        cd docs
-        npm install
-        npm run build
-        mv build ../build
-        
+        cd docs # Change directory to the 'docs' folder.
+        npm install # Install Node.js dependencies.
+        npm run build # Build the Docusaurus site.
+        mv build ../build # Move the build to the appropriate location.
+
     - name: Setup Pages
-      uses: actions/configure-pages@v3
-        
+      uses: actions/configure-pages@v3 # Configure GitHub Pages.
+
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v2
+      uses: actions/upload-pages-artifact@v2 # Upload the build artifact.
       with:
         path: ./build
 
     - name: Deploy to GitHub Pages
       id: deployment
-      uses: actions/deploy-pages@v2
+      uses: actions/deploy-pages@v2 # Deploy the site to GitHub Pages.
