@@ -10,8 +10,7 @@ O TAM, ou Mercado Total Endereçável, representa o tamanho do mercado total par
 
 :::tip Cálculo do SAM
 
-TAM = Número de Empresas no Mercado x Preço do Produto
-
+TAM = Número de Empresas no Mercado x Preço do Produto<br>
 TAM = 1.935.678 empresas x R$ 37.000,00 = **R$ 71.620.086.000,00**
 
 :::
@@ -22,8 +21,7 @@ O SAM, ou Mercado Endereçável Servível, é um segmento do mercado mais acess�
 
 :::tip Cálculo do SAM
 
-SAM = Número de Empresas no Mercado-Alvo x Preço do Produto
-
+SAM = Número de Empresas no Mercado-Alvo x Preço do Produto<br>
 SAM = 328.215 empresas x R$ 37.000,00 = **R$ 328.215.000,00**
 
 :::
@@ -36,8 +34,7 @@ Assumindo que a ARV Systems representa um caso bem-sucedido e que nossa empresa 
 
 :::tip Cálculo do SOM 
 
-SOM = Número de Empresas Atendidas x Preço do Produto
-
+SOM = Número de Empresas Atendidas x Preço do Produto<br>
 SOM = 40 empresas x R$ 37.000,00 = **R$ 1.480.000,00**
 
 :::
