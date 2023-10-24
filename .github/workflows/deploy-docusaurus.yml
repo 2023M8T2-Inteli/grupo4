@@ -1,33 +1,32 @@
-# Name of action
+# Nome da ação
 name: Deploy Docusaurus
 
-# Below we define when the action should execute
+# Abaixo definimos quando a ação deve ser executada
 on:
   push:
-    branches: ["main"]
-  pull_request:
-    types: [closed]
-    branches: ["main"]
-    
-# Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    branches:
+      - main
+  workflow_run:
+    workflows: ["Deploy Docusaurus"]
+    types:
+      - requested
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# Define as permissões do GITHUB_TOKEN para permitir a implantação no GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow one concurrent deployment
+# Permite apenas uma implantação concorrente
 concurrency:
   group: "pages"
   cancel-in-progress: true
 
 env:
-  # Hosted GitHub runners have 7 GB of memory available, let's use 6 GB
+  # Os runners hospedados pelo GitHub têm 7 GB de memória disponíveis, vamos usar 6 GB
   NODE_OPTIONS: --max-old-space-size=6144
 
-# Steps represent a sequence of tasks that will be executed as part of the job
+# Os passos representam uma sequência de tarefas que serão executadas como parte do trabalho
 jobs:
   build:
     environment:
@@ -36,29 +35,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout do código
       uses: actions/checkout@v4
+      with:
+        ref: "main"  # Define a branch de destino como "main"
 
-    - name: Setup Node.js
+    - name: Configuração do Node.js
       uses: actions/setup-node@v3
       with:
         node-version: latest
 
-    - name: Install and Build
+    - name: Instalação e Construção
       run: |
         cd docs
         npm install
         npm run build
         mv build ../build
         
-    - name: Setup Pages
+    - name: Configuração das Páginas
       uses: actions/configure-pages@v3
         
-    - name: Upload artifact
+    - name: Upload do artefato
       uses: actions/upload-pages-artifact@v2
       with:
         path: ./build
 
-    - name: Deploy to GitHub Pages
+    - name: Implantação no GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v2
