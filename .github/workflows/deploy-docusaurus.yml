@@ -42,13 +42,13 @@ jobs:
       uses: actions/setup-node@v3  # Passo para configurar o Node.js
       with:
         node-version: latest
-
+    # Passo para instalar dependências e construir o projeto
     - name: Install and Build
       run: |
         cd docs
         npm install
         npm run build
-        mv build ../build  # Passo para instalar dependências e construir o projeto
+        mv build ../build  
 
     - name: Setup Pages
       uses: actions/configure-pages@v3  # Configuração das páginas
