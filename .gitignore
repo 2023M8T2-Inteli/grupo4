@@ -1,3 +1,8 @@
 *.env
 */node_modules
 *.vscode
+*/.terraform
+*.tfstate
+*.terraform.lock.hcl
+*.terraform.tfstate.lock.info
+*terraform.tfstate.backup
