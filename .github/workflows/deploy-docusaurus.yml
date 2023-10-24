@@ -6,10 +6,6 @@ on:
   push:
     branches:
       - main
-  workflow_run:
-    workflows: ["Deploy Docusaurus"]
-    types:
-      - requested
 
 # Define as permissões do GITHUB_TOKEN para permitir a implantação no GitHub Pages
 permissions:
