@@ -1,19 +1,17 @@
-# Nome do fluxo de trabalho
 name: Deploy Docusaurus
 
-# Eventos que acionam o fluxo de trabalho
 on:
   push:
     branches:
-      - main  # Executa quando há push para a branch "main"
+      - main
   pull_request:
     types:
       - closed
     branches:
-      - main  # Executa quando um pull request é fechado na branch "main"
-  workflow_dispatch:  # Permite a execução manual do fluxo de trabalho
+      - main
+# Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
-# Configuração de permissões
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
