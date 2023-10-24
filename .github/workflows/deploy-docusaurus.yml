@@ -1,11 +1,8 @@
-# Name of action
 name: Deploy Docusaurus
 
-# Below we define when the action should execute
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
 # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -24,9 +21,8 @@ env:
   # Hosted GitHub runners have 7 GB of memory available, let's use 6 GB
   NODE_OPTIONS: --max-old-space-size=6144
 
-# Steps represent a sequence of tasks that will be executed as part of the job
 jobs:
-  build:
+  build-docusaurus:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
