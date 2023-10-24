@@ -1,28 +1,30 @@
-# Nome da ação
+# Name of action
 name: Deploy Docusaurus
 
-# Abaixo definimos quando a ação deve ser executada
+# Below we define when the action should execute
 on:
   push:
     branches:
       - main
+# Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
-# Define as permissões do GITHUB_TOKEN para permitir a implantação no GitHub Pages
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Permite apenas uma implantação concorrente
+# Allow one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: true
 
 env:
-  # Os runners hospedados pelo GitHub têm 7 GB de memória disponíveis, vamos usar 6 GB
+  # Hosted GitHub runners have 7 GB of memory available, let's use 6 GB
   NODE_OPTIONS: --max-old-space-size=6144
 
-# Os passos representam uma sequência de tarefas que serão executadas como parte do trabalho
+# Steps represent a sequence of tasks that will be executed as part of the job
 jobs:
   build:
     environment:
@@ -31,31 +33,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout do código
+    - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        ref: "main"  # Define a branch de destino como "main"
 
-    - name: Configuração do Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: latest
 
-    - name: Instalação e Construção
+    - name: Install and Build
       run: |
         cd docs
         npm install
         npm run build
         mv build ../build
         
-    - name: Configuração das Páginas
+    - name: Setup Pages
       uses: actions/configure-pages@v3
         
-    - name: Upload do artefato
+    - name: Upload artifact
       uses: actions/upload-pages-artifact@v2
       with:
         path: ./build
 
-    - name: Implantação no GitHub Pages
+    - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v2
