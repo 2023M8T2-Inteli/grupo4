@@ -1,106 +1,69 @@
 import React from "react";
+import { FaArrowRight } from "react-icons/fa6";
 import clsx from "clsx";
 import styles from "./styles.module.css";
 import linkedInSvg from "../../../static/img/linkedin.png";
 
 const FeatureList = [
   {
-    name: "Elisa Flemes",
-    Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
-    link: (
-      <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
-      </>
-    ),
+    course: "Engenharia de Computação",
+    name: "Elisa Flemer",
+
+    link: "https://www.linkedin.com/in/elisaflemer",
   },
   {
+    course: "Engenharia de Computação",
     name: "Felipe Campos",
-    Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
-    link: (
-      <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
-      </>
-    ),
+    link: "http://www.linkedin.com/in/felipe-pereira-campos-250aa2231",
   },
   {
+    course: "Engenharia de Computação",
     name: "Gabriela Barreto",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
-    link: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
-      </>
-    ),
+    link: "https://www.linkedin.com/in/gabriela-barretto-dados",
   },
   {
+    course: "Engenharia de Computação",
     name: "Gustavo Ferreira",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
-    link: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
-      </>
-    ),
+    link: "https://www.linkedin.com/in/gustavo-ferreira-oliveira/",
   },
   {
+    course: "Engenharia de Computação",
     name: "Henrique Lemos",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
-    link: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
-      </>
-    ),
+    link: "https://www.linkedin.com/in/henriquelfmatias/",
   },
   {
+    course: "Engenharia de Computação",
     name: "Henrique Marlon",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
-    link: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
-      </>
-    ),
+    link: "https://www.linkedin.com/in/henriquemarlon/",
   },
   {
+    course: "Engenharia de Computação",
     name: "Paulo Evangelista",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
-    link: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
-      </>
-    ),
+    link: "https://www.linkedin.com/in/paulo-evangelista/",
   },
 ];
 
-function Feature({ Svg, name, link }) {
+function Feature({ course, name, link }) {
   return (
-    <div
-      style={{
-        background: "#EEF7FF",
-        margin: "10px",
-        borderRadius: "5px",
-        width: "30%",
-        margin: "1.5%",
-      }}
-    >
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
-      </div>
-      <div className="text--center padding-horiz--md">
-        <h3 style={{color: '#79A4FA'}}>{name}</h3>
-        <a style={{textDecoration: 'underline', display: 'flex', alignItems:'center'}} href={link}>  <img
+    <a href={link} target="_blank" className={styles.card_container}>
+      <div className="padding-horiz--md">
+        <h4 className={styles.course}>{course}</h4>
+        <h2 style={{ fontWeight: "300" }}>{name}</h2>
+        <div className={styles.flex}>
+          <img
             src={linkedInSvg}
             alt="LinkedIn"
             className={styles.linkedInSvg}
-            style={{width: '30px', height: '30px', marginRight: '5px'}}
+            style={{ width: "22px", height: "22px", marginRight: "16px" }}
           />
-          LinkedIn</a>
+          <div className={`${styles.flex} ${styles.text}`}>
+            LinkedIn
+            <FaArrowRight style={{ marginLeft: "4px" }} size={16} />
+          </div>
+
+        </div>
       </div>
-    </div>
+    </a>
   );
 }
 

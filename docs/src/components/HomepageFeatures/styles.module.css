@@ -9,3 +9,41 @@
   height: 200px;
   width: 200px;
 }
+
+.card_container {
+  background: #EEF7FF;
+  margin: 10px;
+  border-radius: 5px;
+  width: 30%;
+  margin: 1.5%;
+  padding: 15px;
+  text-decoration: none;
+}
+
+.card_container:hover {
+  width: 31%;
+  margin: 1%;
+  text-decoration: none;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.text {
+  color: #2B1B53;
+  font-weight: 700;
+}
+
+.course {
+  color: "#79A4FA";
+  font-weight: "600";
+}
+
+@media (max-width: 600px) {
+  .card_container {
+    width: 90% !important;
+    margin: 5% !important;
+  }
+}

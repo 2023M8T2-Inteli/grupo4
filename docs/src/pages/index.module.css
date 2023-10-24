@@ -3,6 +3,7 @@
  * and scoped locally.
  */
 
+ 
 .heroBanner {
   padding: 4rem 0;
   text-align: center;
@@ -20,4 +21,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.custom_container{
+  margin-top: 5%;
+  margin-bottom: 5%;
+  text-align: center;
+}
+.custom_shape {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom_shape svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 156px;
+  transform: rotateY(180deg);
+  transform: rotateX(180deg);
+}
+
+.custom_shape .shape_fill {
+  fill: #2B1B53;
 }

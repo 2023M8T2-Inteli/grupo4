@@ -6,8 +6,8 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "The manobristas | Documentação",
-  tagline: "Documentação do projeto The Manobrista",
+  title: "Robô de Auto Atendimento do Almoxarifado AMBEV",
+  tagline: "Documentação do projeto - grupo 4",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
