@@ -4,10 +4,10 @@ User Stories são descrições breves de funcionalidades de software, escritas n
 
 ***"Como técnico que necessita de utensílios do almoxarifado, quero não ter que gastar minhas horas de trabalho tendo que me deslocar até o almoxarifado para retirar uma peça/utensílio."***
 
-***"Como atendente de almoxarifado, quero utilizar um sistema mais eficiente para poder atender mais ordem de retirada e de entrada no almoxarifado."***
-
-***"Como técnico que necessita de utensílios do almoxarifado, quero um sistema mais eficiente do que o processo manual de ordens atual, para gastar menos tempo na hora de requisitar uma ordem de devolução ou retirada."***
+***"Como técnico que necessita de utensílios do almoxarifado, quero um sistema automatizado para criação de ordens atual, para gastar menos tempo na hora de requisitar uma ordem de devolução ou retirada."***
 
 ***"Como técnico que necessita de utensílios do almoxarifado, quero ter certeza de que minha demanda de utensílios/peças pode ser atendida pelo estoque do almoxarifado."***
+
+***"Como atendente de almoxarifado, quero utilizar um sistema mais rápido para poder atender mais ordens de retirada e de entrada no almoxarifado."***
 
 ***"Como atendente de almoxarifado, quero digitalizar/automatizar o gerenciamento de estoque do almoxarifado, para evitar erros nesse processo e aumentar o tempo disponível para atender as ordens de serviço."***
