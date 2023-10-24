@@ -4,13 +4,11 @@ name: Deploy Docusaurus
 # Below we define when the action should execute
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
   pull_request:
-    types:
-      - closed
-    branches:
-      - main
+    types: [closed]
+    branches: ["main"]
+    
 # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
