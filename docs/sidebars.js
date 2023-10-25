@@ -32,12 +32,12 @@ const sidebars = {
     {
       type: 'category',
       label: 'Proposta de Solução',
-      items: ['Proposta de Solução/2.1 Arquitetura da Solução', 'Proposta de Solução/2.2 Personas','Proposta de Solução/2.3 Histórias de Usuário', 'Proposta de Solução/2.4 Levantamento de Requisitos'],
+      items: ['Proposta de Solução/2.1 Arquitetura da solução', 'Proposta de Solução/2.2 Personas','Proposta de Solução/2.3 Histórias de Usuário', 'Proposta de Solução/2.4 Levantamento de Requisitos', '2.5 Canvas Proposta de Valor'],
     },
     {
       type: 'category',
       label: 'Contexto da Indústria',
-      items: ['Contexto da Indústria/3.1 Análise de Impacto Ético', 'Contexto da Indústria/3.2 Canvas Proposta de Valor', 'Contexto da Indústria/3.3 Análise de Mercado','Contexto da Indústria/3.4 Análise Financeira','Contexto da Indústria/3.5 Matriz de Riscos'],
+      items: ['Contexto da Indústria/3.1 Análise de Impacto Ético', 'Contexto da Indústria/3.3 Análise de Mercado','Contexto da Indústria/3.4 Análise Financeira','Contexto da Indústria/3.5 Matriz de Riscos'],
     },
     {
       type: 'category',
