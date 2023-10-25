@@ -19,7 +19,7 @@
 </p>
 
 ## :student: Integrantes: 
-- <a href="https://www.linkedin.com/in/elisaflemer">Elisa Flemer/a>
+- <a href="https://www.linkedin.com/in/elisaflemer">Elisa Flemer</a>
 - <a href="http://www.linkedin.com/in/felipe-pereira-campos-250aa2231">Felipe Campos</a>
 - <a href="https://www.linkedin.com/in/gabriela-barretto-dados">Gabriela Barretto</a>
 - <a href="https://www.linkedin.com/in/gustavo-ferreira-oliveira/">Gustavo Ferreira de Oliveira</a>
