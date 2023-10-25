@@ -32,7 +32,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'Proposta de Solução',
-      items: ['Proposta de Solução/2.1 Arquitetura da Solução', 'Proposta de Solução/2.2 Personas','Proposta de Solução/2.3 Histórias de Usuário', 'Proposta de Solução/2.4 Levantamento de Requisitos', '2.5 Canvas Proposta de Valor','2.6 Jornada do Usuário'],
+      items: ['Proposta de Solução/2.1 Arquitetura da Solução', 'Proposta de Solução/2.2 Personas','Proposta de Solução/2.3 Histórias de Usuário', 'Proposta de Solução/2.4 Levantamento de Requisitos', '2.5 Canvas Proposta de Valor','Proposta de Solução/2.6 Jornada do Usuário'],
     },
     {
       type: 'category',
