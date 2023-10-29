@@ -37,7 +37,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'Contexto da Indústria',
-      items: ['Contexto da Indústria/3.1 Análise de Impacto Ético', 'Contexto da Indústria/3.3 Análise de Mercado','Contexto da Indústria/3.4 Análise Financeira','Contexto da Indústria/3.5 Matriz de Riscos'],
+      items: ['Contexto da Indústria/3.1 Análise de Impacto Ético', 'Contexto da Indústria/3.3 Análise de Mercado','Contexto da Indústria/3.4 Análise Financeira','Contexto da Indústria/3.5 Matriz de Riscos', 'Contexto da Indústria/3.6 Matriz de Oceano Azul'],
     },
     {
       type: 'category',
