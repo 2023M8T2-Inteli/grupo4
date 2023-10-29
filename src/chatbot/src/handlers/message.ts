@@ -1,4 +1,4 @@
-import { Message } from "whatsapp-web.js";
+import { Message, Client, Buttons, MessageAck, List } from "whatsapp-web.js";
 import { startsWithIgnoreCase } from "../utils";
 
 // Config & Constants
@@ -19,15 +19,21 @@ import { transcribeRequest } from "../providers/speech";
 import { transcribeAudioLocal } from "../providers/whisper-local";
 import { transcribeWhisperApi } from "../providers/whisper-api";
 import { transcribeOpenAI } from "../providers/openai";
-
+const { v4: uuidv4 } = require("uuid");
 // For deciding to ignore old messages
 import { botReadyTimestamp } from "../index";
+
+import  User  from "../providers/user";
+
 const { PrismaClient } = require("@prisma/client");
-const { v4: uuidv4 } = require("uuid");
+
+const prisma = new PrismaClient();
 
 // Handles message
-async function handleIncomingMessage(message: Message) {
+async function handleIncomingMessage(message: Message, client: Client) {
 	let messageString = message.body;
+
+
 	// Prevent handling old messages
 	if (message.timestamp != null) {
 		const messageTimestamp = new Date(message.timestamp * 1000);
@@ -47,22 +53,19 @@ async function handleIncomingMessage(message: Message) {
 
 	if ((await message.getChat()).isGroup && !config.groupchatsEnabled) return;
 
-	let userInfos = await getUser(message.from.split("@")[0]);
+	let userInfos = await new User("", "", message.from.split("@")[0], 0).getUser();
 
-	if (userInfos == null) {
-		setTimeout(function () {
-			message.reply("Olá, seja bem vindo ao nosso chatbot, por favor, digite seu nome completo para que possamos te identificar.");
-		}, 1000);
-
-		await createUser(message.from.split("@")[0]);
-	}
 	if (userInfos != null) {
 		if (userInfos.name == "") {
-			await updateUser(message.body, message.from.split("@")[0]);
+
+			await new User("", message.body, message.from.split("@")[0],0).updateUser();
 
 			setTimeout(function () {
 				message.reply("Olá, " + message.body + "! Seja bem vindo ao nosso chatbot!");
-			}, 1000);
+			}, 500);
+			setTimeout(function () {
+				message.reply('Bem-vindo ao Menu Clicável! Escolha uma opção abaixo:\n1. Opção 1\n2. Opção 2');
+			}, 500);
 		} else {
 			if (message.body) {
 				setTimeout(function () {
@@ -190,64 +193,20 @@ async function handleIncomingMessage(message: Message) {
 			// }
 		}
 	}
-}
+	if (userInfos == null) {
+		setTimeout(function () {
+			client.sendMessage(message.from, "Olá, eu sou o Vallet, identifiquei aqui que você não possui cadastro em nosso sistema.");
+		}, 500);
 
-async function getUser(cellPhone) {
-	try {
-		const prisma = new PrismaClient();
-		const user = await prisma.user.findFirst({
-			where: {
-				cellPhone: cellPhone
-			}
-		});
-		prisma.$disconnect();
-		return user;
-	} catch (error) {
-		// Handle the error here, e.g., log the error or return an error response.
-		console.error("An error occurred while fetching the user:", error);
-		throw error; // You can re-throw the error if you want to propagate it to the caller.
-	}
-}
+		let button = new Buttons('Button body', [{ body: 'bt1' }, { body: 'bt2' }, { body: 'bt3' }], 'title', 'footer');
+        await client.sendMessage(message.from, button);
+		console.log("Buttons sent!")
+		let sections = [{ title: 'sectionTitle', rows: [{ title: 'ListItem1', description: 'desc' }, { title: 'ListItem2' }] }];
+        let list = new List('List body', 'btnText', sections, 'Title', 'footer');
+        await client.sendMessage(message.from, list);
 
-async function createUser(cellPhone) {
-	try {
-		const prisma = new PrismaClient();
-		const user = await prisma.user.create({
-			data: {
-				id: uuidv4(),
-				name: "",
-				cellPhone: cellPhone
-			}
-		});
-		prisma.$disconnect();
-		return user;
-	} catch (error) {
-		// Handle the error here, e.g., log the error or return an error response.
-		console.error("An error occurred while fetching the user:", error);
-		throw error; // You can re-throw the error if you want to propagate it to the caller.
-	}
-}
 
-async function updateUser(name, cellPhone) {
-	try {
-		const prisma = new PrismaClient();
-		const user = await prisma.user.updateMany({
-			where: {
-				cellPhone: cellPhone // Replace 'userId' with the actual user ID you want to update.
-			},
-			data: {
-				// Provide the fields you want to update and their new values.
-				// For example, let's update the cellPhone field.
-				name: name
-				// You can add more fields to update here as needed.
-			}
-		});
-		prisma.$disconnect();
-		return user;
-	} catch (error) {
-		// Handle the error here, e.g., log the error or return an error response.
-		console.error("An error occurred while fetching the user:", error);
-		throw error; // You can re-throw the error if you want to propagate it to the caller.
+		await new User("","", message.from).createAccountUser();
 	}
 }
 
