@@ -27,8 +27,7 @@ const sidebars = {
     {
       type: 'doc',
       label: 'Problema',
-      items: ['Problema'],
-      id: '1',
+      id: 'Problema',
     },
     {
       type: 'category',
