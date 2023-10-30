@@ -31,13 +31,13 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Proposta de Solução',
-      items: ['Proposta de Solução/2.1 Arquitetura da Solução', 'Proposta de Solução/2.2 Personas','Proposta de Solução/2.3 Histórias de Usuário', 'Proposta de Solução/2.4 Levantamento de Requisitos', 'Proposta de Solução/2.5 Canvas Proposta de Valor','Proposta de Solução/2.6 Jornada do Usuário'],
+      label: 'Contexto da Indústria',
+      items: ['Contexto da Indústria/3.1 Análise de Impacto Ético', 'Contexto da Indústria/3.3 TAM-SAM-SOM','Contexto da Indústria/3.4 Análise Financeira','Contexto da Indústria/3.5 Matriz de Riscos', 'Contexto da Indústria/3.6 Matriz de Oceano Azul'],
     },
     {
       type: 'category',
-      label: 'Contexto da Indústria',
-      items: ['Contexto da Indústria/3.1 Análise de Impacto Ético', 'Contexto da Indústria/3.3 TAM-SAM-SOM','Contexto da Indústria/3.4 Análise Financeira','Contexto da Indústria/3.5 Matriz de Riscos', 'Contexto da Indústria/3.6 Matriz de Oceano Azul'],
+      label: 'Proposta de Solução',
+      items: ['Proposta de Solução/2.1 Arquitetura da Solução', 'Proposta de Solução/2.2 Personas','Proposta de Solução/2.3 Histórias de Usuário', 'Proposta de Solução/2.4 Levantamento de Requisitos', 'Proposta de Solução/2.5 Canvas Proposta de Valor','Proposta de Solução/2.6 Jornada do Usuário'],
     },
     {
       type: 'doc',
