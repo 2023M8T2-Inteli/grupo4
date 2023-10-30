@@ -20,13 +20,13 @@ const sidebars = {
 
   tutorialSidebar: [
     {
-      type: 'category',
-      label: 'Sumário',
-      items: ['intro'],
+      type: 'doc',
+      label: 'Introdução',
+      id: 'intro',
     },
     {
       type: 'doc',
-      label: 'Problema',
+      label: 'O problema',
       id: 'Problema',
     },
     {

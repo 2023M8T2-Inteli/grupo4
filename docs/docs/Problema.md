@@ -1,3 +1,5 @@
+# O problema 
+
 A Ambev, nosso parceiro de projetos, enfrenta um desafio significativo em sua cervejaria do futuro, localizada em Guarulhos. O cerne desse problema reside no deslocamento frequente de técnicos de máquinas e outras estações de trabalho até o almoxarifado para obter as peças necessárias para manutenção e operação das instalações. A dimensão da fábrica é substancial, o que resulta em um desperdício significativo de recursos em termos de horas de trabalho dedicadas a essa tarefa específica.
 
 A necessidade constante de recuperar peças críticas do almoxarifado afeta não apenas a eficiência operacional da cervejaria, mas também acarreta custos adicionais e uma carga adicional de trabalho para os técnicos. O deslocamento contínuo entre as diversas áreas da fábrica consome um tempo valioso que poderia ser alocado para atividades mais produtivas e estratégicas.
