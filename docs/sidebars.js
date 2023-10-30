@@ -25,9 +25,9 @@ const sidebars = {
       items: ['intro'],
     },
     {
-      type: 'category',
+      type: 'page',
       label: 'Problema',
-      items: ['1.1 Descrição do Problema'],
+      items: ['Problema'],
     },
     {
       type: 'category',
