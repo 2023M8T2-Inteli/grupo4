@@ -72,7 +72,7 @@ export default function HomepageFeatures() {
     <section className={styles.features}>
       <div className="container">
         <div className="text--center">
-          <h1>Get to know the group members</h1>
+          <h1>Conheça os integrantes do grupo 04</h1>
         </div>
 
         <div className="row">
