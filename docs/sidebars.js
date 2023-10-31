@@ -42,7 +42,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'Referências',
-      items: ['Referências/Análise de mercado'],
+      items: ['Referências/Análise de mercado', 'Referências/Análise Financeira'],
     },
   ],
 
