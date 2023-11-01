@@ -6,7 +6,8 @@ import constants from "./constants";
 
 // CLI
 import * as cli from "./cli/ui";
-import { handleIncomingMessage } from "./handlers/message";
+// import { handleIncomingMessage } from "./handlers/message";
+import MessageEventHandler from "./handlers/message";
 
 // Config
 import { initAiConfig } from "./handlers/ai-config";
@@ -14,6 +15,14 @@ import { initOpenAI } from "./providers/openai";
 
 // Ready timestamp of the bot
 let botReadyTimestamp: Date | null = null;
+
+// Prisma
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+
+// User Service
+import UserService from "./models/user";
+const userService = new UserService(prisma);
 
 // Entrypoint
 const start = async () => {
@@ -28,6 +37,8 @@ const start = async () => {
 			dataPath: constants.sessionPath
 		})
 	});
+
+	const messageEventHandler = new MessageEventHandler(prisma, userService, client);
 
 	// WhatsApp auth
 	client.on(Events.QR_RECEIVED, (qr: string) => {
@@ -78,28 +89,31 @@ const start = async () => {
 
 	// WhatsApp message
 	client.on(Events.MESSAGE_RECEIVED, async (message: any) => {
+		const userName = message._data.notifyName;
 		// Ignore if message is from status broadcast
 		if (message.from == constants.statusBroadcast) return;
 
 		// Ignore if it's a quoted message, (e.g. Bot reply)
 		if (message.hasQuotedMsg) return;
 
-		await handleIncomingMessage(message, client);
+		
+
+		await messageEventHandler.handleIncomingMessage(message, userName);
 	});
 
-	// Reply to own message
-	client.on(Events.MESSAGE_CREATE, async (message: Message) => {
-		// Ignore if message is from status broadcast
-		if (message.from == constants.statusBroadcast) return;
+	// // Reply to own message
+	// client.on(Events.MESSAGE_CREATE, async (message: Message) => {
+	// 	// Ignore if message is from status broadcast
+	// 	if (message.from == constants.statusBroadcast) return;
 
-		// Ignore if it's a quoted message, (e.g. Bot reply)
-		if (message.hasQuotedMsg) return;
+	// 	// Ignore if it's a quoted message, (e.g. Bot reply)
+	// 	if (message.hasQuotedMsg) return;
 
-		// Ignore if it's not from me
-		if (!message.fromMe) return;
+	// 	// Ignore if it's not from me
+	// 	if (!message.fromMe) return;
 
-		await handleIncomingMessage(message, client);
-	});
+	// 	await handleIncomingMessage(message, client);
+	// });
 
 	// WhatsApp initialization
 	client.initialize();
