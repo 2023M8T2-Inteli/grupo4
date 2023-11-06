@@ -1,0 +1,452 @@
+[1.254s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'list', '-p', '--base-paths', '/home/henriquemarlon/Projects/grupo4']
+[1.254s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='list', build_base='build', ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['/home/henriquemarlon/Projects/grupo4'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], topological_order=False, names_only=False, paths_only=True, topological_graph=False, topological_graph_dot=False, topological_graph_density=False, topological_graph_legend=False, topological_graph_dot_cluster=False, topological_graph_dot_include_skipped=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7f682aed2170>, verb_extension=<colcon_package_information.verb.list.ListVerb object at 0x7f682ae8b010>, main=<bound method ListVerb.main of <colcon_package_information.verb.list.ListVerb object at 0x7f682ae8b010>>)
+[1.323s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[1.323s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[1.323s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[1.323s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[1.323s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[1.323s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/henriquemarlon/Projects/grupo4'
+[1.323s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4) by extensions ['ignore', 'ignore_ament_install']
+[1.324s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4) by extension 'ignore'
+[1.324s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4) by extension 'ignore_ament_install'
+[1.324s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4) by extensions ['colcon_pkg']
+[1.324s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4) by extension 'colcon_pkg'
+[1.324s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4) by extensions ['colcon_meta']
+[1.324s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4) by extension 'colcon_meta'
+[1.324s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4) by extensions ['ros']
+[1.324s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4) by extension 'ros'
+[1.338s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4) by extensions ['cmake', 'python']
+[1.338s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4) by extension 'cmake'
+[1.339s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4) by extension 'python'
+[1.339s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4) by extensions ['python_setup_py']
+[1.339s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4) by extension 'python_setup_py'
+[1.339s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs) by extensions ['ignore', 'ignore_ament_install']
+[1.339s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs) by extension 'ignore'
+[1.339s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs) by extension 'ignore_ament_install'
+[1.339s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs) by extensions ['colcon_pkg']
+[1.339s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs) by extension 'colcon_pkg'
+[1.339s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs) by extensions ['colcon_meta']
+[1.339s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs) by extension 'colcon_meta'
+[1.339s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs) by extensions ['ros']
+[1.339s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs) by extension 'ros'
+[1.340s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs) by extensions ['cmake', 'python']
+[1.340s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs) by extension 'cmake'
+[1.340s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs) by extension 'python'
+[1.340s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs) by extensions ['python_setup_py']
+[1.340s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs) by extension 'python_setup_py'
+[1.340s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs) by extensions ['ignore', 'ignore_ament_install']
+[1.340s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs) by extension 'ignore'
+[1.340s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs) by extension 'ignore_ament_install'
+[1.340s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs) by extensions ['colcon_pkg']
+[1.340s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs) by extension 'colcon_pkg'
+[1.340s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs) by extensions ['colcon_meta']
+[1.340s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs) by extension 'colcon_meta'
+[1.340s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs) by extensions ['ros']
+[1.341s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs) by extension 'ros'
+[1.341s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs) by extensions ['cmake', 'python']
+[1.341s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs) by extension 'cmake'
+[1.341s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs) by extension 'python'
+[1.341s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs) by extensions ['python_setup_py']
+[1.341s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs) by extension 'python_setup_py'
+[1.341s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Contexto da Indústria) by extensions ['ignore', 'ignore_ament_install']
+[1.341s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Contexto da Indústria) by extension 'ignore'
+[1.341s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Contexto da Indústria) by extension 'ignore_ament_install'
+[1.341s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Contexto da Indústria) by extensions ['colcon_pkg']
+[1.341s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Contexto da Indústria) by extension 'colcon_pkg'
+[1.341s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Contexto da Indústria) by extensions ['colcon_meta']
+[1.341s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Contexto da Indústria) by extension 'colcon_meta'
+[1.342s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Contexto da Indústria) by extensions ['ros']
+[1.342s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Contexto da Indústria) by extension 'ros'
+[1.342s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Contexto da Indústria) by extensions ['cmake', 'python']
+[1.342s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Contexto da Indústria) by extension 'cmake'
+[1.342s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Contexto da Indústria) by extension 'python'
+[1.342s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Contexto da Indústria) by extensions ['python_setup_py']
+[1.342s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Contexto da Indústria) by extension 'python_setup_py'
+[1.342s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Proposta de Solução) by extensions ['ignore', 'ignore_ament_install']
+[1.342s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Proposta de Solução) by extension 'ignore'
+[1.342s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Proposta de Solução) by extension 'ignore_ament_install'
+[1.342s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Proposta de Solução) by extensions ['colcon_pkg']
+[1.342s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Proposta de Solução) by extension 'colcon_pkg'
+[1.342s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Proposta de Solução) by extensions ['colcon_meta']
+[1.343s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Proposta de Solução) by extension 'colcon_meta'
+[1.343s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Proposta de Solução) by extensions ['ros']
+[1.343s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Proposta de Solução) by extension 'ros'
+[1.343s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Proposta de Solução) by extensions ['cmake', 'python']
+[1.343s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Proposta de Solução) by extension 'cmake'
+[1.343s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Proposta de Solução) by extension 'python'
+[1.343s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Proposta de Solução) by extensions ['python_setup_py']
+[1.343s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/2. Proposta de Solução) by extension 'python_setup_py'
+[1.343s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Contexto da Indústria) by extensions ['ignore', 'ignore_ament_install']
+[1.343s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Contexto da Indústria) by extension 'ignore'
+[1.343s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Contexto da Indústria) by extension 'ignore_ament_install'
+[1.343s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Contexto da Indústria) by extensions ['colcon_pkg']
+[1.343s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Contexto da Indústria) by extension 'colcon_pkg'
+[1.344s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Contexto da Indústria) by extensions ['colcon_meta']
+[1.344s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Contexto da Indústria) by extension 'colcon_meta'
+[1.344s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Contexto da Indústria) by extensions ['ros']
+[1.344s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Contexto da Indústria) by extension 'ros'
+[1.344s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Contexto da Indústria) by extensions ['cmake', 'python']
+[1.344s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Contexto da Indústria) by extension 'cmake'
+[1.344s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Contexto da Indústria) by extension 'python'
+[1.344s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Contexto da Indústria) by extensions ['python_setup_py']
+[1.344s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Contexto da Indústria) by extension 'python_setup_py'
+[1.344s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Proposta de Solução) by extensions ['ignore', 'ignore_ament_install']
+[1.344s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Proposta de Solução) by extension 'ignore'
+[1.344s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Proposta de Solução) by extension 'ignore_ament_install'
+[1.344s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Proposta de Solução) by extensions ['colcon_pkg']
+[1.345s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Proposta de Solução) by extension 'colcon_pkg'
+[1.345s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Proposta de Solução) by extensions ['colcon_meta']
+[1.345s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Proposta de Solução) by extension 'colcon_meta'
+[1.345s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Proposta de Solução) by extensions ['ros']
+[1.345s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Proposta de Solução) by extension 'ros'
+[1.345s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Proposta de Solução) by extensions ['cmake', 'python']
+[1.345s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Proposta de Solução) by extension 'cmake'
+[1.345s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Proposta de Solução) by extension 'python'
+[1.345s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Proposta de Solução) by extensions ['python_setup_py']
+[1.345s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/3. Proposta de Solução) by extension 'python_setup_py'
+[1.345s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/Referências) by extensions ['ignore', 'ignore_ament_install']
+[1.345s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/Referências) by extension 'ignore'
+[1.345s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/Referências) by extension 'ignore_ament_install'
+[1.346s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/Referências) by extensions ['colcon_pkg']
+[1.346s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/Referências) by extension 'colcon_pkg'
+[1.346s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/Referências) by extensions ['colcon_meta']
+[1.346s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/Referências) by extension 'colcon_meta'
+[1.346s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/Referências) by extensions ['ros']
+[1.346s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/Referências) by extension 'ros'
+[1.346s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/Referências) by extensions ['cmake', 'python']
+[1.346s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/Referências) by extension 'cmake'
+[1.346s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/Referências) by extension 'python'
+[1.346s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/Referências) by extensions ['python_setup_py']
+[1.346s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/docs/Referências) by extension 'python_setup_py'
+[1.346s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src) by extensions ['ignore', 'ignore_ament_install']
+[1.346s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src) by extension 'ignore'
+[1.346s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src) by extension 'ignore_ament_install'
+[1.347s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src) by extensions ['colcon_pkg']
+[1.347s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src) by extension 'colcon_pkg'
+[1.347s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src) by extensions ['colcon_meta']
+[1.347s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src) by extension 'colcon_meta'
+[1.347s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src) by extensions ['ros']
+[1.347s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src) by extension 'ros'
+[1.347s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src) by extensions ['cmake', 'python']
+[1.347s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src) by extension 'cmake'
+[1.347s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src) by extension 'python'
+[1.347s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src) by extensions ['python_setup_py']
+[1.347s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src) by extension 'python_setup_py'
+[1.347s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components) by extensions ['ignore', 'ignore_ament_install']
+[1.347s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components) by extension 'ignore'
+[1.347s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components) by extension 'ignore_ament_install'
+[1.348s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components) by extensions ['colcon_pkg']
+[1.348s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components) by extension 'colcon_pkg'
+[1.348s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components) by extensions ['colcon_meta']
+[1.348s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components) by extension 'colcon_meta'
+[1.348s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components) by extensions ['ros']
+[1.348s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components) by extension 'ros'
+[1.348s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components) by extensions ['cmake', 'python']
+[1.348s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components) by extension 'cmake'
+[1.348s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components) by extension 'python'
+[1.348s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components) by extensions ['python_setup_py']
+[1.348s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components) by extension 'python_setup_py'
+[1.348s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components/HomepageFeatures) by extensions ['ignore', 'ignore_ament_install']
+[1.348s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components/HomepageFeatures) by extension 'ignore'
+[1.349s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components/HomepageFeatures) by extension 'ignore_ament_install'
+[1.349s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components/HomepageFeatures) by extensions ['colcon_pkg']
+[1.349s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components/HomepageFeatures) by extension 'colcon_pkg'
+[1.349s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components/HomepageFeatures) by extensions ['colcon_meta']
+[1.349s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components/HomepageFeatures) by extension 'colcon_meta'
+[1.349s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components/HomepageFeatures) by extensions ['ros']
+[1.349s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components/HomepageFeatures) by extension 'ros'
+[1.349s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components/HomepageFeatures) by extensions ['cmake', 'python']
+[1.349s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components/HomepageFeatures) by extension 'cmake'
+[1.349s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components/HomepageFeatures) by extension 'python'
+[1.349s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components/HomepageFeatures) by extensions ['python_setup_py']
+[1.349s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/components/HomepageFeatures) by extension 'python_setup_py'
+[1.349s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/css) by extensions ['ignore', 'ignore_ament_install']
+[1.349s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/css) by extension 'ignore'
+[1.350s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/css) by extension 'ignore_ament_install'
+[1.350s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/css) by extensions ['colcon_pkg']
+[1.350s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/css) by extension 'colcon_pkg'
+[1.350s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/css) by extensions ['colcon_meta']
+[1.350s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/css) by extension 'colcon_meta'
+[1.350s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/css) by extensions ['ros']
+[1.350s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/css) by extension 'ros'
+[1.350s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/css) by extensions ['cmake', 'python']
+[1.350s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/css) by extension 'cmake'
+[1.350s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/css) by extension 'python'
+[1.350s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/css) by extensions ['python_setup_py']
+[1.350s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/css) by extension 'python_setup_py'
+[1.350s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/pages) by extensions ['ignore', 'ignore_ament_install']
+[1.350s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/pages) by extension 'ignore'
+[1.351s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/pages) by extension 'ignore_ament_install'
+[1.351s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/pages) by extensions ['colcon_pkg']
+[1.351s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/pages) by extension 'colcon_pkg'
+[1.351s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/pages) by extensions ['colcon_meta']
+[1.351s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/pages) by extension 'colcon_meta'
+[1.351s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/pages) by extensions ['ros']
+[1.351s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/pages) by extension 'ros'
+[1.351s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/pages) by extensions ['cmake', 'python']
+[1.351s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/pages) by extension 'cmake'
+[1.351s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/pages) by extension 'python'
+[1.351s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/pages) by extensions ['python_setup_py']
+[1.351s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/src/pages) by extension 'python_setup_py'
+[1.351s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static) by extensions ['ignore', 'ignore_ament_install']
+[1.351s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static) by extension 'ignore'
+[1.352s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static) by extension 'ignore_ament_install'
+[1.352s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static) by extensions ['colcon_pkg']
+[1.352s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static) by extension 'colcon_pkg'
+[1.352s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static) by extensions ['colcon_meta']
+[1.352s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static) by extension 'colcon_meta'
+[1.352s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static) by extensions ['ros']
+[1.352s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static) by extension 'ros'
+[1.352s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static) by extensions ['cmake', 'python']
+[1.352s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static) by extension 'cmake'
+[1.352s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static) by extension 'python'
+[1.352s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static) by extensions ['python_setup_py']
+[1.352s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static) by extension 'python_setup_py'
+[1.352s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/files) by extensions ['ignore', 'ignore_ament_install']
+[1.352s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/files) by extension 'ignore'
+[1.353s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/files) by extension 'ignore_ament_install'
+[1.353s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/files) by extensions ['colcon_pkg']
+[1.353s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/files) by extension 'colcon_pkg'
+[1.353s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/files) by extensions ['colcon_meta']
+[1.353s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/files) by extension 'colcon_meta'
+[1.353s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/files) by extensions ['ros']
+[1.353s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/files) by extension 'ros'
+[1.353s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/files) by extensions ['cmake', 'python']
+[1.353s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/files) by extension 'cmake'
+[1.353s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/files) by extension 'python'
+[1.353s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/files) by extensions ['python_setup_py']
+[1.353s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/files) by extension 'python_setup_py'
+[1.353s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/img) by extensions ['ignore', 'ignore_ament_install']
+[1.353s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/img) by extension 'ignore'
+[1.354s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/img) by extension 'ignore_ament_install'
+[1.354s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/img) by extensions ['colcon_pkg']
+[1.354s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/img) by extension 'colcon_pkg'
+[1.354s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/img) by extensions ['colcon_meta']
+[1.354s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/img) by extension 'colcon_meta'
+[1.354s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/img) by extensions ['ros']
+[1.354s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/img) by extension 'ros'
+[1.354s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/img) by extensions ['cmake', 'python']
+[1.354s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/img) by extension 'cmake'
+[1.354s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/img) by extension 'python'
+[1.354s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/img) by extensions ['python_setup_py']
+[1.354s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/docs/static/img) by extension 'python_setup_py'
+[1.354s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/infrastructure) by extensions ['ignore', 'ignore_ament_install']
+[1.355s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/infrastructure) by extension 'ignore'
+[1.355s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/infrastructure) by extension 'ignore_ament_install'
+[1.355s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/infrastructure) by extensions ['colcon_pkg']
+[1.355s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/infrastructure) by extension 'colcon_pkg'
+[1.355s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/infrastructure) by extensions ['colcon_meta']
+[1.355s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/infrastructure) by extension 'colcon_meta'
+[1.355s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/infrastructure) by extensions ['ros']
+[1.355s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/infrastructure) by extension 'ros'
+[1.355s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/infrastructure) by extensions ['cmake', 'python']
+[1.355s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/infrastructure) by extension 'cmake'
+[1.355s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/infrastructure) by extension 'python'
+[1.355s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/infrastructure) by extensions ['python_setup_py']
+[1.355s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/infrastructure) by extension 'python_setup_py'
+[1.355s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/log) by extensions ['ignore', 'ignore_ament_install']
+[1.356s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/log) by extension 'ignore'
+[1.356s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/log) ignored
+[1.356s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src) by extensions ['ignore', 'ignore_ament_install']
+[1.356s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src) by extension 'ignore'
+[1.356s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src) by extension 'ignore_ament_install'
+[1.356s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src) by extensions ['colcon_pkg']
+[1.356s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src) by extension 'colcon_pkg'
+[1.356s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src) by extensions ['colcon_meta']
+[1.356s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src) by extension 'colcon_meta'
+[1.356s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src) by extensions ['ros']
+[1.356s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src) by extension 'ros'
+[1.356s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src) by extensions ['cmake', 'python']
+[1.356s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src) by extension 'cmake'
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src) by extension 'python'
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src) by extensions ['python_setup_py']
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src) by extension 'python_setup_py'
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS) by extensions ['ignore', 'ignore_ament_install']
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS) by extension 'ignore'
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS) by extension 'ignore_ament_install'
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS) by extensions ['colcon_pkg']
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS) by extension 'colcon_pkg'
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS) by extensions ['colcon_meta']
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS) by extension 'colcon_meta'
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS) by extensions ['ros']
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS) by extension 'ros'
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS) by extensions ['cmake', 'python']
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS) by extension 'cmake'
+[1.357s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS) by extension 'python'
+[1.358s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS) by extensions ['python_setup_py']
+[1.358s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS) by extension 'python_setup_py'
+[1.358s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/cpp_srv_turtlesim) by extensions ['ignore', 'ignore_ament_install']
+[1.358s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/cpp_srv_turtlesim) by extension 'ignore'
+[1.358s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/cpp_srv_turtlesim) by extension 'ignore_ament_install'
+[1.358s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/cpp_srv_turtlesim) by extensions ['colcon_pkg']
+[1.358s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/cpp_srv_turtlesim) by extension 'colcon_pkg'
+[1.358s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/cpp_srv_turtlesim) by extensions ['colcon_meta']
+[1.358s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/cpp_srv_turtlesim) by extension 'colcon_meta'
+[1.358s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/cpp_srv_turtlesim) by extensions ['ros']
+[1.358s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/cpp_srv_turtlesim) by extension 'ros'
+[1.361s] DEBUG:colcon.colcon_core.package_identification:Package '/home/henriquemarlon/Projects/grupo4/src/ROS/cpp_srv_turtlesim' with type 'ros.ament_cmake' and name 'cpp_srv_turtlesim'
+[1.362s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/ros_turtles) by extensions ['ignore', 'ignore_ament_install']
+[1.362s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/ros_turtles) by extension 'ignore'
+[1.362s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/ros_turtles) by extension 'ignore_ament_install'
+[1.362s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/ros_turtles) by extensions ['colcon_pkg']
+[1.362s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/ros_turtles) by extension 'colcon_pkg'
+[1.362s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/ros_turtles) by extensions ['colcon_meta']
+[1.362s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/ros_turtles) by extension 'colcon_meta'
+[1.362s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/ros_turtles) by extensions ['ros']
+[1.362s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/ROS/ros_turtles) by extension 'ros'
+[1.363s] DEBUG:colcon.colcon_core.package_identification:Package '/home/henriquemarlon/Projects/grupo4/src/ROS/ros_turtles' with type 'ros.ament_cmake' and name 'ros_turtles'
+[1.363s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot) by extensions ['ignore', 'ignore_ament_install']
+[1.363s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot) by extension 'ignore'
+[1.363s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot) by extension 'ignore_ament_install'
+[1.363s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot) by extensions ['colcon_pkg']
+[1.364s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot) by extension 'colcon_pkg'
+[1.364s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot) by extensions ['colcon_meta']
+[1.364s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot) by extension 'colcon_meta'
+[1.364s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot) by extensions ['ros']
+[1.364s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot) by extension 'ros'
+[1.364s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot) by extensions ['cmake', 'python']
+[1.364s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot) by extension 'cmake'
+[1.364s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot) by extension 'python'
+[1.364s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot) by extensions ['python_setup_py']
+[1.364s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot) by extension 'python_setup_py'
+[1.364s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src) by extensions ['ignore', 'ignore_ament_install']
+[1.365s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src) by extension 'ignore'
+[1.365s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src) by extension 'ignore_ament_install'
+[1.365s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src) by extensions ['colcon_pkg']
+[1.365s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src) by extension 'colcon_pkg'
+[1.365s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src) by extensions ['colcon_meta']
+[1.365s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src) by extension 'colcon_meta'
+[1.365s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src) by extensions ['ros']
+[1.365s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src) by extension 'ros'
+[1.365s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src) by extensions ['cmake', 'python']
+[1.365s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src) by extension 'cmake'
+[1.365s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src) by extension 'python'
+[1.365s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src) by extensions ['python_setup_py']
+[1.365s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src) by extension 'python_setup_py'
+[1.365s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/cli) by extensions ['ignore', 'ignore_ament_install']
+[1.366s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/cli) by extension 'ignore'
+[1.366s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/cli) by extension 'ignore_ament_install'
+[1.366s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/cli) by extensions ['colcon_pkg']
+[1.366s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/cli) by extension 'colcon_pkg'
+[1.366s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/cli) by extensions ['colcon_meta']
+[1.366s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/cli) by extension 'colcon_meta'
+[1.366s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/cli) by extensions ['ros']
+[1.366s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/cli) by extension 'ros'
+[1.366s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/cli) by extensions ['cmake', 'python']
+[1.366s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/cli) by extension 'cmake'
+[1.366s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/cli) by extension 'python'
+[1.366s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/cli) by extensions ['python_setup_py']
+[1.366s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/cli) by extension 'python_setup_py'
+[1.366s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/commands) by extensions ['ignore', 'ignore_ament_install']
+[1.367s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/commands) by extension 'ignore'
+[1.367s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/commands) by extension 'ignore_ament_install'
+[1.367s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/commands) by extensions ['colcon_pkg']
+[1.367s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/commands) by extension 'colcon_pkg'
+[1.367s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/commands) by extensions ['colcon_meta']
+[1.367s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/commands) by extension 'colcon_meta'
+[1.367s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/commands) by extensions ['ros']
+[1.367s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/commands) by extension 'ros'
+[1.367s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/commands) by extensions ['cmake', 'python']
+[1.367s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/commands) by extension 'cmake'
+[1.367s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/commands) by extension 'python'
+[1.367s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/commands) by extensions ['python_setup_py']
+[1.367s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/commands) by extension 'python_setup_py'
+[1.367s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/handlers) by extensions ['ignore', 'ignore_ament_install']
+[1.368s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/handlers) by extension 'ignore'
+[1.368s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/handlers) by extension 'ignore_ament_install'
+[1.368s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/handlers) by extensions ['colcon_pkg']
+[1.368s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/handlers) by extension 'colcon_pkg'
+[1.368s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/handlers) by extensions ['colcon_meta']
+[1.368s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/handlers) by extension 'colcon_meta'
+[1.368s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/handlers) by extensions ['ros']
+[1.368s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/handlers) by extension 'ros'
+[1.368s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/handlers) by extensions ['cmake', 'python']
+[1.368s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/handlers) by extension 'cmake'
+[1.368s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/handlers) by extension 'python'
+[1.368s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/handlers) by extensions ['python_setup_py']
+[1.368s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/handlers) by extension 'python_setup_py'
+[1.368s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/models) by extensions ['ignore', 'ignore_ament_install']
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/models) by extension 'ignore'
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/models) by extension 'ignore_ament_install'
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/models) by extensions ['colcon_pkg']
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/models) by extension 'colcon_pkg'
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/models) by extensions ['colcon_meta']
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/models) by extension 'colcon_meta'
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/models) by extensions ['ros']
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/models) by extension 'ros'
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/models) by extensions ['cmake', 'python']
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/models) by extension 'cmake'
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/models) by extension 'python'
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/models) by extensions ['python_setup_py']
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/models) by extension 'python_setup_py'
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/prisma) by extensions ['ignore', 'ignore_ament_install']
+[1.369s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/prisma) by extension 'ignore'
+[1.370s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/prisma) by extension 'ignore_ament_install'
+[1.370s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/prisma) by extensions ['colcon_pkg']
+[1.370s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/prisma) by extension 'colcon_pkg'
+[1.370s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/prisma) by extensions ['colcon_meta']
+[1.370s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/prisma) by extension 'colcon_meta'
+[1.370s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/prisma) by extensions ['ros']
+[1.370s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/prisma) by extension 'ros'
+[1.370s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/prisma) by extensions ['cmake', 'python']
+[1.370s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/prisma) by extension 'cmake'
+[1.370s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/prisma) by extension 'python'
+[1.370s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/prisma) by extensions ['python_setup_py']
+[1.370s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/prisma) by extension 'python_setup_py'
+[1.370s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/providers) by extensions ['ignore', 'ignore_ament_install']
+[1.370s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/providers) by extension 'ignore'
+[1.371s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/providers) by extension 'ignore_ament_install'
+[1.371s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/providers) by extensions ['colcon_pkg']
+[1.371s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/providers) by extension 'colcon_pkg'
+[1.371s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/providers) by extensions ['colcon_meta']
+[1.371s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/providers) by extension 'colcon_meta'
+[1.371s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/providers) by extensions ['ros']
+[1.371s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/providers) by extension 'ros'
+[1.371s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/providers) by extensions ['cmake', 'python']
+[1.371s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/providers) by extension 'cmake'
+[1.371s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/providers) by extension 'python'
+[1.371s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/providers) by extensions ['python_setup_py']
+[1.371s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/providers) by extension 'python_setup_py'
+[1.371s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services) by extensions ['ignore', 'ignore_ament_install']
+[1.372s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services) by extension 'ignore'
+[1.372s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services) by extension 'ignore_ament_install'
+[1.372s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services) by extensions ['colcon_pkg']
+[1.372s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services) by extension 'colcon_pkg'
+[1.372s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services) by extensions ['colcon_meta']
+[1.372s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services) by extension 'colcon_meta'
+[1.372s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services) by extensions ['ros']
+[1.372s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services) by extension 'ros'
+[1.372s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services) by extensions ['cmake', 'python']
+[1.372s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services) by extension 'cmake'
+[1.372s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services) by extension 'python'
+[1.372s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services) by extensions ['python_setup_py']
+[1.372s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services) by extension 'python_setup_py'
+[1.372s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services/user) by extensions ['ignore', 'ignore_ament_install']
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services/user) by extension 'ignore'
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services/user) by extension 'ignore_ament_install'
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services/user) by extensions ['colcon_pkg']
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services/user) by extension 'colcon_pkg'
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services/user) by extensions ['colcon_meta']
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services/user) by extension 'colcon_meta'
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services/user) by extensions ['ros']
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services/user) by extension 'ros'
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services/user) by extensions ['cmake', 'python']
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services/user) by extension 'cmake'
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services/user) by extension 'python'
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services/user) by extensions ['python_setup_py']
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/services/user) by extension 'python_setup_py'
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/types) by extensions ['ignore', 'ignore_ament_install']
+[1.373s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/types) by extension 'ignore'
+[1.374s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/types) by extension 'ignore_ament_install'
+[1.374s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/types) by extensions ['colcon_pkg']
+[1.374s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/types) by extension 'colcon_pkg'
+[1.374s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/types) by extensions ['colcon_meta']
+[1.374s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/types) by extension 'colcon_meta'
+[1.374s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/types) by extensions ['ros']
+[1.374s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/types) by extension 'ros'
+[1.374s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/types) by extensions ['cmake', 'python']
+[1.374s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/types) by extension 'cmake'
+[1.374s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/types) by extension 'python'
+[1.374s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/types) by extensions ['python_setup_py']
+[1.374s] Level 1:colcon.colcon_core.package_identification:_identify(/home/henriquemarlon/Projects/grupo4/src/chatbot/src/types) by extension 'python_setup_py'
+[1.374s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
