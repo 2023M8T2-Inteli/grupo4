@@ -1,4 +1,4 @@
-import { Client, Message, Events, LocalAuth, List } from "whatsapp-web.js";
+import { Client, Message, Events, LocalAuth } from "whatsapp-web.js";
 import UserService from "../../models/user";
 
 // Import prisma client
@@ -9,20 +9,59 @@ const userService = new UserService(prisma);
 
 const { v4: uuidv4 } = require("uuid");
 
-const sendMenu = async (message: Message, client: Client) => {};
+const delay = async (seconds: number): Promise<void> => {
+	return new Promise<void>((resolve) => {
+		setTimeout(() => {
+			resolve();
+		}, seconds);
+	});
+};
+
+const sendMenu = async (message: Message, client: Client) => {
+	try {
+		await message.reply("*Em que posso te ajudar hoje?*");
+
+		await delay(500);
+		
+		const list = "1. Solicitar nova peça\n2. Acompanhar status de um pedido\n 3. Cancelar pedido\n4. Falar com um atendente";
+		client.sendMessage(message.from, list);
+
+		await delay(500);
+
+		client.sendMessage(message.from, "Digite apenas o número da opção desejada, por favor.");
+
+		return "Menu enviado com sucesso!";
+	} catch (error: any) {
+		console.error("An error occured", error);
+		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
+	}
+};
+
+const updateRequest = async (message: Message, prisma: PrismaClient, requestState: number) => {
+	try{
+		const user = await userService.getUser(message.from);
+		if(user == null){
+			message.reply("Não foi possível encontrar seu cadastro, por favor digite seu nome completo.");
+			return;
+		}
+		await userService.updateUser({...user, requestState});
+
+	}catch (error: any) {
+		console.error("An error occured", error);
+		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
+	}
+
+}
 
 const handleCreateUser = async (message: Message, client: Client, userName: string) => {
 	try {
-		setTimeout(function () {
-			client.sendMessage(
-				message.from,
-				`Olá ${userName}, eu sou o Vallet, identifiquei aqui que você não possui cadastro em nosso sistema.`
-			);
-		}, 500);
+		client.sendMessage(
+			message.from,
+			`Olá ${userName}, eu sou o Vallet, identifiquei aqui que você não possui cadastro em nosso sistema.`
+		);
+		await delay(1000);
 
-		setTimeout(function () {
-			client.sendMessage(message.from, "Aguarde um momento por favor.");
-		}, 1000);
+		client.sendMessage(message.from, "Aguarde um momento por favor.");
 
 		const newUser = {
 			id: uuidv4(),
@@ -34,14 +73,11 @@ const handleCreateUser = async (message: Message, client: Client, userName: stri
 
 		userService.createAccountUser(newUser);
 
-		setTimeout(function () {
-			message.reply("Conta criada com sucesso!");
-		}, 1000);
+		await delay(2000);
 
-		const sections = [{ title: "Opções disponíveis", rows: [{ title: "Solicitar peça" }, { title: "Alterar nome cadastrado" }] }];
-		const menu = new List("Em que posso te ajudar? Selecione uma opção no menu:", "Menu", sections, "Menu de opções:");
-		await client.sendMessage(message.from, menu);
+		message.reply("Conta criada com sucesso!");
 
+		sendMenu(message, client);
 	} catch (error: any) {
 		console.error("An error occured", error);
 		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
@@ -50,10 +86,13 @@ const handleCreateUser = async (message: Message, client: Client, userName: stri
 
 const handleRequestUser = async (message: Message, client: Client) => {
 	try {
+		sendMenu(message, client);
 	} catch (error: any) {
 		console.error("An error occured", error);
 		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
 	}
 };
 
-export { handleCreateUser, handleRequestUser };
+const handleRequestNewPiece = async (message: Message, client: Client) => {};
+
+export {updateRequest, handleCreateUser, handleRequestUser, handleRequestNewPiece};

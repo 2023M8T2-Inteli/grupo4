@@ -1,11 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import UserService from "../models/user";
-import { Client, Message } from "whatsapp-web.js";
+import { Client, Message, List } from "whatsapp-web.js";
 import { botReadyTimestamp } from "../index";
 import * as cli from "../cli/ui";
 // Config & Constants
 import config from "../config";
-import { handleCreateUser } from "../services/user/user-service";
+import { handleCreateUser, handleRequestUser, updateRequest } from "../services/user/user-service";
 
 export default class MessageEventHandler {
 	private userService: UserService;
@@ -18,18 +18,36 @@ export default class MessageEventHandler {
 		this.whatsappClient = whatsappClient;
 	}
 
-    async handleRequestState(requestState: number, message: Message, userName: string) {
-        switch (requestState) {
-            case 0:
-                handleCreateUser(message, this.whatsappClient, userName);
-                break;
-            case 1:
-                //handleUpdateUser(message, this.whatsappClient);
-                break;
-            default:
-                break;
-        }
-    }
+	async handleRequestState(requestState: number, message: Message, userName: string) {
+		switch (requestState) {
+			case 0:
+				handleCreateUser(message, this.whatsappClient, userName);
+				break;
+			case 1:
+				// call handleRequestUser
+				handleRequestUser(message, this.whatsappClient);
+				// update requestState
+				if (message.body == "1") {
+					updateRequest(message, this.prisma, 2);
+				}
+				if (message.body == "2") {
+					updateRequest(message, this.prisma, 3);
+				}
+				if (message.body == "3") {
+					updateRequest(message, this.prisma, 4);
+				}
+				if (message.body == "4") {
+					updateRequest(message, this.prisma, 5);
+				} else {
+					message.reply("Opção inválida, por favor digite apenas o número da opção desejada.");
+				}
+				// call the function to update the requestState
+				this.handleRequestState(2, message, userName);
+				break;
+			default:
+				break;
+		}
+	}
 
 	async handleIncomingMessage(message: Message, userName: string) {
 		// Prevent handling old messages
@@ -52,14 +70,13 @@ export default class MessageEventHandler {
 		// ignore message from groups if groupchatsEnabled is false
 		if ((await message.getChat()).isGroup && !config.groupchatsEnabled) return;
 
-        let requestState = 0;
-        const userData = await this.userService.getUser(message.from)
-        
-        if (userData) {
-            requestState = userData.requestState;
-        }
+		let requestState = 0;
+		const userData = await this.userService.getUser(message.from);
 
-        this.handleRequestState(requestState, message, userName);
-        
+		if (userData) {
+			requestState = userData.requestState;
+		}
+
+		this.handleRequestState(requestState, message, userName);
 	}
 }

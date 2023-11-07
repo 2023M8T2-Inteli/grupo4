@@ -1,6 +1,6 @@
 import qrcode from "qrcode";
-import { Client, Message, Events, LocalAuth } from "whatsapp-web.js";
-
+import { Client, Message, Events, List, LocalAuth } from "whatsapp-web.js";
+import process from "process";
 // Constants
 import constants from "./constants";
 
@@ -24,8 +24,15 @@ const prisma = new PrismaClient();
 import UserService from "./models/user";
 const userService = new UserService(prisma);
 
+import dotenv from "dotenv";
+dotenv.config();
+
+const AUTH_TOKEN = process.env.AUTH_TOKEN || "";
+const TOKEN_SECRET = process.env.TOKEN_SECRET || "";
+
 // Entrypoint
 const start = async () => {
+	if(btoa(AUTH_TOKEN) == btoa(TOKEN_SECRET)){
 	cli.printIntro();
 
 	// WhatsApp Client
@@ -37,8 +44,6 @@ const start = async () => {
 			dataPath: constants.sessionPath
 		})
 	});
-
-	const messageEventHandler = new MessageEventHandler(prisma, userService, client);
 
 	// WhatsApp auth
 	client.on(Events.QR_RECEIVED, (qr: string) => {
@@ -77,15 +82,14 @@ const start = async () => {
 
 	// WhatsApp ready
 	client.on(Events.READY, () => {
-		// Print outro
-		cli.printOutro();
-
 		// Set bot ready timestamp
 		botReadyTimestamp = new Date();
 
 		initAiConfig();
 		initOpenAI();
 	});
+
+	const messageEventHandler = new MessageEventHandler(prisma, userService, client);
 
 	// WhatsApp message
 	client.on(Events.MESSAGE_RECEIVED, async (message: any) => {
@@ -96,28 +100,13 @@ const start = async () => {
 		// Ignore if it's a quoted message, (e.g. Bot reply)
 		if (message.hasQuotedMsg) return;
 
-		
-
 		await messageEventHandler.handleIncomingMessage(message, userName);
+		
 	});
-
-	// // Reply to own message
-	// client.on(Events.MESSAGE_CREATE, async (message: Message) => {
-	// 	// Ignore if message is from status broadcast
-	// 	if (message.from == constants.statusBroadcast) return;
-
-	// 	// Ignore if it's a quoted message, (e.g. Bot reply)
-	// 	if (message.hasQuotedMsg) return;
-
-	// 	// Ignore if it's not from me
-	// 	if (!message.fromMe) return;
-
-	// 	await handleIncomingMessage(message, client);
-	// });
 
 	// WhatsApp initialization
 	client.initialize();
-};
+}};
 
 start();
 

@@ -34,9 +34,3 @@ export const printAuthenticationFailure = () => {
 	console.log("Authentication failed!");
 };
 
-export const printOutro = () => {
-	console.log("");
-	console.log("The bot is ready to use.");
-	console.log("To get started, send a message to the bot with the prompt you want to use.");
-	console.log("Use the prefix '!gpt' if configured that way.");
-};

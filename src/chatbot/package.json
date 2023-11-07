@@ -22,7 +22,7 @@
 		"prisma": "^5.4.2",
 		"qrcode": "^1.5.3",
 		"uuid": "^9.0.1",
-		"whatsapp-web.js": "https://github.com/Julzk/whatsapp-web.js/tarball/jkr_hotfix_7"
+		"whatsapp-web.js": "^1.23.0"
 	},
 	"engines": {
 		"node": ">=18.0.0"
