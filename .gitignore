@@ -7,3 +7,7 @@
 *.terraform.tfstate.lock.info
 *terraform.tfstate.backup
 .DS_Store
+
+*build
+*install
+*log

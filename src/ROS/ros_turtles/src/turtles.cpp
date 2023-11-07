@@ -52,7 +52,7 @@ public:
 int main(int argc, char** argv)
 {
     // Coloque aqui o nome da sua tartaruga
-    auto turtleName = ""
+    auto turtleName = "";
     
     rclcpp::init(argc, argv);
     rclcpp::spin(std::make_shared<Turtle>(turtleName));
