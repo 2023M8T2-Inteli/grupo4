@@ -1,0 +1,5 @@
+<launch>
+  <include file="$(find-pkg-share turtlebot3_cartographer)/launch/cartographer.launch.py"/>
+
+  <node pkg="turtlebot3_teleop" exec="teleop_keyboard" name="controller" launch-prefix="gnome-terminal --" output="screen" />
+</launch>
