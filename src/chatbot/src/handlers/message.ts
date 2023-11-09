@@ -5,7 +5,7 @@ import { botReadyTimestamp } from "../index";
 import * as cli from "../cli/ui";
 // Config & Constants
 import config from "../config";
-import { handleCreateUser, handleRequestUser, updateRequest } from "../services/user/user-service";
+import { handleCreateUser, handleRequestMenu, handleRequestUser, updateRequest } from "../services/user/user-service";
 
 export default class MessageEventHandler {
 	private userService: UserService;
@@ -26,24 +26,12 @@ export default class MessageEventHandler {
 			case 1:
 				// call handleRequestUser
 				handleRequestUser(message, this.whatsappClient);
-				// update requestState
-				if (message.body == "1") {
-					updateRequest(message, this.prisma, 2);
-				}
-				if (message.body == "2") {
-					updateRequest(message, this.prisma, 3);
-				}
-				if (message.body == "3") {
-					updateRequest(message, this.prisma, 4);
-				}
-				if (message.body == "4") {
-					updateRequest(message, this.prisma, 5);
-				} else {
-					message.reply("Opção inválida, por favor digite apenas o número da opção desejada.");
-				}
-				// call the function to update the requestState
-				this.handleRequestState(2, message, userName);
 				break;
+			case 2:
+				handleRequestMenu(message, this.whatsappClient);
+				break;
+			case 3:
+				
 			default:
 				break;
 		}

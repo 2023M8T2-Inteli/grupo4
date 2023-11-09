@@ -37,7 +37,7 @@ const sendMenu = async (message: Message, client: Client) => {
 	}
 };
 
-const updateRequest = async (message: Message, prisma: PrismaClient, requestState: number) => {
+const updateRequest = async (message: Message, requestState: number) => {
 	try{
 		const user = await userService.getUser(message.from);
 		if(user == null){
@@ -93,6 +93,31 @@ const handleRequestUser = async (message: Message, client: Client) => {
 	}
 };
 
-const handleRequestNewPiece = async (message: Message, client: Client) => {};
+const handleRequestMenu = async (message: Message, client: Client) => {
+	try{
+		if (message.body == "1") {
+			updateRequest(message, 3);
+		}
+		if (message.body == "2") {
+			updateRequest(message, 4);
+		}
+		if (message.body == "3") {
+			updateRequest(message, 5);
+		}
+		if (message.body == "4") {
+			updateRequest(message, 6);
+		} else {
+			message.reply("Opção inválida, por favor digite apenas o número da opção desejada.");
+		}
+	} catch (error: any) {
+		console.error("An error occured", error);
+		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
+	}
 
-export {updateRequest, handleCreateUser, handleRequestUser, handleRequestNewPiece};
+}
+
+const handleRequestNewPiece = async (message: Message, client: Client) => {
+	
+};
+
+export {updateRequest, handleCreateUser, handleRequestUser, handleRequestNewPiece, handleRequestMenu};
