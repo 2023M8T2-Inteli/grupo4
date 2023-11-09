@@ -88,14 +88,6 @@ const handleMessageGPT = async (message: Message, prompt: string) => {
 	}
 };
 
-const handleDeleteConversation = async (message: Message) => {
-	// Delete conversation
-	delete conversations[message.from];
-
-	// Reply
-	message.reply("Conversation context was resetted!");
-};
-
 async function sendVoiceMessageReply(message: Message, gptTextResponse: string) {
 	var logTAG = "[TTS]";
 	var ttsRequest = async function (): Promise<Buffer | null> {
@@ -152,4 +144,4 @@ async function sendVoiceMessageReply(message: Message, gptTextResponse: string) 
 	fs.unlinkSync(tempFilePath);
 }
 
-export { handleMessageGPT, handleDeleteConversation };
+export { handleMessageGPT };
