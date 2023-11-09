@@ -1,11 +1,11 @@
 <launch>
   <arg name="use_sim_time" default="False" />
 
-  <include file="$(find-pkg-share turtlebot3_cartographer)/launch/cartographer.launch.py" />
+  <include file="$(find-pkg-share turtlebot3_cartographer)/launch/cartographer.launch.py">
+    <arg name="use_sim_time" value="$(var use_sim_time)" />
+  </include>
 
   <node pkg="turtlebot3_teleop" exec="teleop_keyboard" name="controller" launch-prefix="xterm -e"
-    output="screen">
-    <param name="use_sim_time" value="$(var use_sim_time)" />
-  </node>
+    output="screen" />
 
 </launch>
