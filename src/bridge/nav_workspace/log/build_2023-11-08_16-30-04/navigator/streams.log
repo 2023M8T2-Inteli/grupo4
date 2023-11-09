@@ -1,0 +1,27 @@
+[0.695s] Invoking command in '/home/elisa/Documents/turtlesim/workspace/src/navigator': PYTHONPATH=/home/elisa/Documents/turtlesim/workspace/build/navigator/prefix_override:/home/elisa/Documents/turtlesim/workspace/install/navigator/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/navigator build --build-base /home/elisa/Documents/turtlesim/workspace/build/navigator/build install --record /home/elisa/Documents/turtlesim/workspace/build/navigator/install.log --single-version-externally-managed
+[0.849s] running egg_info
+[0.849s] writing ../../build/navigator/navigator.egg-info/PKG-INFO
+[0.849s] writing dependency_links to ../../build/navigator/navigator.egg-info/dependency_links.txt
+[0.849s] writing entry points to ../../build/navigator/navigator.egg-info/entry_points.txt
+[0.849s] writing requirements to ../../build/navigator/navigator.egg-info/requires.txt
+[0.849s] writing top-level names to ../../build/navigator/navigator.egg-info/top_level.txt
+[0.851s] reading manifest file '../../build/navigator/navigator.egg-info/SOURCES.txt'
+[0.853s] writing manifest file '../../build/navigator/navigator.egg-info/SOURCES.txt'
+[0.853s] running build
+[0.853s] running build_py
+[0.853s] running install
+[0.854s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.854s]   warnings.warn(
+[0.854s] running install_lib
+[0.856s] running install_data
+[0.856s] copying launch/navigator_launch.py -> /home/elisa/Documents/turtlesim/workspace/install/navigator/share/navigator/launch
+[0.856s] running install_egg_info
+[0.858s] removing '/home/elisa/Documents/turtlesim/workspace/install/navigator/lib/python3.10/site-packages/navigator-0.0.0-py3.10.egg-info' (and everything under it)
+[0.858s] Copying ../../build/navigator/navigator.egg-info to /home/elisa/Documents/turtlesim/workspace/install/navigator/lib/python3.10/site-packages/navigator-0.0.0-py3.10.egg-info
+[0.859s] running install_scripts
+[0.873s] Installing andando script to /home/elisa/Documents/turtlesim/workspace/install/navigator/lib/navigator
+[0.873s] Installing cli script to /home/elisa/Documents/turtlesim/workspace/install/navigator/lib/navigator
+[0.873s] Installing init_pose script to /home/elisa/Documents/turtlesim/workspace/install/navigator/lib/navigator
+[0.874s] Installing queue script to /home/elisa/Documents/turtlesim/workspace/install/navigator/lib/navigator
+[0.874s] writing list of installed files to '/home/elisa/Documents/turtlesim/workspace/build/navigator/install.log'
+[0.891s] Invoked command in '/home/elisa/Documents/turtlesim/workspace/src/navigator' returned '0': PYTHONPATH=/home/elisa/Documents/turtlesim/workspace/build/navigator/prefix_override:/home/elisa/Documents/turtlesim/workspace/install/navigator/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/navigator build --build-base /home/elisa/Documents/turtlesim/workspace/build/navigator/build install --record /home/elisa/Documents/turtlesim/workspace/build/navigator/install.log --single-version-externally-managed

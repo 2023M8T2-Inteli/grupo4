@@ -1,4 +1,4 @@
-image: mapa-final.pgm
+image: apresentacao.pgm
 mode: trinary
 resolution: 0.05
 origin: [-0.58, -0.649, 0]

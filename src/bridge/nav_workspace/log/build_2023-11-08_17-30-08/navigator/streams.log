@@ -1,0 +1,29 @@
+[0.519s] Invoking command in '/home/elisa/grupo4/src/nav_workspace/src/navigator': PYTHONPATH=/home/elisa/grupo4/src/nav_workspace/build/navigator/prefix_override:/home/elisa/grupo4/src/nav_workspace/install/navigator/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/navigator build --build-base /home/elisa/grupo4/src/nav_workspace/build/navigator/build install --record /home/elisa/grupo4/src/nav_workspace/build/navigator/install.log --single-version-externally-managed
+[0.677s] running egg_info
+[0.677s] writing ../../build/navigator/navigator.egg-info/PKG-INFO
+[0.677s] writing dependency_links to ../../build/navigator/navigator.egg-info/dependency_links.txt
+[0.678s] writing entry points to ../../build/navigator/navigator.egg-info/entry_points.txt
+[0.678s] writing requirements to ../../build/navigator/navigator.egg-info/requires.txt
+[0.678s] writing top-level names to ../../build/navigator/navigator.egg-info/top_level.txt
+[0.679s] reading manifest file '../../build/navigator/navigator.egg-info/SOURCES.txt'
+[0.680s] writing manifest file '../../build/navigator/navigator.egg-info/SOURCES.txt'
+[0.680s] running build
+[0.680s] running build_py
+[0.680s] copying navigator/initialize_pose.py -> /home/elisa/grupo4/src/nav_workspace/build/navigator/build/lib/navigator
+[0.680s] running install
+[0.680s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.680s]   warnings.warn(
+[0.680s] running install_lib
+[0.681s] copying /home/elisa/grupo4/src/nav_workspace/build/navigator/build/lib/navigator/initialize_pose.py -> /home/elisa/grupo4/src/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator
+[0.681s] byte-compiling /home/elisa/grupo4/src/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator/initialize_pose.py to initialize_pose.cpython-310.pyc
+[0.682s] running install_data
+[0.682s] running install_egg_info
+[0.683s] removing '/home/elisa/grupo4/src/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator-0.0.0-py3.10.egg-info' (and everything under it)
+[0.683s] Copying ../../build/navigator/navigator.egg-info to /home/elisa/grupo4/src/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator-0.0.0-py3.10.egg-info
+[0.684s] running install_scripts
+[0.699s] Installing andando script to /home/elisa/grupo4/src/nav_workspace/install/navigator/lib/navigator
+[0.699s] Installing cli script to /home/elisa/grupo4/src/nav_workspace/install/navigator/lib/navigator
+[0.699s] Installing init_pose script to /home/elisa/grupo4/src/nav_workspace/install/navigator/lib/navigator
+[0.699s] Installing queue script to /home/elisa/grupo4/src/nav_workspace/install/navigator/lib/navigator
+[0.700s] writing list of installed files to '/home/elisa/grupo4/src/nav_workspace/build/navigator/install.log'
+[0.717s] Invoked command in '/home/elisa/grupo4/src/nav_workspace/src/navigator' returned '0': PYTHONPATH=/home/elisa/grupo4/src/nav_workspace/build/navigator/prefix_override:/home/elisa/grupo4/src/nav_workspace/install/navigator/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/navigator build --build-base /home/elisa/grupo4/src/nav_workspace/build/navigator/build install --record /home/elisa/grupo4/src/nav_workspace/build/navigator/install.log --single-version-externally-managed

@@ -1,0 +1,20 @@
+[0.663s] Invoking command in '/home/elisa/grupo4/src/nav_workspace/src/navigator': PYTHONPATH=/home/elisa/grupo4/src/nav_workspace/build/navigator/prefix_override:/home/elisa/grupo4/src/nav_workspace/install/navigator/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/navigator build --build-base /home/elisa/grupo4/src/nav_workspace/build/navigator/build install --record /home/elisa/grupo4/src/nav_workspace/build/navigator/install.log --single-version-externally-managed
+[0.848s] running egg_info
+[0.848s] creating ../../build/navigator/navigatorr.egg-info
+[0.848s] writing ../../build/navigator/navigatorr.egg-info/PKG-INFO
+[0.849s] writing dependency_links to ../../build/navigator/navigatorr.egg-info/dependency_links.txt
+[0.849s] writing entry points to ../../build/navigator/navigatorr.egg-info/entry_points.txt
+[0.849s] writing requirements to ../../build/navigator/navigatorr.egg-info/requires.txt
+[0.849s] writing top-level names to ../../build/navigator/navigatorr.egg-info/top_level.txt
+[0.849s] writing manifest file '../../build/navigator/navigatorr.egg-info/SOURCES.txt'
+[0.850s] reading manifest file '../../build/navigator/navigatorr.egg-info/SOURCES.txt'
+[0.851s] writing manifest file '../../build/navigator/navigatorr.egg-info/SOURCES.txt'
+[0.851s] running build
+[0.852s] running build_py
+[0.852s] running install
+[0.852s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.852s]   warnings.warn(
+[0.853s] running install_lib
+[0.854s] running install_data
+[0.855s] error: can't copy 'resource/navigatorr': doesn't exist or not a regular file
+[0.874s] Invoked command in '/home/elisa/grupo4/src/nav_workspace/src/navigator' returned '1': PYTHONPATH=/home/elisa/grupo4/src/nav_workspace/build/navigator/prefix_override:/home/elisa/grupo4/src/nav_workspace/install/navigator/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/navigator build --build-base /home/elisa/grupo4/src/nav_workspace/build/navigator/build install --record /home/elisa/grupo4/src/nav_workspace/build/navigator/install.log --single-version-externally-managed
