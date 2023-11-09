@@ -23,10 +23,11 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "cli=navigator.cli:main",
-            "andando=navigator.navigator:main",
+            "chatbot=navigator.chatbot:main",
+            "vallet=navigator.vallet:main",
             "init_pose=navigator.initialize_pose:main",
-            "queue=navigator.queue:main"
+            "queue=navigator.poseQueue:main",
+            "coordinatesChatbot=navigator.coordinateChatbot:main"
         ],
     },
 )

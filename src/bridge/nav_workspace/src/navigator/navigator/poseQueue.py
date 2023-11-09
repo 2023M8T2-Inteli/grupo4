@@ -10,7 +10,7 @@ class PoseQueueNode(Node):
         super().__init__('queue')
         self.pose_queue = Queue()
         self.navigator_free = True
-        self.create_subscription(Pose, 'cli', self.cli_callback, 10)
+        self.create_subscription(Pose, 'chatbot_msgs', self.cli_callback, 10)
         self.create_subscription(String, 'status', self.status_callback, 10)
         self.pose_publisher = self.create_publisher(Pose, 'poses', 10)
 

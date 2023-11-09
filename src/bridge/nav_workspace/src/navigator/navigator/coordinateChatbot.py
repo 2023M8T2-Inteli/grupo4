@@ -9,7 +9,7 @@ class MyPublisher(Node):
 
     def __init__(self):
         super().__init__('my_publisher')
-        self.publisher_ = self.create_publisher(Pose, 'cli', 10)
+        self.publisher_ = self.create_publisher(Pose, 'chatbot_msgs', 10)
         timer_period = 1  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
 

@@ -4,9 +4,6 @@ from nav2_simple_commander.robot_navigator import BasicNavigator
 from geometry_msgs.msg import PoseStamped
 from tf_transformations import quaternion_from_euler
 
-
-
-
 def main(args=None):
     rclpy.init(args=args)
     nav = BasicNavigator()

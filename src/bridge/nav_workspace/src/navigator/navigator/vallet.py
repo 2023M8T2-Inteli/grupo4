@@ -7,10 +7,10 @@ from tf_transformations import quaternion_from_euler
 from math import pi
 from std_msgs.msg import String
 
-class Navigator(Node):
+class Vallet(Node):
 
     def __init__(self, navigator):
-        super().__init__('andando')
+        super().__init__('vallet')
         self.publisher = self.create_publisher(String, 'status', 10)
         self.subscription = self.create_subscription(
             Pose,
@@ -57,7 +57,7 @@ def create_pose_stamped(navigator, pos_x, pos_y, rot_z):
 def main(args=None):
     rclpy.init(args=args)
     navigator = BasicNavigator()  # Initialize the navigator
-    navigator_node = Navigator(navigator)
+    navigator_node = Vallet(navigator)
     rclpy.spin(navigator_node)
     navigator_node.destroy_node()
     rclpy.shutdown()
