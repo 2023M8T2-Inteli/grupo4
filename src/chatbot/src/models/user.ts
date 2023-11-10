@@ -1,4 +1,4 @@
-import { PrismaClient, User as PrismaUser, AllowedUsers as PrismaAllowedUsers, Role } from "@prisma/client";
+import { PrismaClient, User as PrismaUser, Role } from "@prisma/client";
 
 interface User {
 	id: string;
@@ -32,15 +32,14 @@ export default class UserService {
 		}
 	}
 
-    async getAdmin(): Promise<PrismaUser | null> {
-		
+	async getAdmin(): Promise<PrismaUser | null> {
 		try {
 			const user = await this.prisma.user.findFirst({
 				where: {
 					role: {
 						equals: [Role.ADMIN]
-					},
-				},
+					}
+				}
 			});
 			return user;
 		} catch (error) {
@@ -80,25 +79,6 @@ export default class UserService {
 			return updatedUser;
 		} catch (error) {
 			console.error("An error occurred while updating the user:", error);
-			throw error;
-		} finally {
-			await this.prisma.$disconnect();
-		}
-	}
-
-	async checkUserByCellPhone(cellPhone: string): Promise<PrismaAllowedUsers | null> {
-		try {
-			const isAllowed = await this.prisma.allowedUsers.findFirst({
-				where: {
-					cellPhone
-				}
-			});
-			if (isAllowed == null) {
-				return null;
-			}
-			return isAllowed;
-		} catch (error) {
-			console.error("An error occurred while fetching the user:", error);
 			throw error;
 		} finally {
 			await this.prisma.$disconnect();

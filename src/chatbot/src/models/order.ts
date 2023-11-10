@@ -1,4 +1,4 @@
-import { PrismaClient, User as PrismaUser, AllowedUsers as PrismaAllowedUsers, Role } from "@prisma/client";
+import { PrismaClient, Order as PrismaOrder, Role } from "@prisma/client";
 
 interface Order {
 	id: string;
@@ -8,22 +8,22 @@ interface Order {
 	createdAt: Date;
 }
 
-export default class UserService {
+export default class OrderService {
 	constructor(private prisma: PrismaClient) {
 		this.prisma = prisma;
 	}
 
-	async getUser(cellPhone: string): Promise<PrismaUser | null> {
+	async getOrder(id: string): Promise<PrismaOrder | null> {
 		try {
-			const user = await this.prisma.user.findFirst({
+			const order = await this.prisma.order.findFirst({
 				where: {
-					cellPhone
+					id
 				}
 			});
-			if (user == null) {
+			if (order == null) {
 				return null;
 			}
-			return user;
+			return order;
 		} catch (error) {
 			console.error("An error occurred while fetching the user:", error);
 			throw error;

@@ -15,15 +15,20 @@ import { transcribeRequest } from "../providers/speech";
 import { transcribeAudioLocal } from "../providers/whisper-local";
 import { transcribeWhisperApi } from "../providers/whisper-api";
 import { transcribeOpenAI } from "../providers/openai";
+import LeadService from "../models/lead";
+
+const { v4: uuidv4 } = require("uuid");
 
 export default class MessageEventHandler {
 	private userService: UserService;
 	private prisma: PrismaClient;
 	private whatsappClient: Client;
+	private leadService: LeadService;
 
-	constructor(prisma: PrismaClient, userService: UserService, whatsappClient: Client) {
+	constructor(prisma: PrismaClient, userService: UserService, leadService: LeadService, whatsappClient: Client) {
 		this.prisma = prisma;
 		this.userService = userService;
+		this.leadService = leadService;
 		this.whatsappClient = whatsappClient;
 	}
 
@@ -49,9 +54,8 @@ export default class MessageEventHandler {
 		if ((await message.getChat()).isGroup && !config.groupchatsEnabled) return;
 
 		const userData = await this.userService.getUser(message.from);
-		const isAllowed = await this.userService.checkUserByCellPhone(message.from.split("@")[0]);
 
-		if (userData || isAllowed) {
+		if (userData) {
 			let requestState = userData?.requestState || 0;
 			this.handleRequestState(requestState, message, userName);
 		}else{
@@ -60,6 +64,15 @@ export default class MessageEventHandler {
 	}
 
 	async handleRequestAccess(message: Message, userName: string) {
+		const newLead = {
+			id: uuidv4(),
+			name: userName,
+			cellPhone: message.from,
+			createdAt: new Date()
+		};
+
+		this.leadService.createAccountLead(newLead);
+
 		message.reply(`Olá ${userName}, tudo bem?`);
 
 		await delay(1000);

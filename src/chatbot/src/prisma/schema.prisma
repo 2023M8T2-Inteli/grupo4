@@ -26,6 +26,13 @@ model Tool {
   Order        Order[]
 }
 
+model Lead {
+  id        String   @id @default(uuid())
+  name      String
+  cellPhone String   @unique
+  createdAt DateTime @default(now())
+}
+
 model Order {
   id        String   @id @default(uuid())
   type      String   @default("Peding")
@@ -34,12 +41,6 @@ model Order {
   createdAt DateTime @default(now())
   tool      Tool     @relation(fields: [toolId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
-}
-
-model AllowedUsers {
-  id        String   @id @default(uuid())
-  cellPhone String   @unique
-  createdAt DateTime @default(now())
 }
 
 enum Role {

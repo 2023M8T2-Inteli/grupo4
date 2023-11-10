@@ -119,19 +119,19 @@ const handleRequestMenu = async (message: Message, client: Client) => {
 	try {
 		switch (message.body) {
 			case "1":
-				await updateRequest(message, 3);
-				message.reply("Por favor envie uma mensagem de voz com a descrição da peça que deseja solicitar.");
+				await updateRequest(message, 1);
+				message.reply("Serviço disponível em breve :)!!!");
 				break;
 
 			case "2":
-				updateRequest(message, 4);
-
+				updateRequest(message, 1);
+				message.reply("No momento, não temos nenhum pedido registrado em seu nome.");
 
 				break;
 
 			case "3":
-				updateRequest(message, 5);
-
+				updateRequest(message, 1);
+				message.reply("No momento, não temos nenhum pedido registrado em seu nome.");
 				
 				break;
 

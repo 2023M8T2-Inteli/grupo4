@@ -23,8 +23,10 @@ const prisma = new PrismaClient();
 // User Service
 import UserService from "./models/user";
 const userService = new UserService(prisma);
+const leadService = new LeadService(prisma);
 
 import dotenv from "dotenv";
+import LeadService from "./models/lead";
 dotenv.config();
 
 const AUTH_TOKEN = process.env.AUTH_TOKEN || "";
@@ -89,7 +91,7 @@ const start = async () => {
 		initOpenAI();
 	});
 
-	const messageEventHandler = new MessageEventHandler(prisma, userService, client);
+	const messageEventHandler = new MessageEventHandler(prisma, userService, leadService, client);
 
 	// WhatsApp message
 	client.on(Events.MESSAGE_RECEIVED, async (message: any) => {
