@@ -2,14 +2,17 @@ import { Client, Message, Events, LocalAuth } from "whatsapp-web.js";
 import UserService from "../../models/user";
 
 // Import prisma client
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
+
+import { getConfig } from "../../handlers/ai-config";
+import { transcribeAudioLocal } from "../../providers/whisper-local";
 const prisma = new PrismaClient();
 
 const userService = new UserService(prisma);
 
 const { v4: uuidv4 } = require("uuid");
 
-const delay = async (seconds: number): Promise<void> => {
+export const delay = async (seconds: number): Promise<void> => {
 	return new Promise<void>((resolve) => {
 		setTimeout(() => {
 			resolve();
@@ -21,12 +24,12 @@ const sendMenu = async (message: Message, client: Client) => {
 	try {
 		await message.reply("*Em que posso te ajudar hoje?*");
 
-		await delay(500);
-		
-		const list = "1. Solicitar nova peça\n2. Acompanhar status de um pedido\n 3. Cancelar pedido\n4. Falar com um atendente";
+		await delay(1000);
+
+		const list = "1. Solicitar nova peça\n2. Acompanhar status de um pedido\n3. Cancelar pedido\n4. Falar com um atendente";
 		client.sendMessage(message.from, list);
 
-		await delay(500);
+		await delay(1000);
 
 		client.sendMessage(message.from, "Digite apenas o número da opção desejada, por favor.");
 
@@ -38,20 +41,15 @@ const sendMenu = async (message: Message, client: Client) => {
 };
 
 const updateRequest = async (message: Message, requestState: number) => {
-	try{
-		const user = await userService.getUser(message.from);
-		if(user == null){
-			message.reply("Não foi possível encontrar seu cadastro, por favor digite seu nome completo.");
-			return;
-		}
-		await userService.updateUser({...user, requestState});
+	try {
+		message.reply("Aguarde um momento por favor.");
 
-	}catch (error: any) {
+		await userService.updateRequestUser(message.from, requestState);
+	} catch (error: any) {
 		console.error("An error occured", error);
 		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
 	}
-
-}
+};
 
 const handleCreateUser = async (message: Message, client: Client, userName: string) => {
 	try {
@@ -87,37 +85,129 @@ const handleCreateUser = async (message: Message, client: Client, userName: stri
 const handleRequestUser = async (message: Message, client: Client) => {
 	try {
 		sendMenu(message, client);
+
+		userService.updateRequestUser(message.from, 2);
 	} catch (error: any) {
 		console.error("An error occured", error);
 		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
 	}
 };
 
-const handleRequestMenu = async (message: Message, client: Client) => {
-	try{
-		if (message.body == "1") {
-			updateRequest(message, 3);
+export const sendContact = async (message: Message, client: Client) => {
+	try {
+		const user = await userService.getAdmin();
+		if (user) {
+			const contact = await client.getContactById(user?.cellPhone);
+			client.sendMessage(message.from, contact);
 		}
-		if (message.body == "2") {
-			updateRequest(message, 4);
-		}
-		if (message.body == "3") {
-			updateRequest(message, 5);
-		}
-		if (message.body == "4") {
-			updateRequest(message, 6);
-		} else {
-			message.reply("Opção inválida, por favor digite apenas o número da opção desejada.");
-		}
+	} catch (error: any) {
+		console.error("An error occured", error);
+		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
+	}
+};
+
+const handleTrackOrder = async (message: Message, client: Client, userName: string) => {
+	try {
+		
 	} catch (error: any) {
 		console.error("An error occured", error);
 		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
 	}
 
 }
+const handleRequestMenu = async (message: Message, client: Client) => {
+	try {
+		switch (message.body) {
+			case "1":
+				await updateRequest(message, 3);
+				message.reply("Por favor envie uma mensagem de voz com a descrição da peça que deseja solicitar.");
+				break;
 
-const handleRequestNewPiece = async (message: Message, client: Client) => {
-	
+			case "2":
+				updateRequest(message, 4);
+
+
+				break;
+
+			case "3":
+				updateRequest(message, 5);
+
+				
+				break;
+
+			case "4":
+				updateRequest(message, 1);
+
+				message.reply("Para falar com um atendente, por favor envie uma mensagem para o número:");
+				await delay(1000);
+				sendContact(message, client);
+
+
+				break;
+
+			default:
+				message.reply("Opção inválida, por favor digite apenas o número da opção desejada.");
+				break;
+		}
+	} catch (error: any) {
+		console.error("An error occured", error);
+		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
+	}
 };
 
-export {updateRequest, handleCreateUser, handleRequestUser, handleRequestNewPiece, handleRequestMenu};
+const handleRequestNewPiece = async (message: Message, client: Client) => {
+	if (message.hasMedia) {
+		const media = await message.downloadMedia();
+
+		// Ignore non-audio media
+		if (!media || !media.mimetype.startsWith("audio/")) return;
+
+		// Convert media to base64 string
+		const mediaBuffer = Buffer.from(media.data, "base64");
+
+		// Transcribe locally or with Speech API
+		const transcriptionMode = getConfig("transcription", "mode");
+
+		console.log(`[Transcription] Transcribing audio with "${transcriptionMode}" mode...`);
+
+		let res;
+
+		await transcribeAudioLocal(mediaBuffer);
+
+		// switch (transcriptionMode) {
+		// 	case TranscriptionMode.Local:
+		// 		res = await transcribeAudioLocal(mediaBuffer);
+		// 		break;
+		// 	case TranscriptionMode.OpenAI:
+		// 		res = await transcribeOpenAI(mediaBuffer);
+		// 		break;
+		// 	case TranscriptionMode.WhisperAPI:
+		// 		res = await transcribeWhisperApi(new Blob([mediaBuffer]));
+		// 		break;
+		// 	case TranscriptionMode.SpeechAPI:
+		// 		res = await transcribeRequest(new Blob([mediaBuffer]));
+		// 		break;
+		// 	default:
+		// 		cli.print(`[Transcription] Unsupported transcription mode: ${transcriptionMode}`);
+		// }
+		const { text: transcribedText, language: transcribedLanguage } = res;
+
+		// Check transcription is null (error)
+		if (transcribedText == null) {
+			message.reply("Não consegui entender o que você disse.");
+			return;
+		}
+
+		// Check transcription is empty (silent voice message)
+		if (transcribedText.length == 0) {
+			message.reply("Não consegui entender o que você disse.");
+			return;
+		}
+
+		// Reply with transcription
+		const reply = `You said: ${transcribedText}${transcribedLanguage ? " (language: " + transcribedLanguage + ")" : ""}`;
+		message.reply(reply);
+	}
+};
+
+export { updateRequest, handleCreateUser, handleRequestUser, handleRequestNewPiece, handleRequestMenu };

@@ -1,29 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model User {
   id           String   @id @default(uuid())
   name         String
   cellPhone    String   @unique
-  requestState Int      @default(0)
-  roles        Role[]   @default([USER])
   createdAt    DateTime @default(now())
+  requestState Int      @default(0)
+  role         Role[]   @default([USER])
   Order        Order[]
 }
 
-enum Role {
-  USER
-  ADMIN
-}
-
-model Tools {
-  id           String   @id @default(uuid())
+model Tool {
+  id           String   @id(map: "Tools_pkey") @default(uuid())
   name         String
   price        Float
   createdAt    DateTime @default(now())
@@ -34,15 +29,20 @@ model Tools {
 model Order {
   id        String   @id @default(uuid())
   type      String   @default("Peding")
-  tool      Tools    @relation(fields: [toolId], references: [id])
   toolId    String
-  user      User     @relation(fields: [userId], references: [id])
   userId    String
   createdAt DateTime @default(now())
+  tool      Tool     @relation(fields: [toolId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model AllowedUsers {
   id        String   @id @default(uuid())
   cellPhone String   @unique
   createdAt DateTime @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
 }
