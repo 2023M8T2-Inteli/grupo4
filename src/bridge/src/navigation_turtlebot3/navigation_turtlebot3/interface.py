@@ -24,16 +24,12 @@ class Interface(Node):
 
         self.get_logger().info(f"Pose {msg.position.x, msg.position.y} published.")
 
-    def destroy(self):
-        self.oracle.destroy_pub()
-        self.destroy_node()
-
 
 def main(args=None):
     rclpy.init(args=args)
     interface_node = Interface()
     rclpy.spin(interface_node)
-    interface_node.destroy()
+    interface_node.destroy_node()
     rclpy.shutdown()
 
 

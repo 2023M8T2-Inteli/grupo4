@@ -41,10 +41,6 @@ class NavigatorController(Node):
         pose.pose.orientation.w = q_w
         return pose
 
-    def destroy(self):
-        self.robot_status.destroy_pub()
-        self.destroy_node()
-
 
 class Vallet(Node):
     def __init__(self, navigator_controller: NavigatorController):
@@ -66,11 +62,6 @@ class Vallet(Node):
         else:
             self.navigator_controller.publish_status("FREE")
 
-    def destroy(self):
-        self.pose.destroy_sub()
-        self.navigator_controller.destroy()
-        self.destroy_node()
-
 
 def main(args=None):
     rclpy.init(args=args)
@@ -78,7 +69,7 @@ def main(args=None):
     navigator_controller = NavigatorController(navigator)
     vallet_node = Vallet(navigator_controller)
     rclpy.spin(vallet_node)
-    vallet_node.destroy()
+    vallet_node.destroy_node()
     rclpy.shutdown()
 
 

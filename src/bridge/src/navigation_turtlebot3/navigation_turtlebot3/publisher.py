@@ -29,7 +29,3 @@ class Publisher():
     def publish(self, message: any) -> None:
         self.publisher.publish(message)
         self.node.get_logger().info(f"Publishing {message} on {self.topic_name}")
-
-    def destroy_pub(self) -> None:
-        self.publisher.destroy()
-        self.node.get_logger().info(f"Publisher {self.name} disconnected.")
