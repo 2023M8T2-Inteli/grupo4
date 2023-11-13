@@ -1,3 +1,8 @@
+![activitie](https://img.shields.io/github/commit-activity/w/2023M8T2-Inteli/grupo4)
+![license](https://img.shields.io/github/license/2023M8T2-Inteli/grupo4)
+![issues](https://img.shields.io/github/issues/2023M8T2-Inteli/grupo4)
+[![Static Badge](https://img.shields.io/badge/documenta%C3%A7%C3%A3o%3A%20online-green?logo=docusaurus&logoColor=white)](https://2023m8t2-inteli.github.io/grupo4/)
+
 # Grupo 4
 
 # Inteli - Instituto de Tecnologia e Liderança 
@@ -49,11 +54,7 @@ A documentação do projeto pode ser consultada na pasta `docs` do repositório.
 
 ### Está procurando a documentação?
 
-[Button Click][Link] 
-
-[Button Click]: https://img.shields.io/badge/Acesse_a_documentação_aqui!-ff2222?style=for-the-badge
-[Link]: https://2023m8t2-inteli.github.io/grupo4/
-
+[![Static Badge](https://img.shields.io/badge/Acesse%20a%20documenta%C3%A7%C3%A3o-green?logo=docusaurus&logoColor=white)](https://2023m8t2-inteli.github.io/grupo4/)
 
 
 ## 📁 Estrutura de pastas
