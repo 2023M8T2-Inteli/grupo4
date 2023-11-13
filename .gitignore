@@ -10,4 +10,5 @@
 
 *build
 *install
-*/log
+*log
+*__pycache__
