@@ -1,7 +1,7 @@
-![activitie](https://img.shields.io/github/commit-activity/w/2023M8T2-Inteli/grupo4)
-![license](https://img.shields.io/github/license/2023M8T2-Inteli/grupo4)
-![issues](https://img.shields.io/github/issues/2023M8T2-Inteli/grupo4)
-[![Static Badge](https://img.shields.io/badge/documenta%C3%A7%C3%A3o%3A%20online-green?logo=docusaurus&logoColor=white)](https://2023m8t2-inteli.github.io/grupo4/)
+![activitie](https://img.shields.io/github/commit-activity/w/2023M8T2-Inteli/grupo4?style=plastic)
+![license](https://img.shields.io/github/license/2023M8T2-Inteli/grupo4?style=plastic)
+![issues](https://img.shields.io/github/issues/2023M8T2-Inteli/grupo4?style=plastic)
+[![Static Badge](https://img.shields.io/badge/Documenta%C3%A7%C3%A3o%3A%20online-white?logo=docusaurus&logoColor=white&color=%23014007?style=plastic)](https://2023m8t2-inteli.github.io/grupo4/)
 
 # Grupo 4
 
