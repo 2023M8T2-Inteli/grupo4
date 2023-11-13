@@ -28,6 +28,7 @@ setup(
             "interface=navigation_turtlebot3.interface:main",
             "initial_pose=navigation_turtlebot3.initial_pose:main",
             "vallet=navigation_turtlebot3.vallet:main",
+            "chatbot=navigation_turtlebot3.chatbot:main"
         ],
     },
 )

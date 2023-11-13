@@ -43,18 +43,12 @@ class PoseQueue(Node):
         else:
             self.get_logger().info("Something went wrong.")
 
-    def destroy(self) -> None:
-        self.enqueue.destroy_sub()
-        self.status.destroy_sub()
-        self.dequeue.destroy_pub()
-        self.destroy_node()
-
 
 def main(args=None):
     rclpy.init(args=args)
     pose_queue_node = PoseQueue()
     rclpy.spin(pose_queue_node)
-    pose_queue_node.destroy()
+    pose_queue_node.destroy_node()
     rclpy.shutdown()
 
 

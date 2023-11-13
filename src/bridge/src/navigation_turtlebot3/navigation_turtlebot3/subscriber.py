@@ -23,7 +23,3 @@ class Subscriber():
         self.node.create_timer(period, timer_callback)
 
         self.node.get_logger().info(f"Timer on {self.name} node created.")
-
-    def destroy_sub(self) -> None:
-        self.subscription.destroy()
-        self.node.get_logger().info(f"Subscriber {self.name} disconnected.")

@@ -46,4 +46,11 @@ def generate_launch_description():
             prefix="xterm -e",
             name="interface"
         ),
+        Node(
+            package='navigation_turtlebot3',
+            executable='chatbot',
+            output='screen',
+            prefix="xterm -e",
+            name="chatbot"
+        )
     ])
