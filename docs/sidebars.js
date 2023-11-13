@@ -37,7 +37,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'Desenvolvimento da Solução',
-      items: ['Desenvolvimento da Solução/3.1 Chatbot Whatsapp'],
+      items: ['Desenvolvimento da Solução/3.1 Mapeamento e navegação', 'Desenvolvimento da Solução/3.2 Chatbot'],
     },
     {
       type: 'doc',

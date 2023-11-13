@@ -1,0 +1,57 @@
+[0.450s] Invoking command in '/home/elisa/grupo4/src/bridge/nav_workspace/src/navigator': PYTHONPATH=/home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/prefix_override:/home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/navigator build --build-base /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build install --record /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/install.log --single-version-externally-managed
+[0.599s] running egg_info
+[0.600s] creating ../../build/navigator/navigator.egg-info
+[0.600s] writing ../../build/navigator/navigator.egg-info/PKG-INFO
+[0.600s] writing dependency_links to ../../build/navigator/navigator.egg-info/dependency_links.txt
+[0.600s] writing entry points to ../../build/navigator/navigator.egg-info/entry_points.txt
+[0.600s] writing requirements to ../../build/navigator/navigator.egg-info/requires.txt
+[0.600s] writing top-level names to ../../build/navigator/navigator.egg-info/top_level.txt
+[0.600s] writing manifest file '../../build/navigator/navigator.egg-info/SOURCES.txt'
+[0.601s] reading manifest file '../../build/navigator/navigator.egg-info/SOURCES.txt'
+[0.602s] writing manifest file '../../build/navigator/navigator.egg-info/SOURCES.txt'
+[0.603s] running build
+[0.603s] running build_py
+[0.603s] creating /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build
+[0.603s] creating /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build/lib
+[0.603s] creating /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build/lib/navigator
+[0.603s] copying navigator/coordinateChatbot.py -> /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build/lib/navigator
+[0.603s] copying navigator/initialize_pose.py -> /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build/lib/navigator
+[0.604s] copying navigator/poseQueue.py -> /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build/lib/navigator
+[0.604s] copying navigator/__init__.py -> /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build/lib/navigator
+[0.604s] copying navigator/chatbot.py -> /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build/lib/navigator
+[0.604s] copying navigator/vallet.py -> /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build/lib/navigator
+[0.604s] running install
+[0.604s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.604s]   warnings.warn(
+[0.604s] running install_lib
+[0.605s] creating /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator
+[0.605s] copying /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build/lib/navigator/coordinateChatbot.py -> /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator
+[0.605s] copying /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build/lib/navigator/initialize_pose.py -> /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator
+[0.605s] copying /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build/lib/navigator/poseQueue.py -> /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator
+[0.605s] copying /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build/lib/navigator/__init__.py -> /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator
+[0.605s] copying /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build/lib/navigator/chatbot.py -> /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator
+[0.605s] copying /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build/lib/navigator/vallet.py -> /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator
+[0.606s] byte-compiling /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator/coordinateChatbot.py to coordinateChatbot.cpython-310.pyc
+[0.606s] byte-compiling /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator/initialize_pose.py to initialize_pose.cpython-310.pyc
+[0.606s] byte-compiling /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator/poseQueue.py to poseQueue.cpython-310.pyc
+[0.607s] byte-compiling /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator/__init__.py to __init__.cpython-310.pyc
+[0.607s] byte-compiling /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator/chatbot.py to chatbot.cpython-310.pyc
+[0.607s] byte-compiling /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator/vallet.py to vallet.cpython-310.pyc
+[0.608s] running install_data
+[0.608s] creating /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/share/ament_index
+[0.608s] creating /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/share/ament_index/resource_index
+[0.608s] creating /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/share/ament_index/resource_index/packages
+[0.608s] copying resource/navigator -> /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/share/ament_index/resource_index/packages
+[0.608s] copying package.xml -> /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/share/navigator
+[0.609s] creating /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/share/navigator/launch
+[0.609s] copying launch/navigator_launch.py -> /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/share/navigator/launch
+[0.609s] running install_egg_info
+[0.610s] Copying ../../build/navigator/navigator.egg-info to /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages/navigator-0.0.0-py3.10.egg-info
+[0.611s] running install_scripts
+[0.624s] Installing chatbot script to /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/navigator
+[0.624s] Installing coordinatesChatbot script to /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/navigator
+[0.624s] Installing init_pose script to /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/navigator
+[0.624s] Installing queue script to /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/navigator
+[0.624s] Installing vallet script to /home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/navigator
+[0.624s] writing list of installed files to '/home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/install.log'
+[0.643s] Invoked command in '/home/elisa/grupo4/src/bridge/nav_workspace/src/navigator' returned '0': PYTHONPATH=/home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/prefix_override:/home/elisa/grupo4/src/bridge/nav_workspace/install/navigator/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/navigator build --build-base /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/build install --record /home/elisa/grupo4/src/bridge/nav_workspace/build/navigator/install.log --single-version-externally-managed

@@ -6,16 +6,24 @@ from geometry_msgs.msg import Pose
 class Chatbot(Node):
     def __init__(self):
         super().__init__('chatbot')
+
         self.intencoes = {
-            r'\b(olá|oi|hey|e aí|oiê)\b': 'cumprimento',
-            r'\b(tchau|até logo|até mais)\b': 'despedida',
-            r'\b((?:(?:vai|va|ir)(?: para| pro| pra|)(?: (?:o |na |no |))?(?:ponto |)?([a-zA-Z]+)))\b': 'ir_para',
+            r'(olá|oi|hey|e aí|oiê)': 'cumprimento',
+            r'(tchau|até logo|até mais)': 'despedida',
+            r'\b(s?e?s?k?o?l)\b': 'skol',
+            r'br[aa]?mm?a|brahma': 'brahma',
+            r'ze|zé|zé delivery|delivery': 'ze delivery',
+            r'b[ea]ts?|bats|beets|bites|beates|bates|betes|beats': 'beats',
+            r'almo?x(?:erif(?:ado)?|arif(?:e|ado)?|cherif(?:ado|edo)?)': 'almoxarifado'
         }
 
+
         self.destinos = {
-            'casa': {'x': 0.0, 'y': 0.0, 'z': 0.0},
-            'A': {'x': 1.0, 'y': 0.0, 'z': 0.0},
-            'B': {'x': 0.0, 'y': 1.0, 'z': 0.0},
+            'almoxarifado': {'x': 0.0, 'y': 0.0, 'z': 0.0},
+            'beats': {'x': 1.26, 'y': 0.0, 'z': 0.0},
+            'brahma': {'x': 1.22, 'y': -1.55, 'z': 0.0},
+            'ze delivery': {'x': 0.62, 'y': -0.81, 'z': 0.0},
+            'skol': {'x': 0.0, 'y': -1.55, 'z': 0.0},
         }
 
         self.intencao = None
@@ -23,54 +31,46 @@ class Chatbot(Node):
         self.publisher_ = self.create_publisher(Pose, 'chatbot_msgs', 10)
 
     def ir_para(self):
-        if self.destino in self.destinos:
-            pose_msg = Pose()
-            pose_msg.position.x = self.destinos[self.destino]['x']
-            pose_msg.position.y = self.destinos[self.destino]['y']
-            pose_msg.position.z = self.destinos[self.destino]['z']
-            self.get_logger().info(f'Indo para {self.destino} - Coordenadas (x:{pose_msg.position.x}, y:{pose_msg.position.y}, z:{pose_msg.position.z})')
-            self.publisher_.publish(pose_msg)
-            return f'Indo para {self.destino} - Coordenadas (x:{pose_msg.position.x}, y:{pose_msg.position.y}, z:{pose_msg.position.z})'
-        else:
-            return 'Destino não encontrado.'
+        pose_msg = Pose()
+        pose_msg.position.x = self.destino['x']
+        pose_msg.position.y = self.destino['y']
+        pose_msg.position.z = self.destino['z']
+        self.publisher_.publish(pose_msg)
+        print(f'OK! Vou para {self.intencao} - Coordenadas (x:{pose_msg.position.x}, y:{pose_msg.position.y}, z:{pose_msg.position.z})')
 
     def terminar_chat(self):
-        return 'Até mais!'
+        print('Até mais!')
+        exit()
 
     def identificar_intencao(self, texto):
         for expressao, intencao in self.intencoes.items():
             match = re.search(expressao, texto, re.IGNORECASE)
             if match:
-                if intencao == 'ir_para':
-                    return intencao, match.group(2).upper() if match.group(2) else None
-                else:
-                    return intencao, None
-        return 'desconhecido', None
+                return intencao
+        return None
+      
 
-    def executar_acao(self, intencao, destino):
-        if intencao == 'cumprimento':
-            return 'Olá! Eu sou o Vallet da cervejaria do futuro. Para onde devo ir?'
+    def executar_acao(self, intencao):
+        if intencao:
+            if intencao == 'cumprimento':
+                print('Olá! Eu sou o Vallet da cervejaria do futuro. Para onde devo ir?')
 
-        elif intencao == 'despedida':
-            return self.terminar_chat()
-
-        elif intencao == 'ir_para':
-            if destino:
-                return self.ir_para()
+            elif intencao == 'despedida':
+                return self.terminar_chat()
+            
             else:
-                return 'Destino não especificado.'
+                self.destino = self.destinos[self.intencao]
+                self.ir_para()
 
         else:
-            return 'Desculpe, não entendi o que você disse.'
+            print('Desculpe, não entendi o que você disse.')
 
     def iniciar_conversa(self):
         while True:
             texto = input("Você: ")
-            self.intencao, self.destino = self.identificar_intencao(texto)
-            resposta = self.executar_acao(self.intencao, self.destino)
-            print(resposta)
-            if self.intencao == 'despedida':
-                exit()
+            self.intencao = self.identificar_intencao(texto)
+            self.executar_acao(self.intencao)
+            
 
 def main(args=None):
     rclpy.init(args=args)
