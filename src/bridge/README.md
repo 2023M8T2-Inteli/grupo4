@@ -2,9 +2,9 @@
 
 ### Pacotes Mapping:
 
-O pacote Demiurge contempla os scripts necessários para realizar o mapeamento pelo robô em ambiente simulado e se encontra no diretório: `ativ2-m8/src/mapping_<turtlebot3/gazebo>`. 
+Os pacotes mapping_<gazebo/turtlebot3> contemplam os scripts necessários para realizar o mapeamento pelo robô em ambiente simulado ou real e se encontram no diretório: `ativ2-m8/src/mapping_<turtlebot3/gazebo>`. 
 
-Para executá-lo, juntamente com as suas dependências, é preciso seguir as seguintes instruções:
+Para executá-los, juntamente com as suas dependências, é preciso seguir as seguintes instruções:
 
 - Na pasta raíz desse projeto rode o seguinte comando:
 
@@ -39,9 +39,9 @@ Neste [link]() é possível ver o funcionamento do pacote.
 
 ### Pacotes Navigation:
 
-O pacote de intelligible se encontra no diretório `ativ2-m8/src/navigation_<turtlebot3/gazebo>`. 
+Os pacotes navigation_<turtlebot3/gazebo> se encontram no diretório `ativ2-m8/src/navigation_<turtlebot3/gazebo>`. 
 
-Para executa-lo é preciso seguir as seguintes instruções:
+Para executá-los é preciso seguir as seguintes instruções:
 
 - Na pasta raíz desse projeto rode o seguinte comando:
 
