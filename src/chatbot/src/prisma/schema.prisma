@@ -18,12 +18,15 @@ model User {
 }
 
 model Tool {
-  id           String   @id(map: "Tools_pkey") @default(uuid())
-  name         String
-  price        Float
-  createdAt    DateTime @default(now())
-  requestState Int      @default(0)
-  Order        Order[]
+  id          String   @id @default(uuid())
+  code        Int   @unique
+  name        String
+  price       Float
+  tag         String
+  minQuantity Int
+  maxQuantity Int
+  createdAt   DateTime @default(now())
+  Order       Order[]
 }
 
 model Lead {

@@ -1,8 +1,11 @@
 name: Chatbot WhatsApp
+
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
+    paths:
+      - 'src/chatbot/**'
+
 
 jobs:
   CI_CHATBOT:
