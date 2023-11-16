@@ -7,11 +7,8 @@ import constants from "./constants";
 // CLI
 import * as cli from "./cli/ui";
 // import { handleIncomingMessage } from "./handlers/message";
-import MessageEventHandler from "./handlers/message";
+import {MessageEventHandler} from "./handlers/message";
 
-// Config
-import { initAiConfig } from "./handlers/ai-config";
-import { initOpenAI } from "./providers/openai";
 
 // Ready timestamp of the bot
 let botReadyTimestamp: Date | null = null;
@@ -23,10 +20,9 @@ const prisma = new PrismaClient();
 // User Service
 import UserService from "./models/user";
 const userService = new UserService(prisma);
-const leadService = new LeadService(prisma);
+
 
 import dotenv from "dotenv";
-import LeadService from "./models/lead";
 dotenv.config();
 
 const AUTH_TOKEN = process.env.AUTH_TOKEN || "";
@@ -86,23 +82,20 @@ const start = async () => {
 	client.on(Events.READY, () => {
 		// Set bot ready timestamp
 		botReadyTimestamp = new Date();
-
-		initAiConfig();
-		initOpenAI();
+	
 	});
 
-	const messageEventHandler = new MessageEventHandler(prisma, userService, leadService, client);
+	const messageEventHandler = new MessageEventHandler(prisma, userService, client);
 
 	// WhatsApp message
 	client.on(Events.MESSAGE_RECEIVED, async (message: any) => {
-		const userName = message._data.notifyName;
 		// Ignore if message is from status broadcast
 		if (message.from == constants.statusBroadcast) return;
 
 		// Ignore if it's a quoted message, (e.g. Bot reply)
 		if (message.hasQuotedMsg) return;
 
-		await messageEventHandler.handleIncomingMessage(message, userName);
+		await messageEventHandler.handleIncomingMessage(message);
 		
 	});
 

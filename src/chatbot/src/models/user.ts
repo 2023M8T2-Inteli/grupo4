@@ -1,12 +1,5 @@
 import { PrismaClient, User as PrismaUser, Role } from "@prisma/client";
 
-interface User {
-	id: string;
-	name: string;
-	cellPhone: string;
-	requestState: number;
-	createdAt: Date;
-}
 
 export default class UserService {
 	constructor(private prisma: PrismaClient) {
@@ -50,11 +43,14 @@ export default class UserService {
 		}
 	}
 
-	async createAccountUser(user: User): Promise<PrismaUser> {
+	async createAccountUser(user: PrismaUser): Promise<PrismaUser> {
 		try {
 			const createdUser = await this.prisma.user.create({
 				data: {
-					...user
+					id: user.id,
+					name: user.name,
+					cellPhone: user.cellPhone,
+					requestState: user.requestState,
 				}
 			});
 			return createdUser;
@@ -66,14 +62,15 @@ export default class UserService {
 		}
 	}
 
-	async updateUser(user: User): Promise<PrismaUser> {
+	async updateAccountUser(user: PrismaUser): Promise<PrismaUser> {
 		try {
 			const updatedUser = await this.prisma.user.update({
 				where: {
 					cellPhone: user.cellPhone
 				},
 				data: {
-					name: user.name
+					name: user.name,
+					requestState: user.requestState
 				}
 			});
 			return updatedUser;

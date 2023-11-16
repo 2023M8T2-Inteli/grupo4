@@ -1,116 +1,144 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User as PrismaUser } from "@prisma/client";
 import UserService from "../models/user";
 import { Client, Message, List } from "whatsapp-web.js";
-import { botReadyTimestamp } from "../index";
 import * as cli from "../cli/ui";
 // Config & Constants
 import config from "../config";
-import { delay, handleCreateUser, handleRequestMenu, handleRequestNewPiece, handleRequestUser, sendContact, updateRequest } from "../services/user/user-service";
 
-import { handleMessageAIConfig, getConfig, executeCommand } from "../handlers/ai-config";
+import {handleCreateUser, handleUpdateUser} from "../messages/user/user-messages"
 
 // // Speech API & Whisper
 import { TranscriptionMode } from "../types/transcription-mode";
 import { transcribeRequest } from "../providers/speech";
 import { transcribeAudioLocal } from "../providers/whisper-local";
 import { transcribeWhisperApi } from "../providers/whisper-api";
-import { transcribeOpenAI } from "../providers/openai";
-import LeadService from "../models/lead";
 
 const { v4: uuidv4 } = require("uuid");
 
-export default class MessageEventHandler {
-	private userService: UserService;
-	private prisma: PrismaClient;
-	private whatsappClient: Client;
-	private leadService: LeadService;
-
-	constructor(prisma: PrismaClient, userService: UserService, leadService: LeadService, whatsappClient: Client) {
-		this.prisma = prisma;
-		this.userService = userService;
-		this.leadService = leadService;
-		this.whatsappClient = whatsappClient;
-	}
-
-	async handleIncomingMessage(message: Message, userName: string) {
-		// Prevent handling old messages
-		if (message.timestamp != null) {
-			const messageTimestamp = new Date(message.timestamp * 1000);
-
-			// If startTimestamp is null, the bot is not ready yet
-			if (botReadyTimestamp == null) {
-				cli.print(`Ignoring message because bot is not ready yet: ${message.body}`);
-				return;
-			}
-
-			// Ignore messages that are sent before the bot is started
-			if (messageTimestamp < botReadyTimestamp) {
-				cli.print(`Ignoring old message: ${message.body}`);
-				return;
-			}
-		}
-
-		// ignore message from groups if groupchatsEnabled is false
-		if ((await message.getChat()).isGroup && !config.groupchatsEnabled) return;
-
-		const userData = await this.userService.getUser(message.from);
-
-		if (userData) {
-			let requestState = userData?.requestState || 0;
-			this.handleRequestState(requestState, message, userName);
-		}else{
-			this.handleRequestAccess(message, userName);
-		}
-	}
-
-	async handleRequestAccess(message: Message, userName: string) {
-		const newLead = {
-			id: uuidv4(),
-			name: userName,
-			cellPhone: message.from,
-			createdAt: new Date()
-		};
-
-		this.leadService.createAccountLead(newLead);
-
-		message.reply(`Olá ${userName}, tudo bem?`);
-
-		await delay(1000);
-
-		message.reply("Estou verificando se você tem autorização de acesso ao sistema, por favor, aguarde um momento.");
-
-		await delay(1000);
-		
-		message.reply("Identifiquei aqui que você não possui autorização de acesso ao sistema, por favor, entre em contato com um administrador.");
-
-		
-		await delay(1000);
-
-		sendContact(message, this.whatsappClient);
-
-	}
-
-	async handleRequestState(requestState: number, message: Message, userName: string) {
-		switch (requestState) {
-			case 0:
-				handleCreateUser(message, this.whatsappClient, userName);
-				break;
-			case 1:
-				// call handleRequestUser
-				handleRequestUser(message, this.whatsappClient);
-				break;
-			case 2:
-				handleRequestMenu(message, this.whatsappClient);
-				break;
-			case 3:
-				handleRequestNewPiece(message, this.whatsappClient);
-				// 	// Transcribe audio
-				
-
-			default:
-				break;
-		}
-	}
+// Define interfaces for the Command and Chain of Responsibility patterns
+interface IRequestStateHandler {
+    handle(requestState: number, message: Message, userName: string): Promise<void>;
 }
 
+interface IRequestAccess {
+    handle(message: Message, user: PrismaUser | null): Promise<void>;
+}
+
+interface IMessageValidator {
+    validate(message: Message): Promise<boolean>;
+}
+
+// Command Pattern for handling different request states
+class RequestStateHandler implements IRequestStateHandler {
+    private whatsappClient: Client;
+    private userService: UserService;
+
+    constructor(whatsappClient: Client, userService: UserService) {
+        this.whatsappClient = whatsappClient;
+        this.userService = userService;
+    }
+
+    async handle(requestState: number, message: Message, userName: string): Promise<void> {
+        // Implement logic based on requestState
+    }
+}
+
+class RequestAccess implements IRequestAccess {
+    private whatsappClient: Client;
+    private userService: UserService;
+
+    constructor(whatsappClient: Client, userService: UserService) {
+        this.whatsappClient = whatsappClient;
+        this.userService = userService;
+    }
+
+    async handle(message: Message, user: PrismaUser | null): Promise<void> {
+		if(user?.name == ""){
+            handleUpdateUser(message, this.whatsappClient)
+		}
+        if(user?.name != ""){
+            handleLeadAcess(message, this.whatsappClient)
+        }
+        else{
+            handleCreateUser(message, this.whatsappClient)
+        }
+    }
+}
+
+// Base class for Chain of Responsibility Pattern
+abstract class MessageValidator implements IMessageValidator {
+    protected nextValidator?: IMessageValidator;
+
+    constructor(nextValidator?: IMessageValidator) {
+        this.nextValidator = nextValidator;
+    }
+
+    async validate(message: Message): Promise<boolean> {
+        if (this.nextValidator) {
+            return this.nextValidator.validate(message);
+        }
+        return true; // If all validations pass
+    }
+}
+
+// Specific validator for group messages
+class GroupMessageValidator extends MessageValidator {
+    async validate(message: Message): Promise<boolean> {
+        if ((await message.getChat()).isGroup) {
+            return false; // Group messages are ignored
+        }
+        return super.validate(message);
+    }
+}
+
+// Specific validator for checking bot readiness
+class BotReadyValidator extends MessageValidator {
+    validate(message: Message): Promise<boolean> {
+        if (botReadyTimestamp == null || new Date(message.timestamp * 1000) < botReadyTimestamp) {
+            return Promise.resolve(false); // Bot not ready or old message
+        }
+        return super.validate(message);
+    }
+}
+
+// Your MessageEventHandler class
+export class MessageEventHandler {
+	private prismaClient: PrismaClient;
+    private userService: UserService;
+    private whatsappClient: Client;
+    private messageValidator: IMessageValidator;
+
+    constructor(prismaClient: PrismaClient, userService: UserService, whatsappClient: Client) {
+        this.userService = userService;
+        this.whatsappClient = whatsappClient;
+        this.messageValidator = new BotReadyValidator(new GroupMessageValidator());
+    }
+
+    async handleIncomingMessage(message: Message): Promise<void> {
+        if (!(await this.messageValidator.validate(message))) {
+            return; // Validation failed
+        }
+
+        const userData = await this.userService.getUser(message.from);
+
+        if (userData?.role?.includes("USER") || userData?.role?.includes("ADMIN")) {
+            let requestState = userData?.requestState;
+            const requestStateHandler = new RequestStateHandler(this.whatsappClient, this.userService);
+            requestStateHandler.handle(requestState, message, userData.name);
+        } 
+        if(userData?.role?.includes("LEAD") || userData == null) {
+            let requestAccess = new RequestAccess(this.whatsappClient, this.userService)
+			requestAccess.handle(message, userData)
+        }
+    }
+
+    // ... Rest of the class
+}
+
+let botReadyTimestamp: Date | null = new Date();
+
+
+function handleLeadAcess(message: Message, whatsappClient: Client) {
+    throw new Error("Function not implemented.");
+}
 

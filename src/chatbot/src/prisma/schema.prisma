@@ -13,7 +13,7 @@ model User {
   cellPhone    String   @unique
   createdAt    DateTime @default(now())
   requestState Int      @default(0)
-  role         Role[]   @default([USER])
+  role         Role[]   @default([LEAD])
   Order        Order[]
 }
 
@@ -29,13 +29,6 @@ model Tool {
   Order       Order[]
 }
 
-model Lead {
-  id        String   @id @default(uuid())
-  name      String
-  cellPhone String   @unique
-  createdAt DateTime @default(now())
-}
-
 model Order {
   id        String   @id @default(uuid())
   type      String   @default("Peding")
@@ -47,6 +40,7 @@ model Order {
 }
 
 enum Role {
+  LEAD
   USER
   ADMIN
 }

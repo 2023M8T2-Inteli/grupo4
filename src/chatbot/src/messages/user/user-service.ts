@@ -4,7 +4,6 @@ import UserService from "../../models/user";
 // Import prisma client
 import { PrismaClient, Role } from "@prisma/client";
 
-import { getConfig } from "../../handlers/ai-config";
 import { transcribeAudioLocal } from "../../providers/whisper-local";
 const prisma = new PrismaClient();
 
@@ -165,10 +164,6 @@ const handleRequestNewPiece = async (message: Message, client: Client) => {
 		// Convert media to base64 string
 		const mediaBuffer = Buffer.from(media.data, "base64");
 
-		// Transcribe locally or with Speech API
-		const transcriptionMode = getConfig("transcription", "mode");
-
-		console.log(`[Transcription] Transcribing audio with "${transcriptionMode}" mode...`);
 
 		let res;
 

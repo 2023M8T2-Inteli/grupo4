@@ -3,7 +3,6 @@ import fs from "fs";
 import path from "path";
 import { randomUUID } from "crypto";
 import { Message, MessageMedia } from "whatsapp-web.js";
-import { chatgpt } from "../providers/openai";
 import * as cli from "../cli/ui";
 import config from "../config";
 
@@ -11,12 +10,10 @@ import { ChatMessage } from "chatgpt";
 
 // TTS
 import { ttsRequest as speechTTSRequest } from "../providers/speech";
-import { ttsRequest as awsTTSRequest } from "../providers/aws";
 import { TTSMode } from "../types/tts-mode";
 
 // Moderation
 import { moderateIncomingPrompt } from "./moderation";
-import { aiConfig, getConfig } from "./ai-config";
 
 // Mapping from number to last conversation id
 const conversations = {};
@@ -73,12 +70,6 @@ const handleMessageGPT = async (message: Message, prompt: string) => {
 
 		cli.print(`[GPT] Answer to ${message.from}: ${response.text}  | OpenAI request took ${end}ms)`);
 
-		// TTS reply (Default: disabled)
-		if (getConfig("tts", "enabled")) {
-			sendVoiceMessageReply(message, response.text);
-			message.reply(response.text);
-			return;
-		}
 
 		// Default: Text reply
 		message.reply(response.text);
@@ -99,13 +90,6 @@ async function sendVoiceMessageReply(message: Message, gptTextResponse: string) 
 			logTAG = "[SpeechAPI]";
 			ttsRequest = async function (): Promise<Buffer | null> {
 				return await speechTTSRequest(gptTextResponse);
-			};
-			break;
-
-		case TTSMode.AWSPolly:
-			logTAG = "[AWSPolly]";
-			ttsRequest = async function (): Promise<Buffer | null> {
-				return await awsTTSRequest(gptTextResponse);
 			};
 			break;
 
