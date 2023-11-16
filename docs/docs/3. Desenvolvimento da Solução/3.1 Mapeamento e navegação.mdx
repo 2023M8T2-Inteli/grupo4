@@ -1,3 +1,9 @@
+---
+title: Meu Documento
+---
+
+import VideoPlayer from '../../src/components/VideoPlayer';
+
 # Mapeamento e navegação
 
 Esta seção da documentação concentra-se no processo essencial que permite a um robô mover-se autonomamente em um ambiente desconhecido. Primeiramente, abordaremos como o robô cria um mapa do ambiente ao seu redor, identificando obstáculos e rotas possíveis. Em seguida, discutiremos a importância de uma interface de comunicação eficaz que permite aos usuários especificar pontos para onde desejam que o robô se mova. Essa interface organiza esses pontos em uma sequência lógica e os transmite ao robô na ordem correta. Este fluxo integrado de mapeamento e comunicação é vital para a autonomia do robô. Abaixo, forneceremos detalhes mais aprofundados sobre cada etapa desse processo, explicando como cada componente contribui para a operação autônoma eficaz do robô.
@@ -20,25 +26,43 @@ Em resumo, no ROS, os "nós" são entidades autônomas que executam tarefas espe
 
 ## Módulos
 
-ESte projeto é dividido em dois workspaces localizados na pasta src/bridge. O primeiro workspace é dedicado ao mapeamento, enquanto o segundo lida com a navegação.
+ESte projeto é dividido em 4 pacotes pacotes, que futuramente serão unidos em um só, mas que por hora representam separadamente o sistema de mapeamento e de navegação de acordo com o contexto onde está sendo implementado o robô ( Turtlebot3 ou Gazebo ). Todos os pacotes estão no mesmo workspace contido na pasta ```src/bridge```.
 
 ### Mapeamento (mapping_launch)
 
-O workspace de mapeamento contém um launcher em C++ que inicia os pacotes de teleop (controle manual) e Cartographer (mapeamento). Além disso, um script em bash está presente para salvar automaticamente o mapa gerado como um arquivo YAML e uma imagem quando o comando Ctrl+C é pressionado no terminal.
+O workspace de mapeamento contém um launcher que inicia os pacotes: turtlebot3_teleop (navegação manual) e turtlebot3_cartographer (sistema de cartografia via sensores tal como o SLAM).
 
 #### Execução
 
-Para executar o mapeamento, utilize os seguintes comandos na pasta raiz do workspace:
+Para executá-lo, juntamente com as suas dependências, é preciso seguir as seguintes instruções:
 
-```bash
-
-chmod +x mapping_zsh.sh
-./mapping_zsh.sh
+- Na pasta raíz desse projeto rode o seguinte comando:
 
 ```
+sudo chmod +x ./mapping_<turtlebot3/gazebo>_zsh.sh
+```
 
-No terminal extra que será aberto, utilize o teclado para movimentar o robô. Na aba de navegação com Rviz, observe a formação do mapa. Quando ele estiver bem definido, pressione Ctrl-C no terminal inicial para salvar o mapa. Ele será salvo na pasta do workspace com o nome "map.yaml" e "map.pgm".
+> [!IMPORTANT]
+> Verifique qual a versão do seu shell com o seguinte comando: ```echo $SHELL```, caso ela difira do tipo zsh rode o comando acima com o sufixo bash: ```sudo chmod +x ./mapping_<turtlebot3/gazebo>_bash.sh```. Se atente à escolha do ambiente ao rodar os comandos, por exemplo, caso vc queira rodar no ambiente simulado do gazebo, rode `sudo chmod +x ./mapping_gazebo_bash.sh`.
 
+- Em seguida, no mesmo diretório rode o comando:
+
+```
+./mapping_<turtlebot3/gazebo>_zsh.sh
+```
+
+O script acima instalará na sua máquina todas as dependências necessárias para executar os nós ROS necessárias para a etapa de mapeamento.
+
+> [!IMPORTANT]
+> Mais uma vez verifique qual a versão do seu shell com o seguinte comando: ```echo $SHELL```, caso ela difira do tipo zsh rode o comando acima com o sufixo bash: ```./mapping_<turtlebot3/gazebo>_bash.sh```. Se atente à escolha do ambiente ao rodar os comandos, por exemplo, caso vc queira rodar no ambiente simulado do gazebo, rode `./mapping_gazebo_bash.sh`.
+
+- Após isso, em outro terminal, é preciso rodar o comando abaixo para salvar o mapa gerado pela varredura no mapa:
+  
+```
+ros2 run nav2_map_server map_saver_cli -f ./assets/map_<turtlebot3/gazebo>
+```
+
+Depois de obter sucesso com os comandos acima, você cumpriu a rotina de mapeamento. Agora basta clicar em CTRL+C para encerrar todos os processos criados pelo script `.sh`
 
 ### Navegação (nav_workspace)
 O workspace de navegação contém um pacote com um script em bash que inicia o Rviz com um arquivo de mapa fornecido como argumento. Além disso, há cinco nós: um para abrir um terminal de chatbot, um para abrir um terminal de entrada de coordenadas, um nó para inicializar a pose do robô, e um nó para gerenciar a fila de pontos. O quinto nó, chamado Vallet, utiliza a API do Simple Commander para comunicação programática com o Nav2. As conexões entre esses tópicos podem ser visualizadas na imagem abaixo. Note que o nó de inicialização de pose não é visível porque ele se encerra assim que a pose é publicada, diferentemente dos outros, que permanecem ativos até o final da interação do usuário.
@@ -48,25 +72,35 @@ O workspace de navegação contém um pacote com um script em bash que inicia o 
 
 #### Execução
 
-Para executar a navegação, utilize os seguintes comandos na pasta raiz do workspace:
+Para executá-los é preciso seguir as seguintes instruções:
 
-```bash
-
-colcon build
-source install/setup.bash
-bash run.sh <nome-do-mapa>.yaml
+- Na pasta raíz desse projeto rode o seguinte comando:
 
 ```
+sudo chmod +x ./navigation_<turtlebot3/gazebo>_zsh.sh
+```
 
-Tanto através do chatbot quanto do terminal de coordenadas, é possível enviar pontos para o robô. Esses pontos são publicados no tópico chatbot_msgs como mensagens do tipo Pose. O nó de fila se inscreve nesse tópico, enfileira os pontos e aguarda o status do nó Vallet.
+> [!IMPORTANT]
+> Verifique qual a versão do seu shell com o seguinte comando: ```echo $SHELL```, caso ela difira do tipo zsh rode o comando acima com o sufixo bash: ```sudo chmod +x ./navigation_<turtlebot3/gazebo>_bash.sh```. Se atente à escolha do ambiente ao rodar os comandos, por exemplo, caso vc queira rodar no ambiente simulado do gazebo, rode `sudo chmod +x ./navigation_gazebo_bash.sh`.
 
-Quando o nó Vallet está disponível, a fila publica o próximo ponto no tópico poses. O nó Vallet escuta esse tópico, envia uma ação de goToPose quando disponível e aguarda uma nova pose. Após a conclusão, o nó Vallet publica "Busy" no tópico status, indicando que está ocupado, e posteriormente, "Free" ao finalizar.
+- Em seguida, no mesmo diretório, rode o comando:
+
+```
+./navigation_<turtlebot3/gazebo>_zsh.sh
+```
+
+> [!IMPORTANT]
+> Mais uma vez verifique qual a versão do seu shell com o seguinte comando: ```echo $SHELL```, caso ela difira do tipo zsh rode o comando acima com o sufixo bash: ```./navigation_<turtlebot3/gazebo>_bash.sh```. Se atente à escolha do ambiente ao rodar os comandos, por exemplo, caso vc queira rodar no ambiente simulado do gazebo, rode `sudo chmod +x ./navigation_gazebo_bash.sh`.
+
+- Tanto através do chatbot quanto do terminal de coordenadas, é possível enviar pontos para o robô. Esses pontos são publicados no tópico chatbot_msgs como mensagens do tipo Pose. O nó de fila se inscreve nesse tópico, enfileira os pontos e aguarda o status do nó Vallet.
+
+- Quando o nó Vallet está disponível, a fila publica o próximo ponto no tópico poses. O nó Vallet escuta esse tópico, envia uma ação de goToPose quando disponível e aguarda uma nova pose. Após a conclusão, o nó Vallet publica "Busy" no tópico status, indicando que está ocupado, e posteriormente, "Free" ao finalizar.
+
+- Depois de obter sucesso com os comandos acima, você cumpriu a rotina de mapeamento. Agora basta clicar em CTRL+C para encerrar todos os processos criados pelo script `.sh`.
 
 ## Demo
 
-<video controls>
-  <source src="../../static/video/demo.mp4"/>
-</video>
+<VideoPlayer url="../../../static/video/demo.mp4" />
 
 
 # Transição da Simulação para Robô Real em Mapeamento e Navegação
