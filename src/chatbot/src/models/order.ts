@@ -10,16 +10,42 @@ export default class OrderService {
 		try {
 			const user = await this.prisma.user.findFirst({where: {cellPhone: message.from}})
 			if (user){
-				const order = await this.prisma.order.findFirst({
+				const orders = await this.prisma.order.findFirst({
 					where: {
 						code: Number(message.body),
 						userId: user.id
 					}
 				});
-				if (order == null) {
+				if (orders == null) {
 					return null;
 				}
-				return order;
+				return orders;
+
+			}else{
+				return null;
+			}
+		} catch (error) {
+			console.error("An error occurred while fetching the user:", error);
+			throw error;
+		} finally {
+			await this.prisma.$disconnect();
+		}
+	}
+
+	async getOpenOrder(message: Message): Promise<PrismaOrder[] | null> {
+		try {
+			const user = await this.prisma.user.findFirst({where: {cellPhone: message.from}})
+			if (user){
+				const orders = await this.prisma.order.findMany({
+					where: {
+						type: "In Progress" || "Pending",
+						userId: user.id
+					}
+				});
+				if (orders == null) {
+					return null;
+				}
+				return orders;
 
 			}else{
 				return null;
@@ -42,7 +68,7 @@ export default class OrderService {
 					userId: user.id
 				},
 				 data: {
-					type: "Canled"
+					type: "Canceled"
 				}
 			});
 			if (order == null) {

@@ -28,7 +28,7 @@ const sendMenu = async (message: Message, client: Client) => {
 		await delay(1000);
 
 		const list =
-			"1. Solicitar nova peça\n2. Acompanhar status de um pedido\n3. Cancelar pedido\n4. Falar com um atendente\n5. Alterar nome cadastrado";
+			"*1.* Solicitar nova peça.\n*2.* Acompanhar status de um pedido.\n*3.* Acompanhar pedidos em aberto.\n*4.* Cancelar pedido.\n*5.* Falar com um atendente.\n*6.* Alterar nome cadastrado.";
 		client.sendMessage(message.from, list);
 
 		await delay(1000);
@@ -132,15 +132,18 @@ const handleProcessRequest = async (message: Message, client: Client) => {
 			case "2":
 				message.reply("Certo, você deseja acompanhar o status de um pedido.");
 				userService.updateRequestUser(message.from, 4);
+				message.reply("Por favor, digite o número do pedido que deseja acompanhar.");
 				break;
 			case "3":
-				message.reply("Certo, você deseja cancelar um pedido.");
-
-				userService.updateRequestUser(message.from, 5);
-
-				message.reply("Por favor, digite o número do pedido que deseja cancelar.");
+				message.reply("Certo, você deseja acompanhar seus pedidos em aberto.");
+				handleOpenOrder(message, client)
 				break;
 			case "4":
+				message.reply("Certo, você deseja cancelar um pedido.");
+				userService.updateRequestUser(message.from, 5);
+				message.reply("Por favor, digite o número do pedido que deseja cancelar.");
+				break;
+			case "5":
 				message.reply("Certo, você deseja falar com um atendente.");
 				handleSendContact(message, client);
 				break;
@@ -171,9 +174,11 @@ const handleSendContact = async (message: Message, client: Client) => {
 
 const handleCancelOrder = async (message: Message, client: Client) => {
 	try {
+		client.sendMessage(message.from,"Certo. Aguarde um momento por favor.");
+
 		const order = await orderService.getOrder(message);
 		if (order) {
-			message.reply("Pedido: " + order.id + "\nStatus: " + order.type + "\nData: " + order.createdAt);
+			message.reply("*Pedido:* " + order.code + "\n*Status:* " + order.type + "\n*Data:* " + order.createdAt);
 			await delay(1000);
 			client.sendMessage(message.from,"Aguarde um momento por favor.");
 			await delay(1000);
@@ -181,6 +186,7 @@ const handleCancelOrder = async (message: Message, client: Client) => {
 			orderService.cancelOrder(message);
 
 			message.reply("Pedido cancelado com sucesso!");
+			userService.updateRequestUser(message.from, 1);
 
 		} else {
 			message.reply("Pedido não encontrado, por favor, digite o número do pedido que deseja cancelar.");
@@ -191,4 +197,44 @@ const handleCancelOrder = async (message: Message, client: Client) => {
 	}
 };
 
-export { handleCreateUser, handleUpdateUser, handleLeadAcess, handleRequestMenu, handleProcessRequest, handleCancelOrder };
+const handleStatusOrder = async (message: Message, client: Client) => {
+	try {
+		client.sendMessage(message.from,"Certo. Aguarde um momento por favor.");
+
+		const order = await orderService.getOrder(message);
+		if (order) {
+			message.reply("*Pedido:* " + order.code + "\n*Status:* " + order.type + "\n*Data:* " + order.createdAt);
+			await delay(1000);
+
+			userService.updateRequestUser(message.from, 1);
+
+		} else {
+			message.reply("Pedido não encontrado, por favor, digite o número do pedido que deseja cancelar.");
+		}
+	} catch (error: any) {
+		console.error("An error occured", error);
+		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
+	}
+}
+
+const handleOpenOrder = async (message: Message, client: Client) => {
+	try {
+		client.sendMessage(message.from,"Certo. Aguarde um momento por favor.");
+		const orders = await orderService.getOpenOrder(message);
+		if (orders && orders.length > 0) {
+			for (const order of orders) {
+			message.reply("*Pedido:* " + order.code + "\n*Status:* " + order.type + "\n*Data:* " + order.createdAt);
+			await delay(1000);
+			}
+			userService.updateRequestUser(message.from, 1);
+
+		} else {
+			message.reply("No momento você não possui pedidos em aberto.");
+		}
+	} catch (error: any) {
+		console.error("An error occured", error);
+		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
+	}
+}
+
+export { handleCreateUser, handleUpdateUser, handleLeadAcess, handleRequestMenu, handleProcessRequest, handleCancelOrder, handleStatusOrder, handleOpenOrder };
