@@ -5,7 +5,7 @@ import * as cli from "../cli/ui";
 // Config & Constants
 import config from "../config";
 
-import {handleCreateUser, handleUpdateUser} from "../messages/user/user-messages"
+import {handleCancelOrder, handleCreateUser, handleLeadAcess, handleProcessRequest, handleRequestMenu, handleUpdateUser} from "../messages/user/user-messages"
 
 // // Speech API & Whisper
 import { TranscriptionMode } from "../types/transcription-mode";
@@ -16,11 +16,11 @@ import { transcribeWhisperApi } from "../providers/whisper-api";
 const { v4: uuidv4 } = require("uuid");
 
 // Define interfaces for the Command and Chain of Responsibility patterns
-interface IRequestStateHandler {
+interface IRequestUserHandler {
     handle(requestState: number, message: Message, userName: string): Promise<void>;
 }
 
-interface IRequestAccess {
+interface IRequestLeadHandler {
     handle(message: Message, user: PrismaUser | null): Promise<void>;
 }
 
@@ -29,7 +29,7 @@ interface IMessageValidator {
 }
 
 // Command Pattern for handling different request states
-class RequestStateHandler implements IRequestStateHandler {
+class RequestUserHandler implements IRequestUserHandler {
     private whatsappClient: Client;
     private userService: UserService;
 
@@ -38,12 +38,27 @@ class RequestStateHandler implements IRequestStateHandler {
         this.userService = userService;
     }
 
-    async handle(requestState: number, message: Message, userName: string): Promise<void> {
-        // Implement logic based on requestState
+    async handle(requestState: number, message: Message): Promise<void> {
+        switch (requestState) {
+            case 1:
+                handleRequestMenu(message, this.whatsappClient)
+                break;
+            case 2:
+                handleProcessRequest(message, this.whatsappClient)
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                handleCancelOrder(message, this.whatsappClient)
+                break;
+            default:
+                break;
+        }
     }
 }
 
-class RequestAccess implements IRequestAccess {
+class RequestLeadHandler implements IRequestLeadHandler {
     private whatsappClient: Client;
     private userService: UserService;
 
@@ -116,29 +131,24 @@ export class MessageEventHandler {
 
     async handleIncomingMessage(message: Message): Promise<void> {
         if (!(await this.messageValidator.validate(message))) {
-            return; // Validation failed
+            return;
         }
 
         const userData = await this.userService.getUser(message.from);
 
         if (userData?.role?.includes("USER") || userData?.role?.includes("ADMIN")) {
             let requestState = userData?.requestState;
-            const requestStateHandler = new RequestStateHandler(this.whatsappClient, this.userService);
-            requestStateHandler.handle(requestState, message, userData.name);
+            const requestUserHandler = new RequestUserHandler(this.whatsappClient, this.userService);
+            requestUserHandler.handle(requestState, message);
         } 
         if(userData?.role?.includes("LEAD") || userData == null) {
-            let requestAccess = new RequestAccess(this.whatsappClient, this.userService)
-			requestAccess.handle(message, userData)
+            let requestLeadHandler = new RequestLeadHandler(this.whatsappClient, this.userService)
+			requestLeadHandler.handle(message, userData)
         }
     }
 
-    // ... Rest of the class
 }
 
 let botReadyTimestamp: Date | null = new Date();
 
-
-function handleLeadAcess(message: Message, whatsappClient: Client) {
-    throw new Error("Function not implemented.");
-}
 

@@ -43,6 +43,8 @@ const start = async () => {
 		})
 	});
 
+	let messageQueue: any = [];
+
 	// WhatsApp auth
 	client.on(Events.QR_RECEIVED, (qr: string) => {
 		console.log("");
@@ -89,14 +91,20 @@ const start = async () => {
 
 	// WhatsApp message
 	client.on(Events.MESSAGE_RECEIVED, async (message: any) => {
-		// Ignore if message is from status broadcast
-		if (message.from == constants.statusBroadcast) return;
+		// Add message to queue
+		messageQueue.push(message);
+		// Handle messages in queue
+		while (messageQueue.length > 0) {
+			// Get message from queue
+			const message: any = messageQueue.shift();
+			// Ignore if message is from status broadcast
+			if (message.from == constants.statusBroadcast) return;
 
-		// Ignore if it's a quoted message, (e.g. Bot reply)
-		if (message.hasQuotedMsg) return;
+			// Ignore if it's a quoted message, (e.g. Bot reply)
+			if (message.hasQuotedMsg) return;
 
-		await messageEventHandler.handleIncomingMessage(message);
-		
+			messageEventHandler.handleIncomingMessage(message);
+		}
 	});
 
 	// WhatsApp initialization
