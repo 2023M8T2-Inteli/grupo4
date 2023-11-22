@@ -12,7 +12,13 @@ import {MessageEventHandler} from "./handlers/message";
 import express, { Request, Response } from 'express';
 
 const app = express();
-const port = 3000;
+const port = 5000;
+
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
+	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+	next();
+  });
 
 // Ready timestamp of the bot
 let botReadyTimestamp: Date | null = null;
@@ -50,20 +56,20 @@ const start = async () => {
 	});
 
 	let messageQueue: any = [];
-
+	let urll = ''
 	// WhatsApp auth
 	let qrCodeUrl = client.on(Events.QR_RECEIVED, (qr: string) => {
 		let qr_code = qrcode.toString(
 			qr,
 			{
 				type: "svg",
-				width: 50,
+				width: 300,
 				margin: 2,
 				scale: 1
 			},
 			(err, url) => {
 				if (err) throw err;
-				cli.printQRCode(url);
+				urll = url
 			}
 		);
 		return qr_code;
@@ -72,10 +78,8 @@ const start = async () => {
 	
 	
 	app.get('/', (req: Request, res: Response) => {
-		res.send('Hello World!');
-		if (qrCodeUrl) {
-			res.status(200).send(qrCodeUrl);
-			res.send(qrCodeUrl);
+		if (urll) {
+			res.status(200).send(urll);
 		} else {
 			res.status(400).send('User is authenticated');
 		}
