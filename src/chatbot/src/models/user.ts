@@ -46,12 +46,7 @@ export default class UserService {
 	async createAccountUser(user: PrismaUser): Promise<PrismaUser> {
 		try {
 			const createdUser = await this.prisma.user.create({
-				data: {
-					id: user.id,
-					name: user.name,
-					cellPhone: user.cellPhone,
-					requestState: user.requestState,
-				}
+				data: user
 			});
 			return createdUser;
 		} catch (error) {

@@ -10,7 +10,7 @@ async function transcribeWhisperApi(audioBlob: Blob): Promise<{ text: string; la
 	formData.append("numSpeakers", "1");
 	formData.append("fileType", "ogg");
 	if (config.transcriptionLanguage) {
-		formData.append("language", config.transcriptionLanguage);
+		formData.append("language", "pt-BR");
 	}
 	formData.append("task", "transcribe");
 

@@ -1,16 +1,12 @@
-import { Client, Message, Events, LocalAuth } from "whatsapp-web.js";
+import { Client, Message } from "whatsapp-web.js";
 import UserService from "../../models/user";
 import OrderService from "../../models/order";
-
-// Import prisma client
 import { PrismaClient, User as PrismaUser, Role } from "@prisma/client";
-
-import { transcribeAudioLocal } from "../../providers/whisper-local";
+import { handleMessageGPT } from "../../handlers/gpt";
+import { transcribeOpenAI } from "../../providers/openai";
 const prisma = new PrismaClient();
-
 const userService = new UserService(prisma);
 const orderService = new OrderService(prisma);
-
 const { v4: uuidv4 } = require("uuid");
 
 export const delay = async (seconds: number): Promise<void> => {
@@ -86,6 +82,7 @@ const handleUpdateUser = async (message: Message, client: Client) => {
 		};
 
 		userService.updateAccountUser(newUser);
+		handleLeadAcess(message, client);
 	} catch (error: any) {
 		console.error("An error occured", error);
 		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
@@ -244,7 +241,7 @@ const handleNewOrder = async (message: Message, client: Client) => {
 			const media = await message.downloadMedia();
 			// Convert media to base64 string
 			const mediaBuffer = Buffer.from(media.data, "base64");
-			let response = await transcribeAudioLocal(mediaBuffer);
+			let response = await transcribeOpenAI(mediaBuffer);
 			const { text: transcribedText, language: transcribedLanguage } = response;
 			// Check transcription is null (error)
 			if (transcribedText == null || transcribedText.length == 0) {
@@ -252,7 +249,13 @@ const handleNewOrder = async (message: Message, client: Client) => {
 				client.sendMessage(message.from, "Por favor, teria como me mandar um áudio novamente.")
 				return;
 			}
+			// 	// 	// Handle message GPT
+			await handleMessageGPT(message, transcribedText);
+					
+				
 
+
+			
 			
 		}
 		if(message.body){
@@ -266,3 +269,4 @@ const handleNewOrder = async (message: Message, client: Client) => {
 }
 
 export { handleCreateUser, handleUpdateUser, handleLeadAcess, handleRequestMenu, handleProcessRequest, handleCancelOrder, handleStatusOrder, handleOpenOrder, handleNewOrder };
+	

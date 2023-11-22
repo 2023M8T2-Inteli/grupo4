@@ -2,7 +2,6 @@ import { PrismaClient, User as PrismaUser } from "@prisma/client";
 import UserService from "../models/user";
 import { Client, Message, List } from "whatsapp-web.js";
 import * as cli from "../cli/ui";
-// Config & Constants
 import config from "../config";
 
 import {handleCancelOrder, handleCreateUser, handleLeadAcess, handleNewOrder, handleProcessRequest, handleRequestMenu, handleStatusOrder, handleUpdateUser} from "../messages/user/user-messages"
@@ -45,6 +44,7 @@ class RequestUserHandler implements IRequestUserHandler {
                 break;
             case 2:
                 handleProcessRequest(message, this.whatsappClient)
+                break;
             case 3:
                 handleNewOrder(message, this.whatsappClient)
                 break
@@ -69,15 +69,16 @@ class RequestLeadHandler implements IRequestLeadHandler {
     }
 
     async handle(message: Message, user: PrismaUser | null): Promise<void> {
-		if(user?.name == ""){
-            handleUpdateUser(message, this.whatsappClient)
-		}
-        if(user?.name != ""){
-            handleLeadAcess(message, this.whatsappClient)
-        }
-        else{
+        if (user == null){
             handleCreateUser(message, this.whatsappClient)
         }
+		if(user?.name == "" && user != null){
+            handleUpdateUser(message, this.whatsappClient)
+		}
+        if(user?.name != "" && user != null){
+            handleLeadAcess(message, this.whatsappClient)
+        }
+        
     }
 }
 

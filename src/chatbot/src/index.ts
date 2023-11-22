@@ -1,15 +1,15 @@
 import qrcode from "qrcode";
 import { Client, Events, LocalAuth } from "whatsapp-web.js";
 import process from "process";
-// Constants
 import constants from "./constants";
-
-// CLI
 import * as cli from "./cli/ui";
-// import { handleIncomingMessage } from "./handlers/message";
+import { initAiConfig } from "./handlers/ai-config";
 import {MessageEventHandler} from "./handlers/message";
-
+import { initOpenAI } from "./providers/openai";
 import express, { Request, Response } from 'express';
+import { PrismaClient } from "@prisma/client";
+import UserService from "./models/user";
+import dotenv from "dotenv";
 
 const app = express();
 const port = 3000;
@@ -18,26 +18,18 @@ const port = 3000;
 let botReadyTimestamp: Date | null = null;
 
 // Prisma
-import { PrismaClient } from "@prisma/client";
+
 const prisma = new PrismaClient();
-
-// User Service
-import UserService from "./models/user";
 const userService = new UserService(prisma);
-
-
-import dotenv from "dotenv";
-dotenv.config();
-
 const AUTH_TOKEN = process.env.AUTH_TOKEN || "";
 const TOKEN_SECRET = process.env.TOKEN_SECRET || "";
+
+dotenv.config();
 
 // Entrypoint
 const start = async () => {
 	if(btoa(AUTH_TOKEN) == btoa(TOKEN_SECRET)){
 	cli.printIntro();
-
-	
 
 	// WhatsApp Client
 	const client = new Client({
@@ -50,32 +42,29 @@ const start = async () => {
 	});
 
 	let messageQueue: any = [];
-
+	let qrCodeUrl: string | null = null;
 	// WhatsApp auth
-	let qrCodeUrl = client.on(Events.QR_RECEIVED, (qr: string) => {
+	client.on(Events.QR_RECEIVED, (qr: string) => {
 		let qr_code = qrcode.toString(
 			qr,
 			{
 				type: "svg",
-				width: 50,
+				width: 300,
 				margin: 2,
 				scale: 1
 			},
 			(err, url) => {
 				if (err) throw err;
 				cli.printQRCode(url);
+				qrCodeUrl = url;
 			}
-		);
-		return qr_code;
+		);	
 	});
-
 	
 	
 	app.get('/', (req: Request, res: Response) => {
-		res.send('Hello World!');
 		if (qrCodeUrl) {
 			res.status(200).send(qrCodeUrl);
-			res.send(qrCodeUrl);
 		} else {
 			res.status(400).send('User is authenticated');
 		}
@@ -106,6 +95,8 @@ const start = async () => {
 	client.on(Events.READY, () => {
 		// Set bot ready timestamp
 		botReadyTimestamp = new Date();
+		initAiConfig();
+		initOpenAI();
 	
 	});
 
