@@ -6,16 +6,22 @@ import socketio
 
 
 class Streamer:
-    def __init__(self, sub: Subscriber, socket_url: str) -> None:
+    def __init__(self, sub: Subscriber, socket_url: str, socket_listeners: dict = {}) -> None:
         self.subscriber = sub
         self.subscriber.create_sub(self.listener_callback)
         self.sio = socketio.Client()
+        # Loop para adicionar os listeners 
+        if socket_listeners:
+            for key, value in socket_listeners.items():
+                self.sio.on(str(key), value)
+
         self.sio.connect(socket_url)
+        
 
     def listener_callback(self, msg: Any) -> None:
         try:
             json_msg = json.dumps(self.message_to_dictionary(msg))
-            self.sio.emit("message", json_msg)
+            self.sio.emit("robot_status", json_msg)
             return
         except:
             raise Exception("Error transforming data...")
