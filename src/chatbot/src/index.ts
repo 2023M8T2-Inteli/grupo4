@@ -74,10 +74,10 @@ const start = async () => {
 	app.get('/', (req: Request, res: Response) => {
 		res.send('Hello World!');
 		if (qrCodeUrl) {
-			res.status(200).send("QR Code available");
+			res.status(200).send(qrCodeUrl);
 			res.send(qrCodeUrl);
 		} else {
-			res.status(404).send('QR Code not available');
+			res.status(400).send('User is authenticated');
 		}
 	});
 	
