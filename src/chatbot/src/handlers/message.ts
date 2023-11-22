@@ -5,7 +5,7 @@ import * as cli from "../cli/ui";
 // Config & Constants
 import config from "../config";
 
-import {handleCancelOrder, handleCreateUser, handleLeadAcess, handleProcessRequest, handleRequestMenu, handleStatusOrder, handleUpdateUser} from "../messages/user/user-messages"
+import {handleCancelOrder, handleCreateUser, handleLeadAcess, handleNewOrder, handleProcessRequest, handleRequestMenu, handleStatusOrder, handleUpdateUser} from "../messages/user/user-messages"
 
 // // Speech API & Whisper
 import { TranscriptionMode } from "../types/transcription-mode";
@@ -47,6 +47,7 @@ class RequestUserHandler implements IRequestUserHandler {
                 handleProcessRequest(message, this.whatsappClient)
             case 3:
                 handleNewOrder(message, this.whatsappClient)
+                break
             case 4:
                 handleStatusOrder(message, this.whatsappClient)
             case 5:

@@ -1,5 +1,5 @@
 import qrcode from "qrcode";
-import { Client, Message, Events, List, LocalAuth } from "whatsapp-web.js";
+import { Client, Events, LocalAuth } from "whatsapp-web.js";
 import process from "process";
 // Constants
 import constants from "./constants";
@@ -9,6 +9,10 @@ import * as cli from "./cli/ui";
 // import { handleIncomingMessage } from "./handlers/message";
 import {MessageEventHandler} from "./handlers/message";
 
+import express, { Request, Response } from 'express';
+
+const app = express();
+const port = 3000;
 
 // Ready timestamp of the bot
 let botReadyTimestamp: Date | null = null;
@@ -33,6 +37,8 @@ const start = async () => {
 	if(btoa(AUTH_TOKEN) == btoa(TOKEN_SECRET)){
 	cli.printIntro();
 
+	
+
 	// WhatsApp Client
 	const client = new Client({
 		puppeteer: {
@@ -46,13 +52,12 @@ const start = async () => {
 	let messageQueue: any = [];
 
 	// WhatsApp auth
-	client.on(Events.QR_RECEIVED, (qr: string) => {
-		console.log("");
-		qrcode.toString(
+	let qrCodeUrl = client.on(Events.QR_RECEIVED, (qr: string) => {
+		let qr_code = qrcode.toString(
 			qr,
 			{
-				type: "terminal",
-				small: true,
+				type: "svg",
+				width: 50,
 				margin: 2,
 				scale: 1
 			},
@@ -61,6 +66,23 @@ const start = async () => {
 				cli.printQRCode(url);
 			}
 		);
+		return qr_code;
+	});
+
+	
+	
+	app.get('/', (req: Request, res: Response) => {
+		res.send('Hello World!');
+		if (qrCodeUrl) {
+			res.status(200).send("QR Code available");
+			res.send(qrCodeUrl);
+		} else {
+			res.status(404).send('QR Code not available');
+		}
+	});
+	
+	app.listen(port, () => {
+		console.log(`Server running on http://localhost:${port}`);
 	});
 
 	// WhatsApp loading

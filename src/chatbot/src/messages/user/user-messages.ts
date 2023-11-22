@@ -128,6 +128,7 @@ const handleProcessRequest = async (message: Message, client: Client) => {
 			case "1":
 				message.reply("Certo, você deseja solicitar uma nova peça.");
 				userService.updateRequestUser(message.from, 3);
+				message.reply("Você pode me dizer qual peça deseja, por mensagem ou por áudio.")
 				break;
 			case "2":
 				message.reply("Certo, você deseja acompanhar o status de um pedido.");
@@ -237,4 +238,31 @@ const handleOpenOrder = async (message: Message, client: Client) => {
 	}
 }
 
-export { handleCreateUser, handleUpdateUser, handleLeadAcess, handleRequestMenu, handleProcessRequest, handleCancelOrder, handleStatusOrder, handleOpenOrder };
+const handleNewOrder = async (message: Message, client: Client) => {
+	try {
+		if(message.hasMedia){
+			const media = await message.downloadMedia();
+			// Convert media to base64 string
+			const mediaBuffer = Buffer.from(media.data, "base64");
+			let response = await transcribeAudioLocal(mediaBuffer);
+			const { text: transcribedText, language: transcribedLanguage } = response;
+			// Check transcription is null (error)
+			if (transcribedText == null || transcribedText.length == 0) {
+				message.reply("Desculpa, não consegui entender o que você disse.");
+				client.sendMessage(message.from, "Por favor, teria como me mandar um áudio novamente.")
+				return;
+			}
+
+			
+		}
+		if(message.body){
+
+		}
+
+	} catch (error: any) {
+		console.error("An error occured", error);
+		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
+	}
+}
+
+export { handleCreateUser, handleUpdateUser, handleLeadAcess, handleRequestMenu, handleProcessRequest, handleCancelOrder, handleStatusOrder, handleOpenOrder, handleNewOrder };
