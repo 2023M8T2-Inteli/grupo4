@@ -1,40 +1,41 @@
 import rclpy
+import socketio
 from rclpy.node import Node
 from std_msgs.msg import String
-from websocket_turtlebot3.subscriber import Subscriber
-from websocket_turtlebot3.streamer import Streamer
-from websocket_turtlebot3.publisher import Publisher
 from geometry_msgs.msg import Pose
+from .subscriber import Subscriber
+from .streamer import Streamer
+from .publisher import Publisher
 
 
 class ClientWebSocket(Node):
     def __init__(self):
         super().__init__("client_websocket")
 
-        self.sub = Subscriber(
-            self, "status", "/status", String)
-        
-        self.send_to_queue = Publisher(self, "enqueue", "/enqueue", Pose)
-        
-        # Callback functions
-        websocket_listeners = {"add_to_queue": self.add_to_queue}
+        self.sio = socketio.Client()
 
-        self.streamer = Streamer(sub=self.sub, socket_url="http://localhost:3000", socket_listeners=websocket_listeners)
+        self.sio.connect("http://10.128.64.39:3000")
 
-    def add_to_queue(self, data):
-        print("Received data: ", data)
+        self.enqueue = Publisher(self, "enqueue", "/enqueue", Pose)
+
+        self.status = Subscriber(self, "status", "/status", String)
+
+        self.streamer = Streamer(self, self.sio, "/navigation", self.enqueue, self.status)
+
+    def add_to_queue(self):
         pose = Pose()
-        pose.position.x = data["x"]
-        pose.position.y = data["y"]
+        pose.position.x = self.streamer.latest_received_data["x"]
+        pose.position.y = self.streamer.latest_received_data["y"]
         pose.position.z = 0.0
-        self.send_to_queue.publish(pose)
+        self.enqueue.publish(pose)
 
 
 def main(args=None):
     rclpy.init(args=args)
-    battery_node = ClientWebSocket()
-    rclpy.spin(battery_node)
-    battery_node.destroy_node()
+    client = ClientWebSocket()
+    client.add_to_queue()
+    rclpy.spin(client)
+    client.destroy_node()
     rclpy.shutdown()
 
 

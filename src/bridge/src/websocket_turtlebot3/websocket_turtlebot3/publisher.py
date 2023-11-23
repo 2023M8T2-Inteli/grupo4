@@ -3,7 +3,7 @@ from rclpy.node import Node
 
 
 class Publisher():
-    def __init__(self, node: Node, name: str,topic_name: str, topic_type: any):
+    def __init__(self, node: Node, name: str, topic_name: str, topic_type: Any):
         self.node = node
         self.name = name
         self.publisher = None
