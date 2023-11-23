@@ -10,7 +10,7 @@ import dotenv
 dotenv.load_dotenv()
 
 # load the document and split it into chunks
-loader = TextLoader("C:/Users/Inteli/repos/grupo4/src/chat_sprint3/items.txt")
+loader = TextLoader("./items.txt")
 documents = loader.load()
 
 # split it into chunks
