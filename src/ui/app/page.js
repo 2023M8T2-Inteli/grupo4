@@ -4,6 +4,7 @@ import { useState } from "react";
 import Popup from "./components/Popup";
 import WhatsappButton from "./components/WhatsappComponent";
 import VideoComponent from "./components/Video";
+import MyComponent from "./components/SSE";
 
 export default function Home() {
   const [isPopupOpen, setPopupOpen] = useState(false);
@@ -15,6 +16,7 @@ export default function Home() {
   return (
     <div className="h-screen w-full flex justify-center items-center">
       <VideoComponent />
+      <MyComponent/>
       <WhatsappButton onClick={togglePopup} />
       <Popup isOpen={isPopupOpen} togglePopup={togglePopup} />
     </div>
