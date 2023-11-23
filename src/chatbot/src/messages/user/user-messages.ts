@@ -1,12 +1,14 @@
 import { Client, Message } from "whatsapp-web.js";
 import UserService from "../../models/user";
 import OrderService from "../../models/order";
+import ToolService from "../../models/tool";
 import { PrismaClient, User as PrismaUser, Role } from "@prisma/client";
 import { handleMessageGPT } from "../../handlers/gpt";
 import { transcribeOpenAI } from "../../providers/openai";
 const prisma = new PrismaClient();
 const userService = new UserService(prisma);
 const orderService = new OrderService(prisma);
+const toolService = new ToolService(prisma);
 const { v4: uuidv4 } = require("uuid");
 
 export const delay = async (seconds: number): Promise<void> => {
@@ -19,7 +21,7 @@ export const delay = async (seconds: number): Promise<void> => {
 
 const sendMenu = async (message: Message, client: Client) => {
 	try {
-		await message.reply("*Em que posso te ajudar hoje?*");
+		client.sendMessage(message.from,"*Em que posso te ajudar hoje?*");
 
 		await delay(1000);
 
@@ -95,11 +97,12 @@ const handleLeadAcess = async (message: Message, client: Client) => {
 		await delay(1000);
 		message.reply("Solicite a um atendente que te dê acesso ao sistema.");
 		const user = await userService.getAdmin();
-		if (user) {
+		if (user != null) {
 			client.sendMessage(message.from, "Por favor, solicite a ele que te dê acesso ao sistema.");
 			const contact = await client.getContactById(user?.cellPhone);
 			client.sendMessage(message.from, contact);
-		} else {
+		} 
+		if(user == null) {
 			await delay(1000);
 			client.sendMessage(message.from, "No momento não temos atendentes disponíveis, por favor, tente novamente mais tarde.");
 		}
@@ -172,8 +175,6 @@ const handleSendContact = async (message: Message, client: Client) => {
 
 const handleCancelOrder = async (message: Message, client: Client) => {
 	try {
-		client.sendMessage(message.from,"Certo. Aguarde um momento por favor.");
-
 		const order = await orderService.getOrder(message);
 		if (order) {
 			message.reply("*Pedido:* " + order.code + "\n*Status:* " + order.type + "\n*Data:* " + order.createdAt);
@@ -237,6 +238,7 @@ const handleOpenOrder = async (message: Message, client: Client) => {
 
 const handleNewOrder = async (message: Message, client: Client) => {
 	try {
+		const catalog = await toolService.getCatalog();
 		if(message.hasMedia){
 			const media = await message.downloadMedia();
 			// Convert media to base64 string
@@ -258,7 +260,6 @@ const handleNewOrder = async (message: Message, client: Client) => {
 		if(message.body){
 			const chat_response = await handleMessageGPT(message, message.body);
 			console.log(chat_response);
-
 		}
 
 	} catch (error: any) {

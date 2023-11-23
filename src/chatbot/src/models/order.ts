@@ -8,8 +8,8 @@ export default class OrderService {
 
 	async getOrder(message: Message): Promise<PrismaOrder | null> {
 		try {
-			const user = await this.prisma.user.findFirst({where: {cellPhone: message.from}})
-			if (user){
+			const user = await this.prisma.user.findFirst({ where: { cellPhone: message.from } });
+			if (user != null) {
 				const orders = await this.prisma.order.findFirst({
 					where: {
 						code: Number(message.body),
@@ -20,8 +20,8 @@ export default class OrderService {
 					return null;
 				}
 				return orders;
-
-			}else{
+			}
+			else {
 				return null;
 			}
 		} catch (error) {
@@ -34,11 +34,11 @@ export default class OrderService {
 
 	async getOpenOrder(message: Message): Promise<PrismaOrder[] | null> {
 		try {
-			const user = await this.prisma.user.findFirst({where: {cellPhone: message.from}})
-			if (user){
+			const user = await this.prisma.user.findFirst({ where: { cellPhone: message.from } });
+			if (user != null) {
 				const orders = await this.prisma.order.findMany({
 					where: {
-						type: "In Progress" || "Pending",
+						type: "In Progress",
 						userId: user.id
 					}
 				});
@@ -46,10 +46,8 @@ export default class OrderService {
 					return null;
 				}
 				return orders;
-
-			}else{
+			} 
 				return null;
-			}
 		} catch (error) {
 			console.error("An error occurred while fetching the user:", error);
 			throw error;
@@ -60,23 +58,24 @@ export default class OrderService {
 
 	async cancelOrder(message: Message): Promise<PrismaOrder | null> {
 		try {
-			const user = await this.prisma.user.findFirst({where: {cellPhone: message.from}})
-			if (user){
-			const order = await this.prisma.order.update({
-				where: {
-					code: Number(message.body),
-					userId: user.id
-				},
-				 data: {
-					type: "Canceled"
+			const user = await this.prisma.user.findFirst({ where: { cellPhone: message.from } });
+			if (user) {
+				const order = await this.prisma.order.update({
+					where: {
+						code: Number(message.body),
+						userId: user.id
+					},
+					data: {
+						type: "Canceled"
+					}
+				});
+				if (order == null) {
+					return null;
 				}
-			});
-			if (order == null) {
+				return order;
+			} else {
 				return null;
 			}
-			return order;
-		}else{
-			return null;}
 		} catch (error) {
 			console.error("An error occurred while fetching the user:", error);
 			throw error;
@@ -84,5 +83,4 @@ export default class OrderService {
 			await this.prisma.$disconnect();
 		}
 	}
-
 }

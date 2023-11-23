@@ -169,6 +169,12 @@ export class MessageEventHandler {
 
         const userData = await this.userService.getUser(message.from);
 
+        if (message.body == "!sair" || message.body == "!Sair") {
+            await this.whatsappClient.sendMessage(message.from, "Até mais!");
+            this.userService.updateRequestUser(message.from, 1);
+            return;
+        }
+
         if (userData?.role?.includes("USER")) {
             let requestState = userData?.requestState;
             const requestUserHandler = new RequestUserHandler(this.whatsappClient, this.userService);
