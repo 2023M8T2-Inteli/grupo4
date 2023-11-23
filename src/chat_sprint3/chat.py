@@ -51,8 +51,8 @@ class ChatBot:
             bot_message += str(s.content)
         ws_json = self.extrair_coordenadas(bot_message)
         home = {
-            'x': 0,
-            'y': 0
+            'x': 0.0,
+            'y': 0.0
         }
         if ws_json:
             print(ws_json)
