@@ -14,12 +14,12 @@ def connect(sid, environ):
 def message(sid, data):
     if data['x'] and data['y']:
         print(f'Mensagem recebida de {sid}: {data}')
-        sio.emit("add_to_queue", data)
+        sio.emit("/navigation", data)
 
 @sio.on('robot_status')
 def message(sid, data):
     print(f'Mensagem recebida de {sid}: {data}')
-    sio.emit("add_to_queue", data)
+    sio.emit("/navigation", data)
 
 
 # Evento de desconexão
