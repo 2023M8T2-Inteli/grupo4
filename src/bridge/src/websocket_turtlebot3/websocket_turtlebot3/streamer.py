@@ -7,15 +7,15 @@ from websocket_turtlebot3.subscriber import Subscriber
 
 
 class Streamer:
-    def __init__(self, node: Node, client: Any, socket_event: str, pub: Publisher = None,  sub: Subscriber = None):
+    def __init__(self, node: Node, client: Any, socket_event: str, socket_callback: Any = None, pub: Publisher = None,  sub: Subscriber = None):
         self.node = node
         self.sio = client
         self.socket_event = socket_event
         self.latest_received_data = None
-        self.pub = pub if pub is Publisher else None
-        self.sub = sub if sub is Subscriber else None
+        self.pub = pub if isinstance(pub, Publisher) else None
+        self.sub = sub if isinstance(sub, Subscriber) else None 
 
-        self._set_strategies()
+        self._set_strategies(socket_callback)
 
     def emit_event(self, msg: Any) -> None:
         try:
@@ -34,24 +34,15 @@ class Streamer:
         else:
             return msg
 
-    def catch_event(self, data: str) -> None:
-        try:
-            self.latest_received_data = data
-            self.node.get_logger().info(f"Received data: {data} and publishing on {self.pub.topic_name}")
-            return
-        except Exception as e:
-            raise ValueError(f"Error sending data: {e}")
-
-    def _set_strategies(self) -> None:
+    def _set_strategies(self, socket_callback) -> None:
         if self.sub is not None:
             self.sub.create_sub(self.emit_event)
+            self.node.get_logger().info(f"Subscriber {self.sub.name} created.")
         else:
-            raise Exception("No subscriber was found on this streamer.")
+            self.node.get_logger().info("No subscriber was found on this streamer.")
 
         if self.pub is not None:
-            self.sio.on(self.socket_event, self.catch_event)
+            self.sio.on(self.socket_event, socket_callback)
+            self.node.get_logger().info(f"Socket event {self.socket_event} created.")
         else:
-            raise Exception("No publisher was found on this streamer.")
-
-    def disconnect(self) -> None:
-        self.sio.disconnect()
+            self.node.get_logger().info("No publisher was found on this streamer.")

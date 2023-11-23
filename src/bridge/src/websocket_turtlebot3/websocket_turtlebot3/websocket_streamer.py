@@ -14,27 +14,32 @@ class ClientWebSocket(Node):
 
         self.sio = socketio.Client()
 
-        self.sio.connect("http://10.128.64.39:3000")
+        self.sio.connect("http://localhost:3000")
 
         self.enqueue = Publisher(self, "enqueue", "/enqueue", Pose)
 
         self.status = Subscriber(self, "status", "/status", String)
 
-        self.streamer = Streamer(self, self.sio, "/navigation", self.enqueue, self.status)
+        self.streamer = Streamer(self, self.sio, "/navigation", self.add_to_queue, self.enqueue, self.status)
 
-    def add_to_queue(self):
+    def add_to_queue(self, data: dict[str, float]):
+        self.get_logger().info(f"Received data: {data} and publishing on {self.enqueue.topic_name}")
         pose = Pose()
-        pose.position.x = self.streamer.latest_received_data["x"]
-        pose.position.y = self.streamer.latest_received_data["y"]
+        pose.position.x = data["x"]
+        pose.position.y = data["y"]
         pose.position.z = 0.0
         self.enqueue.publish(pose)
+    
+    def disconnect(self) -> None:
+        self.get_logger().info("Disconnecting from server.")
+        self.sio.disconnect()
 
 
 def main(args=None):
     rclpy.init(args=args)
     client = ClientWebSocket()
-    client.add_to_queue()
     rclpy.spin(client)
+    client.disconnect()
     client.destroy_node()
     rclpy.shutdown()
 
