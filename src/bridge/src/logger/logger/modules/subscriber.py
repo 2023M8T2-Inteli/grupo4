@@ -6,11 +6,11 @@ class Subscriber():
     def __init__(self,  node: Node, name: str, srv_name: str, srv_type: Any, custom_qos: Any = None):
         self.node = node
         self.name = name
-        self.srv_type = srv_type
         self.srv_name = srv_name
+        self.srv_type = srv_type
         self.subscription = None
         self.custom_qos = custom_qos
-        self.node.get_logger().info(f"Subscription {self.name} created.")
+        self.node.get_logger().info(f"Subscription {self.name} created and callback instantiated.")
 
     def create_sub(self, subscription_callback: Any) -> None:
         self.subscription = self.node.create_subscription(
