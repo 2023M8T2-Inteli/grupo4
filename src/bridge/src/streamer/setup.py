@@ -1,11 +1,11 @@
-from setuptools import setup
+from setuptools import find_packages, setup
 
-package_name = 'websocket_turtlebot3'
+package_name = 'streamer'
 
 setup(
     name=package_name,
     version='0.0.0',
-    packages=[package_name],
+    packages=find_packages(exclude=['test']),
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -13,14 +13,14 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='henriquematias',
-    maintainer_email='henrique.matias@sou.inteli.edu.br',
+    maintainer='henriquemarlon',
+    maintainer_email='henriquemarloncs@gmail.com',
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "websocket_streamer=websocket_turtlebot3.websocket_streamer:main",
+            "streamer=streamer.websocket_streamer:main",
         ],
     },
 )

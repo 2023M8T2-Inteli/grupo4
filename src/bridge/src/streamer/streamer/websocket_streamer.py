@@ -20,7 +20,7 @@ class ClientWebSocket(Node):
 
         self.status = Subscriber(self, "status", "/status", String)
 
-        self.streamer = Streamer(self, self.sio, "/navigation", self.add_to_queue, self.enqueue, self.status)
+        self.streamer = Streamer(self, self.sio, "/navigation", self.status, self.add_to_queue, self.enqueue)
 
     def add_to_queue(self, data: dict[str, float]):
         self.get_logger().info(f"Received data: {data} and publishing on {self.enqueue.topic_name}")
