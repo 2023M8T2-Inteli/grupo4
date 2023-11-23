@@ -7,7 +7,7 @@ from subscriber import Subscriber
 
 
 class Streamer:
-    def __init__(self, node: Node, client: Any, socket_event: str, socket_callback: Any = None, pub: Publisher = None,  sub: Subscriber = None):
+    def __init__(self, node: Node, client: Any, socket_event: str, sub: Subscriber = None, socket_callback: Any = None, pub: Publisher = None):
         self.node = node
         self.sio = client
         self.socket_event = socket_event
