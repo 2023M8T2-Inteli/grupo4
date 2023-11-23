@@ -1,32 +1,30 @@
 import qrcode from "qrcode";
-import { Client, Message, Events, List, LocalAuth } from "whatsapp-web.js";
+import { Client, Events, LocalAuth } from "whatsapp-web.js";
 import process from "process";
-// Constants
 import constants from "./constants";
-
-// CLI
 import * as cli from "./cli/ui";
-// import { handleIncomingMessage } from "./handlers/message";
+import { initAiConfig } from "./handlers/ai-config";
 import {MessageEventHandler} from "./handlers/message";
+import { initOpenAI } from "./providers/openai";
+import express, { Request, Response } from 'express';
+import { PrismaClient } from "@prisma/client";
+import UserService from "./models/user";
+import dotenv from "dotenv";
 
+const app = express();
+const port = 3000;
 
 // Ready timestamp of the bot
 let botReadyTimestamp: Date | null = null;
 
 // Prisma
-import { PrismaClient } from "@prisma/client";
+
 const prisma = new PrismaClient();
-
-// User Service
-import UserService from "./models/user";
 const userService = new UserService(prisma);
-
-
-import dotenv from "dotenv";
-dotenv.config();
-
 const AUTH_TOKEN = process.env.AUTH_TOKEN || "";
 const TOKEN_SECRET = process.env.TOKEN_SECRET || "";
+
+dotenv.config();
 
 // Entrypoint
 const start = async () => {
@@ -43,22 +41,37 @@ const start = async () => {
 		})
 	});
 
+	let messageQueue: any = [];
+	let qrCodeUrl: string | null = null;
 	// WhatsApp auth
 	client.on(Events.QR_RECEIVED, (qr: string) => {
-		console.log("");
-		qrcode.toString(
+		let qr_code = qrcode.toString(
 			qr,
 			{
-				type: "terminal",
-				small: true,
+				type: "svg",
+				width: 300,
 				margin: 2,
 				scale: 1
 			},
 			(err, url) => {
 				if (err) throw err;
 				cli.printQRCode(url);
+				qrCodeUrl = url;
 			}
-		);
+		);	
+	});
+	
+	
+	app.get('/', (req: Request, res: Response) => {
+		if (qrCodeUrl) {
+			res.status(200).send(qrCodeUrl);
+		} else {
+			res.status(400).send('User is authenticated');
+		}
+	});
+	
+	app.listen(port, () => {
+		console.log(`Server running on http://localhost:${port}`);
 	});
 
 	// WhatsApp loading
@@ -82,6 +95,8 @@ const start = async () => {
 	client.on(Events.READY, () => {
 		// Set bot ready timestamp
 		botReadyTimestamp = new Date();
+		initAiConfig();
+		initOpenAI();
 	
 	});
 
@@ -89,14 +104,20 @@ const start = async () => {
 
 	// WhatsApp message
 	client.on(Events.MESSAGE_RECEIVED, async (message: any) => {
-		// Ignore if message is from status broadcast
-		if (message.from == constants.statusBroadcast) return;
+		// Add message to queue
+		messageQueue.push(message);
+		// Handle messages in queue
+		while (messageQueue.length > 0) {
+			// Get message from queue
+			const message: any = messageQueue.shift();
+			// Ignore if message is from status broadcast
+			if (message.from == constants.statusBroadcast) return;
 
-		// Ignore if it's a quoted message, (e.g. Bot reply)
-		if (message.hasQuotedMsg) return;
+			// Ignore if it's a quoted message, (e.g. Bot reply)
+			if (message.hasQuotedMsg) return;
 
-		await messageEventHandler.handleIncomingMessage(message);
-		
+			messageEventHandler.handleIncomingMessage(message);
+		}
 	});
 
 	// WhatsApp initialization

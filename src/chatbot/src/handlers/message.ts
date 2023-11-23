@@ -2,10 +2,11 @@ import { PrismaClient, User as PrismaUser } from "@prisma/client";
 import UserService from "../models/user";
 import { Client, Message, List } from "whatsapp-web.js";
 import * as cli from "../cli/ui";
-// Config & Constants
 import config from "../config";
 
-import {handleCreateUser, handleUpdateUser} from "../messages/user/user-messages"
+import {handleCancelOrder, handleCreateUser, handleLeadAcess, handleNewOrder, handleProcessRequest, handleRequestMenu, handleStatusOrder, handleUpdateUser} from "../messages/user/user-messages"
+
+import {handleAdminProcessRequest, handleAdminRequestMenu, handleNewPoint, handleUpdateUserAccess} from "../messages/admin/admin-messages"
 
 // // Speech API & Whisper
 import { TranscriptionMode } from "../types/transcription-mode";
@@ -16,11 +17,11 @@ import { transcribeWhisperApi } from "../providers/whisper-api";
 const { v4: uuidv4 } = require("uuid");
 
 // Define interfaces for the Command and Chain of Responsibility patterns
-interface IRequestStateHandler {
+interface IRequestUserHandler {
     handle(requestState: number, message: Message, userName: string): Promise<void>;
 }
 
-interface IRequestAccess {
+interface IRequestLeadHandler {
     handle(message: Message, user: PrismaUser | null): Promise<void>;
 }
 
@@ -28,8 +29,8 @@ interface IMessageValidator {
     validate(message: Message): Promise<boolean>;
 }
 
-// Command Pattern for handling different request states
-class RequestStateHandler implements IRequestStateHandler {
+
+class RequestAdminHandler implements IRequestUserHandler {
     private whatsappClient: Client;
     private userService: UserService;
 
@@ -38,12 +39,58 @@ class RequestStateHandler implements IRequestStateHandler {
         this.userService = userService;
     }
 
-    async handle(requestState: number, message: Message, userName: string): Promise<void> {
-        // Implement logic based on requestState
+    async handle(requestState: number, message: Message): Promise<void> {
+        switch (requestState) {
+            case 1:
+                handleAdminRequestMenu(message, this.whatsappClient)
+                break;
+            case 2:
+                handleAdminProcessRequest(message, this.whatsappClient)
+                break;
+            case 3:
+                handleNewPoint(message, this.whatsappClient)
+            case 4:
+                handleUpdateUserAccess(message, this.whatsappClient)
+            default:
+                break;
+        }
     }
 }
 
-class RequestAccess implements IRequestAccess {
+
+// Command Pattern for handling different request states
+class RequestUserHandler implements IRequestUserHandler {
+    private whatsappClient: Client;
+    private userService: UserService;
+
+    constructor(whatsappClient: Client, userService: UserService) {
+        this.whatsappClient = whatsappClient;
+        this.userService = userService;
+    }
+
+    async handle(requestState: number, message: Message): Promise<void> {
+        switch (requestState) {
+            case 1:
+                handleRequestMenu(message, this.whatsappClient)
+                break;
+            case 2:
+                handleProcessRequest(message, this.whatsappClient)
+                break;
+            case 3:
+                handleNewOrder(message, this.whatsappClient)
+                break
+            case 4:
+                handleStatusOrder(message, this.whatsappClient)
+            case 5:
+                handleCancelOrder(message, this.whatsappClient)
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+class RequestLeadHandler implements IRequestLeadHandler {
     private whatsappClient: Client;
     private userService: UserService;
 
@@ -53,15 +100,16 @@ class RequestAccess implements IRequestAccess {
     }
 
     async handle(message: Message, user: PrismaUser | null): Promise<void> {
-		if(user?.name == ""){
-            handleUpdateUser(message, this.whatsappClient)
-		}
-        if(user?.name != ""){
-            handleLeadAcess(message, this.whatsappClient)
-        }
-        else{
+        if (user == null){
             handleCreateUser(message, this.whatsappClient)
         }
+		if(user?.name == "" && user != null){
+            handleUpdateUser(message, this.whatsappClient)
+		}
+        if(user?.name != "" && user != null){
+            handleLeadAcess(message, this.whatsappClient)
+        }
+        
     }
 }
 
@@ -116,29 +164,29 @@ export class MessageEventHandler {
 
     async handleIncomingMessage(message: Message): Promise<void> {
         if (!(await this.messageValidator.validate(message))) {
-            return; // Validation failed
+            return;
         }
 
         const userData = await this.userService.getUser(message.from);
 
-        if (userData?.role?.includes("USER") || userData?.role?.includes("ADMIN")) {
+        if (userData?.role?.includes("USER")) {
             let requestState = userData?.requestState;
-            const requestStateHandler = new RequestStateHandler(this.whatsappClient, this.userService);
-            requestStateHandler.handle(requestState, message, userData.name);
+            const requestUserHandler = new RequestUserHandler(this.whatsappClient, this.userService);
+            requestUserHandler.handle(requestState, message);
         } 
+        if(userData?.role?.includes("ADMIN")){
+            let requestState = userData?.requestState;
+            const requestUserHandler = new RequestAdminHandler(this.whatsappClient, this.userService);
+            requestUserHandler.handle(requestState, message);   
+        }
         if(userData?.role?.includes("LEAD") || userData == null) {
-            let requestAccess = new RequestAccess(this.whatsappClient, this.userService)
-			requestAccess.handle(message, userData)
+            let requestLeadHandler = new RequestLeadHandler(this.whatsappClient, this.userService)
+			requestLeadHandler.handle(message, userData)
         }
     }
 
-    // ... Rest of the class
 }
 
 let botReadyTimestamp: Date | null = new Date();
 
-
-function handleLeadAcess(message: Message, whatsappClient: Client) {
-    throw new Error("Function not implemented.");
-}
 

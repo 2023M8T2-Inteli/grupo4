@@ -46,12 +46,7 @@ export default class UserService {
 	async createAccountUser(user: PrismaUser): Promise<PrismaUser> {
 		try {
 			const createdUser = await this.prisma.user.create({
-				data: {
-					id: user.id,
-					name: user.name,
-					cellPhone: user.cellPhone,
-					requestState: user.requestState,
-				}
+				data: user
 			});
 			return createdUser;
 		} catch (error) {
@@ -90,6 +85,26 @@ export default class UserService {
 				},
 				data: {
 					requestState: requestState
+				}
+			});
+
+			return resquestUser;
+		} catch (error) {
+			console.error("An error occurred while fetching the user:", error);
+			throw error;
+		} finally {
+			await this.prisma.$disconnect();
+		}
+	}
+
+	async updateRoletUser(cellPhone: string): Promise<PrismaUser> {
+		try {
+			const resquestUser = await this.prisma.user.update({
+				where: {
+					cellPhone: cellPhone
+				},
+				data: {
+					role: [Role.USER]
 				}
 			});
 
