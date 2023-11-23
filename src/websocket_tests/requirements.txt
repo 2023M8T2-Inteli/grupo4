@@ -1,3 +1,5 @@
 eventlet
 python-socketio
 python-socketio[client]
+python-dotenv
+psycopg2
