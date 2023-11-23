@@ -21,5 +21,4 @@ def disconnect():
 # Executa a conexão
 if __name__ == '__main__':
     sio.connect(SERVER_URL)
-    sio.wait()
 

@@ -2,8 +2,8 @@ import json
 import socketio
 from typing import Any
 from rclpy.node import Node
-from publisher import Publisher
-from subscriber import Subscriber
+from .publisher import Publisher
+from .subscriber import Subscriber
 
 
 class Streamer:
