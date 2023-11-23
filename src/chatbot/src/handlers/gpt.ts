@@ -5,7 +5,7 @@ import { randomUUID } from "crypto";
 import { Message, MessageMedia } from "whatsapp-web.js";
 import * as cli from "../cli/ui";
 import config from "../config";
-
+import { chatgpt } from "../providers/openai";
 import { ChatMessage } from "chatgpt";
 
 // TTS

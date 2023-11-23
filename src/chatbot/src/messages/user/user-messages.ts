@@ -24,7 +24,7 @@ const sendMenu = async (message: Message, client: Client) => {
 		await delay(1000);
 
 		const list =
-			"*1.* Solicitar nova peça.\n*2.* Acompanhar status de um pedido.\n*3.* Acompanhar pedidos em aberto.\n*4.* Cancelar pedido.\n*5.* Falar com um atendente.\n*6.* Alterar nome cadastrado.";
+		"*1.* Solicitar nova peça. 🆕\n*2.* Acompanhar status de um pedido. 📦\n*3.* Acompanhar pedidos em aberto. 📑\n*4.* Cancelar pedido. ❌\n*5.* Falar com um atendente. 💬\n*6.* Alterar nome cadastrado. ✏️";
 		client.sendMessage(message.from, list);
 
 		await delay(1000);
@@ -249,16 +249,15 @@ const handleNewOrder = async (message: Message, client: Client) => {
 				client.sendMessage(message.from, "Por favor, teria como me mandar um áudio novamente.")
 				return;
 			}
+			
 			// 	// 	// Handle message GPT
-			await handleMessageGPT(message, transcribedText);
-					
-				
+			const chat_response = await handleMessageGPT(message, transcribedText);
 
-
-			
-			
+			console.log(chat_response);
 		}
 		if(message.body){
+			const chat_response = await handleMessageGPT(message, message.body);
+			console.log(chat_response);
 
 		}
 

@@ -96,4 +96,24 @@ export default class UserService {
 			await this.prisma.$disconnect();
 		}
 	}
+
+	async updateRoletUser(cellPhone: string): Promise<PrismaUser> {
+		try {
+			const resquestUser = await this.prisma.user.update({
+				where: {
+					cellPhone: cellPhone
+				},
+				data: {
+					role: [Role.USER]
+				}
+			});
+
+			return resquestUser;
+		} catch (error) {
+			console.error("An error occurred while fetching the user:", error);
+			throw error;
+		} finally {
+			await this.prisma.$disconnect();
+		}
+	}
 }

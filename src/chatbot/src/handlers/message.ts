@@ -6,6 +6,8 @@ import config from "../config";
 
 import {handleCancelOrder, handleCreateUser, handleLeadAcess, handleNewOrder, handleProcessRequest, handleRequestMenu, handleStatusOrder, handleUpdateUser} from "../messages/user/user-messages"
 
+import {handleAdminProcessRequest, handleAdminRequestMenu, handleNewPoint, handleUpdateUserAccess} from "../messages/admin/admin-messages"
+
 // // Speech API & Whisper
 import { TranscriptionMode } from "../types/transcription-mode";
 import { transcribeRequest } from "../providers/speech";
@@ -26,6 +28,35 @@ interface IRequestLeadHandler {
 interface IMessageValidator {
     validate(message: Message): Promise<boolean>;
 }
+
+
+class RequestAdminHandler implements IRequestUserHandler {
+    private whatsappClient: Client;
+    private userService: UserService;
+
+    constructor(whatsappClient: Client, userService: UserService) {
+        this.whatsappClient = whatsappClient;
+        this.userService = userService;
+    }
+
+    async handle(requestState: number, message: Message): Promise<void> {
+        switch (requestState) {
+            case 1:
+                handleAdminRequestMenu(message, this.whatsappClient)
+                break;
+            case 2:
+                handleAdminProcessRequest(message, this.whatsappClient)
+                break;
+            case 3:
+                handleNewPoint(message, this.whatsappClient)
+            case 4:
+                handleUpdateUserAccess(message, this.whatsappClient)
+            default:
+                break;
+        }
+    }
+}
+
 
 // Command Pattern for handling different request states
 class RequestUserHandler implements IRequestUserHandler {
@@ -138,11 +169,16 @@ export class MessageEventHandler {
 
         const userData = await this.userService.getUser(message.from);
 
-        if (userData?.role?.includes("USER") || userData?.role?.includes("ADMIN")) {
+        if (userData?.role?.includes("USER")) {
             let requestState = userData?.requestState;
             const requestUserHandler = new RequestUserHandler(this.whatsappClient, this.userService);
             requestUserHandler.handle(requestState, message);
         } 
+        if(userData?.role?.includes("ADMIN")){
+            let requestState = userData?.requestState;
+            const requestUserHandler = new RequestAdminHandler(this.whatsappClient, this.userService);
+            requestUserHandler.handle(requestState, message);   
+        }
         if(userData?.role?.includes("LEAD") || userData == null) {
             let requestLeadHandler = new RequestLeadHandler(this.whatsappClient, this.userService)
 			requestLeadHandler.handle(message, userData)
