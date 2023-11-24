@@ -8,6 +8,10 @@ import { getConfig } from "../handlers/ai-config";
 import ffmpeg from "fluent-ffmpeg";
 import { blobFromSync, File } from "fetch-blob/from.js";
 import config from "../config";
+import exp from "constants";
+import { Message } from "whatsapp-web.js";
+import { json } from "stream/consumers";
+import {io}  from "socket.io-client"
 
 export let chatgpt: ChatGPTAPI;
 export let openai: OpenAIApi;
@@ -28,6 +32,39 @@ export function initOpenAI() {
 			apiKey: getConfig("gpt", "apiKey")
 		})
 	);
+}
+
+export async function getPointOpenAI(message: Message, points) {
+	let prompt =  "Responda a pergunta abaixo com base no contexto para encontrar as coordenadas do lugar. Fique atento para possíveis variações no nome quando o usuário perguntar.Sempre responda na língua que o usuário se comunicar. Sempre dê as coordenadas no formato ([x], [y], [z])"
+	let jsonPoints = JSON.stringify(points)
+		
+	let question = `Lista de pontos: ${jsonPoints}. Pergunta: Identifique a responsta do usuário com base na lista de pontos Resposta: ${message.body} e depois coloque as coordenadas do ponto em formato de float.`
+
+
+	const response = await openai.createChatCompletion({
+		model: 'gpt-4',
+    	messages: [{role: 'system', content: prompt}, { role: 'user', content: question } ],
+	
+	});
+
+	let pointResponse = response.data.choices[0].message?.content;
+
+	const regex: RegExp = /-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?/gi;
+    const match = pointResponse?.match(regex);
+	const socket = io("http://10.128.64.39:3000");
+    if (match) {
+		match.forEach(coordinateString => {
+			// Splitting the matched string into individual numbers
+			const parts = coordinateString.split(',').map(part => parseFloat(part.trim()));
+			const [x, y, z] = parts;
+			socket.emit("send_points", {x, y, z});
+			message.reply(pointResponse as any);
+
+		});
+    }
+	else{
+		message.reply("Não consegui encontrar o ponto. Tente novamente.")
+	}
 }
 
 export async function transcribeOpenAI(audioBuffer: Buffer): Promise<{ text: string; language: string }> {
@@ -52,6 +89,7 @@ export async function transcribeOpenAI(audioBuffer: Buffer): Promise<{ text: str
 	// FormData
 	const formData = new FormData();
 	formData.append("file", new File([blobFromSync(wavPath)], wavFilename, { type: "audio/wav" }));
+	
 	formData.append("model", "whisper-1");
 	if (config.transcriptionLanguage) {
 		formData.append("language", config.transcriptionLanguage);

@@ -81,6 +81,7 @@ class RequestUserHandler implements IRequestUserHandler {
                 break
             case 4:
                 handleStatusOrder(message, this.whatsappClient)
+                break;
             case 5:
                 handleCancelOrder(message, this.whatsappClient)
                 break;

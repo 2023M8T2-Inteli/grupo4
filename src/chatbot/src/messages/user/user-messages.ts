@@ -4,13 +4,15 @@ import OrderService from "../../models/order";
 import ToolService from "../../models/tool";
 import { PrismaClient, User as PrismaUser, Role } from "@prisma/client";
 import { handleMessageGPT } from "../../handlers/gpt";
-import { transcribeOpenAI } from "../../providers/openai";
+import { getPointOpenAI, transcribeOpenAI } from "../../providers/openai";
 import { getConfig } from "../../handlers/ai-config";
 import * as terminal from "../../cli/ui";
+import PointService from "../../models/point";
 const prisma = new PrismaClient();
 const userService = new UserService(prisma);
 const orderService = new OrderService(prisma);
 const toolService = new ToolService(prisma);
+const pointService = new PointService(prisma);
 const { v4: uuidv4 } = require("uuid");
 
 export const delay = async (seconds: number): Promise<void> => {
@@ -30,7 +32,6 @@ const sendMenu = async (message: Message, client: Client) => {
 		const list =
 			"*1.* Solicitar nova peça. 🆕\n*2.* Acompanhar status de um pedido. 📦\n*3.* Acompanhar pedidos em aberto. 📑\n*4.* Cancelar pedido. ❌\n*5.* Falar com um atendente. 💬\n*6.* Alterar nome cadastrado. ✏️";
 		client.sendMessage(message.from, list);
-
 	} catch (error: any) {
 		console.error("An error occured", error);
 		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
@@ -109,8 +110,7 @@ const handleLeadAcess = async (message: Message, client: Client) => {
 			client.sendMessage(message.from, "Por favor, solicite a ele que te dê acesso ao sistema.");
 			const contact = await client.getContactById(user?.cellPhone);
 			client.sendMessage(message.from, contact);
-		}
-		else {
+		} else {
 			await delay(1000);
 			client.sendMessage(message.from, "No momento não temos atendentes disponíveis, por favor, tente novamente mais tarde.");
 		}
@@ -153,7 +153,15 @@ async function sendNewOrder(message: Message, client: Client) {
 	try {
 		message.reply("Certo, você deseja solicitar uma nova peça.");
 		userService.updateRequestUser(message.from, 3);
-		message.reply("Você pode me dizer qual peça deseja, por mensagem ou por áudio.");
+		message.reply("Você pode me dizer onde você está?");
+		const points = await pointService.getPoints();
+		let listPoints = "";
+		if (points && points.length > 0) {
+			for (const point of points) {
+				listPoints += "*" + point.name + "*\n";
+			}
+			message.reply(listPoints);
+		}
 	} catch (error: any) {
 		console.error("An error occured", error);
 		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
@@ -216,7 +224,7 @@ async function sendChangeName(message: Message, client: Client) {
 const handleProcessRequest = async (message: Message, client: Client) => {
 	try {
 		let maxMatches = 0;
-		let actionToExecute 
+		let actionToExecute;
 		for (const [pattern, action] of intentDict) {
 			const matches = pattern.exec(message.body);
 			terminal.print(`[Intent] ${pattern} -> ${matches ? matches.length : 0} matches`);
@@ -225,11 +233,9 @@ const handleProcessRequest = async (message: Message, client: Client) => {
 				actionToExecute = action;
 			}
 		}
-
 		if (actionToExecute) {
 			await actionDict[actionToExecute](message, client);
-		}
-		else{
+		} else {
 			message.reply("Desculpa, não consegui entender o que você disse.");
 			client.sendMessage(message.from, "Por favor, tente novamente.");
 		}
@@ -316,29 +322,27 @@ const handleOpenOrder = async (message: Message, client: Client) => {
 
 const handleNewOrder = async (message: Message, client: Client) => {
 	try {
-		const catalog = await toolService.getCatalog();
-		if (message.hasMedia) {
-			const media = await message.downloadMedia();
-			const transcriptionMode = getConfig("transcription", "mode");
-			terminal.print(`[Transcription] Transcribing audio with "${transcriptionMode}" mode...`);
-			// Convert media to base64 string
-			const mediaBuffer = Buffer.from(media.data, "base64");
-			let response = await transcribeOpenAI(mediaBuffer);
-			const { text: transcribedText, language: transcribedLanguage } = response;
-			// Check transcription is null (error)
-			if (transcribedText == null || transcribedText.length == 0) {
-				message.reply("Desculpa, não consegui entender o que você disse.");
-				client.sendMessage(message.from, "Por favor, teria como me mandar um áudio novamente.");
-				return;
-			}
+		// if (message.hasMedia) {
+		// 	const media = await message.downloadMedia();
+		// 	const transcriptionMode = getConfig("transcription", "mode");
+		// 	terminal.print(`[Transcription] Transcribing audio with "${transcriptionMode}" mode...`);
+		// 	// Convert media to base64 string
+		// 	const mediaBuffer = Buffer.from(media.data, "base64");
+		// 	let response = await transcribeOpenAI(mediaBuffer);
+		// 	const { text: transcribedText, language: transcribedLanguage } = response;
+		// 	// Check transcription is null (error)
+		// 	if (transcribedText == null || transcribedText.length == 0) {
+		// 		message.reply("Desculpa, não consegui entender o que você disse.");
+		// 		client.sendMessage(message.from, "Por favor, teria como me mandar um áudio novamente.");
+		// 		return;
+		// 	}
+		// 	const chat_response = await handleMessageGPT(message, transcribedText);
 
-			// 	// 	// Handle message GPT
-			const chat_response = await handleMessageGPT(message, transcribedText);
-
-			console.log(chat_response);
-		}
+		// 	console.log(chat_response);
+		// }
 		if (message.body) {
-			const chat_response = await handleMessageGPT(message, message.body);
+			const points = await pointService.getPoints();
+			const chat_response = await getPointOpenAI(message, points);
 			console.log(chat_response);
 		}
 	} catch (error: any) {

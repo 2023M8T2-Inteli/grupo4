@@ -25,6 +25,21 @@ export default class PointService {
 		}
 	}
 
+	async getPoints(): Promise<PrismaPoint[] | null> {
+		try {
+			const points = await this.prisma.point.findMany();
+			if (points == null) {
+				return null;
+			}
+			return points;
+		} catch (error) {
+			console.error("An error occurred while fetching the user:", error);
+			throw error;
+		} finally {
+			await this.prisma.$disconnect();
+		}
+	}
+
 	async createPoint(point: PrismaPoint): Promise<PrismaPoint | null> {
 		try {
 			const newPoint = await this.prisma.point.create({data: point});
