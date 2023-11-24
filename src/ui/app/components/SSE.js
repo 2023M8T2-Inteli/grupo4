@@ -1,25 +1,46 @@
-// components/MyComponent.js
-'use client'
+import { useEffect, useState, useRef } from 'react';
 
-import { useEffect } from 'react';
+const AudioPlayer = () => {
+  const [eventSource, setEventSource] = useState(null);
+  const [audioSrc, setAudioSrc] = useState(null);
+  const audioRef = useRef(null);
 
-function MyComponent() {
   useEffect(() => {
-    const eventSource = new EventSource('/api/expression');
+    const source = new EventSource('http://localhost:5000/sse');
+    console.log('running')
 
-    eventSource.onmessage = (event) => {
+    source.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log('Received message:', data.message);
-      // Update your UI or state with the received data
+      setAudioSrc(`data:audio/mp3;base64,${data.audio}`);
     };
 
+    source.onerror = (error) => {
+      console.error('SSE Error:', error);
+      source.close();
+    };
+
+    setEventSource(source);
+
     return () => {
-      // Cleanup when the component is unmounted
-      eventSource.close();
+      if (source) {
+        source.close();
+      }
     };
   }, []);
 
-  return <div>Your component content here</div>;
-}
+  useEffect(() => {
+    // Simulate a click on the audio element when the audio source is set
+    if (audioSrc && audioRef.current) {
+      audioRef.current.click();
+    }
+  }, [audioSrc]);
 
-export default MyComponent;
+  return (
+    <div>
+      <h1>Audio Player</h1>
+      {audioSrc && <audio autoPlay={true} src={audioSrc} ref={audioRef} />}
+    </div>
+  );
+};
+
+export default AudioPlayer;
