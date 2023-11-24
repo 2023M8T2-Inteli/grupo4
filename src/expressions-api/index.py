@@ -47,37 +47,31 @@ stored_data = {
     'emotion': 'happy',
 }
 
+@app.route('/audio')
+def get_audio():
+    current_text = stored_data['speech']
+    audio_base64 = synthesize_text_base64(current_text)
+    
+    response_data = {
+        'speech': audio_base64,
+        'emotion': stored_data['emotion'],
+    }
 
-
-@app.route('/sse')
-def sse():
-    def generate():
-                print('oi')
-                current_text = stored_data['speech']
-                audio_base64 = synthesize_text_base64(current_text)
-
-                stored_data['audio'] = audio_base64
-                print(audio_base64)
-                # Send SSE event with base64-encoded audio
-                yield f"data: {json.dumps(stored_data)}\n\n"
-    return Response(generate(), content_type='text/event-stream')
+    print(response_data)
+    return jsonify(response_data)
 
 # Handle POST requests to update data
 @app.route('/update', methods=['POST'])
 def update():
     new_data = request.json
 
-    # Check if the speech text has changed
-    if new_data['speech'] != stored_data['speech']:
-        with lock:
-            stored_data.update({
-                **new_data,
-                'timestamp': new_data['timestamp'] if 'timestamp' in new_data else '',
-            })
+    stored_data.update({
+        **new_data,
+        'timestamp': new_data['timestamp'] if 'timestamp' in new_data else '',
+    })
 
-        return jsonify({'message': 'Data updated successfully'}), 200
-    else:
-        return jsonify({'message': 'No changes in speech text'}), 200
+    return jsonify({'message': 'Data updated successfully'}), 200
+
 
 # Start the server
 if __name__ == '__main__':

@@ -1,39 +1,32 @@
 import { useEffect, useState, useRef } from 'react';
 
 const AudioPlayer = () => {
-  const [eventSource, setEventSource] = useState(null);
   const [audioSrc, setAudioSrc] = useState(null);
   const audioRef = useRef(null);
 
   useEffect(() => {
-    const source = new EventSource('http://localhost:5000/sse');
-    console.log('running')
+    const fetchAudio = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/audio');
+        if (!response.ok) {
+          throw new Error('Failed to fetch audio');
+        }
 
-    source.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setAudioSrc(`data:audio/mp3;base64,${data.audio}`);
-    };
-
-    source.onerror = (error) => {
-      console.error('SSE Error:', error);
-      source.close();
-    };
-
-    setEventSource(source);
-
-    return () => {
-      if (source) {
-        source.close();
+        const data = await response.json();
+        setAudioSrc(`data:audio/mp3;base64,${data.speech}`);
+      } catch (error) {
+        console.error('Fetch Audio Error:', error.message);
       }
     };
-  }, []);
 
-  useEffect(() => {
-    // Simulate a click on the audio element when the audio source is set
-    if (audioSrc && audioRef.current) {
-      audioRef.current.click();
-    }
-  }, [audioSrc]);
+    const fetchInterval = setInterval(fetchAudio, 5000); // Fetch every 10 seconds
+
+    // Initial fetch
+    fetchAudio();
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(fetchInterval);
+  }, []);
 
   return (
     <div>

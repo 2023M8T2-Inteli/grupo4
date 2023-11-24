@@ -9,6 +9,7 @@ import gradio as gr
 import re
 import dotenv
 import socketio
+import requests
 
 dotenv.load_dotenv()
 
@@ -22,7 +23,7 @@ class ChatBot:
         template = """Responda a pergunta abaixo com base no contexto para encontrar as coordenadas do lugar. Fique atento para possíveis variações no nome quando o usuário perguntar. 
         Sempre responda na língua que o usuário se comunicar. Sempre dê as coordenadas no formato ([x], [y], [z]) Contexto:
         {context}
-
+        A primeira palavra da resposta deve ser o sentimento da sua resposta dentre as opções FELIZ E TRISTE
         Pergunta: {question}
         """
         prompt = ChatPromptTemplate.from_template(template)
@@ -45,10 +46,27 @@ class ChatBot:
             self.msg.submit(self.respond, [self.msg, self.chatbot], [
                             self.msg, self.chatbot])
 
+    
+    def update_function_api(self, chat_response_string):
+        # Replace the URL with your actual update route API endpoint
+        api_url = 'http://localhost:5000/update'
+
+        # Make an HTTP POST request to the update route
+        response = requests.post(api_url, json={'speech': chat_response_string, 'emotion': 'happy'})
+
+        # Check the response status
+        if response.status_code == 200:
+            print('Chat response sent successfully')
+        else:
+            print(f'Failed to send chat response. Status code: {response.status_code}')
+
     def respond(self, message, chat_history):
         bot_message = ""
         for s in self.chain.stream(message):
             bot_message += str(s.content)
+
+        self.update_function_api(bot_message)
+        
         ws_json = self.extrair_coordenadas(bot_message)
         home = {
             'x': 0.0,
