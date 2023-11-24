@@ -10,6 +10,7 @@ import express, { Request, Response } from 'express';
 import { PrismaClient } from "@prisma/client";
 import UserService from "./models/user";
 import dotenv from "dotenv";
+import { io } from "socket.io-client";
 
 const app = express();
 const port = 3000;
@@ -23,6 +24,8 @@ const prisma = new PrismaClient();
 const userService = new UserService(prisma);
 const AUTH_TOKEN = process.env.AUTH_TOKEN || "";
 const TOKEN_SECRET = process.env.TOKEN_SECRET || "";
+
+
 
 dotenv.config();
 

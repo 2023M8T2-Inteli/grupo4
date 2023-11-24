@@ -32,7 +32,7 @@ model Tool {
 model Order {
   id        String   @id @default(uuid())
   code      Int      @unique @default(autoincrement())
-  type      String   @default("Peding")
+  type      String   @default("In Progress")
   toolId    String
   userId    String
   pointId   String
