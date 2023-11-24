@@ -4,7 +4,7 @@ import { Client, Message, List } from "whatsapp-web.js";
 import * as cli from "../cli/ui";
 import config from "../config";
 
-import {handleCancelOrder, handleCreateUser, handleLeadAcess, handleNewOrder, handleProcessRequest, handleRequestMenu, handleStatusOrder, handleUpdateUser} from "../messages/user/user-messages"
+import {handleCancelOrder, handleCreateUser, handleLeadAcess, handleNewOrder, handleProcessRequest, handleRequestMenu, handleStatusOrder, handleUpdateName, handleUpdateUser} from "../messages/user/user-messages"
 
 import {handleAdminProcessRequest, handleAdminRequestMenu, handleNewPoint, handleUpdateUserAccess} from "../messages/admin/admin-messages"
 
@@ -83,6 +83,9 @@ class RequestUserHandler implements IRequestUserHandler {
                 handleStatusOrder(message, this.whatsappClient)
             case 5:
                 handleCancelOrder(message, this.whatsappClient)
+                break;
+            case 6: 
+                handleUpdateName(message, this.whatsappClient)
                 break;
             default:
                 break;
@@ -182,8 +185,8 @@ export class MessageEventHandler {
         } 
         if(userData?.role?.includes("ADMIN")){
             let requestState = userData?.requestState;
-            const requestUserHandler = new RequestAdminHandler(this.whatsappClient, this.userService);
-            requestUserHandler.handle(requestState, message);   
+            const requestAdminHandler = new RequestAdminHandler(this.whatsappClient, this.userService);
+            requestAdminHandler.handle(requestState, message);   
         }
         if(userData?.role?.includes("LEAD") || userData == null) {
             let requestLeadHandler = new RequestLeadHandler(this.whatsappClient, this.userService)
