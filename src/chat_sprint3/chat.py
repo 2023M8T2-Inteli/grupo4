@@ -80,7 +80,7 @@ class ChatBot:
         # load it into Chroma
         vectorstore = Chroma.from_documents(docs, embedding_function)
 
-        retriever = vectorstore.as_retriever()
+        retriever = vectorstore.as_retriever() 
 
         return retriever
 
