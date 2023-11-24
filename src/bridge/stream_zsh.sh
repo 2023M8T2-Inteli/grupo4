@@ -21,4 +21,4 @@ source install/local_setup.zsh
 
 echo "Runing the launch file..."
 # Launch the launch file
-ros2 launch battery battery_percentage.launch.py
+ros2 launch stream stream.launch.py

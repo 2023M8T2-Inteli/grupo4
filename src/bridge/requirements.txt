@@ -1,0 +1,6 @@
+lxml
+wheel
+eventlet
+transforms3d
+python-socketio
+python-socketio[client]
