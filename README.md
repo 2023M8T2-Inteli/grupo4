@@ -25,27 +25,27 @@
 
 ## :student: Integrantes:
 
-- `<a href="https://www.linkedin.com/in/elisaflemer">`Elisa Flemer `</a>`
-- `<a href="http://www.linkedin.com/in/felipe-pereira-campos-250aa2231">`Felipe Campos `</a>`
-- `<a href="https://www.linkedin.com/in/gabriela-barretto-dados">`Gabriela Barretto `</a>`
-- `<a href="https://www.linkedin.com/in/gustavo-ferreira-oliveira/">`Gustavo Ferreira de Oliveira `</a>`
-- `<a href="https://www.linkedin.com/in/henriquemarlon/">`Henrique Marlon Conceição Santos `</a>`
-- `<a href="https://www.linkedin.com/in/henriquelfmatias/">`Henrique Matias `</a>`
-- `<a href="https://www.linkedin.com/in/paulo-evangelista/">`Paulo Presa Evangelista `</a>`
+- <a href="https://www.linkedin.com/in/elisaflemer">Elisa Flemer </a>
+- <a href="http://www.linkedin.com/in/felipe-pereira-campos-250aa2231">Felipe Campos </a>
+- <a href="https://www.linkedin.com/in/gabriela-barretto-dados">Gabriela Barretto </a>
+- <a href="https://www.linkedin.com/in/gustavo-ferreira-oliveira/">Gustavo Ferreira de Oliveira </a>
+- <a href="https://www.linkedin.com/in/henriquemarlon/">Henrique Marlon Conceição Santos </a>
+- <a href="https://www.linkedin.com/in/henriquelfmatias/">Henrique Matias </a>
+- <a href="https://www.linkedin.com/in/paulo-evangelista/">Paulo Presa Evangelista </a>
 - 
 
 ## :teacher: Professores:
 
 ### Orientador(a)
 
-- `<a href="https://www.linkedin.com/in/murilo-zanini-de-carvalho-0980415b/">`Murilo Zanini de Carvalho `</a>`
+- <a href="https://www.linkedin.com/in/murilo-zanini-de-carvalho-0980415b/">Murilo Zanini de Carvalho </a>
 
 ### Instrutores
 
-- `<a href="https://www.linkedin.com/in/rodrigo-mangoni-nicola-537027158/">`Rodrigo Mangoni Nicola `</a>`
-- `<a href="https://www.linkedin.com/in/ricardo-jos%C3%A9-missori/">`Ricardo José Missori `</a>`
-- `<a href="https://www.linkedin.com/in/lisane-valdo/">`Lisane Valdo `</a>`
-- `<a href="https://www.linkedin.com/in/gui-cestari/">`Guilherme Cestari `</a>`
+- <a href="https://www.linkedin.com/in/rodrigo-mangoni-nicola-537027158/">Rodrigo Mangoni Nicola </a>
+- <a href="https://www.linkedin.com/in/ricardo-jos%C3%A9-missori/">Ricardo José Missori </a>
+- <a href="https://www.linkedin.com/in/lisane-valdo/">Lisane Valdo </a>
+- <a href="https://www.linkedin.com/in/gui-cestari/">Guilherme Cestari </a>
 
 ## 📝 Descrição
 
