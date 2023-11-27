@@ -43,7 +43,7 @@ def synthesize_text_base64(text, language_code="pt-BR", voice_name='pt-BR-Wavene
 
 # Variable to store data
 stored_data = {
-    'speech': 'Olá, eu sou o Vallet',
+    'speech': 'Bom dia, eu sou o Raphinha, o robô autônomo da Cervejaria do Futuro, na Ambev.',
     'emotion': 'happy',
 }
 

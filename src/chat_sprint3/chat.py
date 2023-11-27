@@ -21,9 +21,8 @@ class ChatBot:
         self.sio.connect('http://10.128.64.39:3000')
         
         template = """Responda a pergunta abaixo com base no contexto para encontrar as coordenadas do lugar. Fique atento para possíveis variações no nome quando o usuário perguntar. 
-        Sempre responda na língua que o usuário se comunicar. Sempre dê as coordenadas no formato ([x], [y], [z]) Contexto:
+        Sempre responda na língua que o usuário se comunicar. Sempre dê as coordenadas no formato (x, y, z) Contexto:
         {context}
-        A primeira palavra da resposta deve ser o sentimento da sua resposta dentre as opções FELIZ E TRISTE
         Pergunta: {question}
         """
         prompt = ChatPromptTemplate.from_template(template)

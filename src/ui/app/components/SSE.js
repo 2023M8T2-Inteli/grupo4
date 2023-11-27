@@ -30,8 +30,7 @@ const AudioPlayer = () => {
 
   return (
     <div>
-      <h1>Audio Player</h1>
-      {audioSrc && <audio autoPlay={true} src={audioSrc} ref={audioRef} />}
+      {audioSrc && <audio autoPlay={true} src={audioSrc} ref={audioRef} className='hidden' />}
     </div>
   );
 };
