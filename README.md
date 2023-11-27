@@ -5,13 +5,13 @@
 
 # Grupo 4
 
-# Inteli - Instituto de Tecnologia e Liderança 
+# Inteli - Instituto de Tecnologia e Liderança
 
 <p align="center">
 <a href= "https://www.inteli.edu.br/"><img src="docs/static/img/inteli.png" alt="Inteli - Instituto de Tecnologia e Liderança" border="0"></a>
 </p>
 
-# Valeti
+# Vallet
 
 <!-- <p align="center">
 <img src="documentos/image/capa-solucao.png" alt="Bleedwatch - Solução" border="0">
@@ -23,30 +23,33 @@
 <img src="docs/static/img/logo.png" alt="Logo grupo" border="0">
 </p>
 
-## :student: Integrantes: 
-- <a href="https://www.linkedin.com/in/elisaflemer">Elisa Flemer</a>
-- <a href="http://www.linkedin.com/in/felipe-pereira-campos-250aa2231">Felipe Campos</a>
-- <a href="https://www.linkedin.com/in/gabriela-barretto-dados">Gabriela Barretto</a>
-- <a href="https://www.linkedin.com/in/gustavo-ferreira-oliveira/">Gustavo Ferreira de Oliveira</a>
-- <a href="https://www.linkedin.com/in/henriquemarlon/">Henrique Marlon Conceição Santos</a> 
-- <a href="https://www.linkedin.com/in/henriquelfmatias/">Henrique Matias</a> 
-- <a href="https://www.linkedin.com/in/paulo-evangelista/">Paulo Presa Evangelista</a> 
+## :student: Integrantes:
+
+- `<a href="https://www.linkedin.com/in/elisaflemer">`Elisa Flemer `</a>`
+- `<a href="http://www.linkedin.com/in/felipe-pereira-campos-250aa2231">`Felipe Campos `</a>`
+- `<a href="https://www.linkedin.com/in/gabriela-barretto-dados">`Gabriela Barretto `</a>`
+- `<a href="https://www.linkedin.com/in/gustavo-ferreira-oliveira/">`Gustavo Ferreira de Oliveira `</a>`
+- `<a href="https://www.linkedin.com/in/henriquemarlon/">`Henrique Marlon Conceição Santos `</a>`
+- `<a href="https://www.linkedin.com/in/henriquelfmatias/">`Henrique Matias `</a>`
+- `<a href="https://www.linkedin.com/in/paulo-evangelista/">`Paulo Presa Evangelista `</a>`
 - 
 
 ## :teacher: Professores:
-### Orientador(a) 
-- <a href="https://www.linkedin.com/in/murilo-zanini-de-carvalho-0980415b/">Murilo Zanini de Carvalho</a>
+
+### Orientador(a)
+
+- `<a href="https://www.linkedin.com/in/murilo-zanini-de-carvalho-0980415b/">`Murilo Zanini de Carvalho `</a>`
 
 ### Instrutores
-- <a href="https://www.linkedin.com/in/rodrigo-mangoni-nicola-537027158/">Rodrigo Mangoni Nicola</a>
-- <a href="https://www.linkedin.com/in/ricardo-jos%C3%A9-missori/">Ricardo José Missori</a> 
-- <a href="https://www.linkedin.com/in/lisane-valdo/">Lisane Valdo</a>
-- <a href="https://www.linkedin.com/in/gui-cestari/">Guilherme Cestari</a> 
+
+- `<a href="https://www.linkedin.com/in/rodrigo-mangoni-nicola-537027158/">`Rodrigo Mangoni Nicola `</a>`
+- `<a href="https://www.linkedin.com/in/ricardo-jos%C3%A9-missori/">`Ricardo José Missori `</a>`
+- `<a href="https://www.linkedin.com/in/lisane-valdo/">`Lisane Valdo `</a>`
+- `<a href="https://www.linkedin.com/in/gui-cestari/">`Guilherme Cestari `</a>`
 
 ## 📝 Descrição
 
-O projeto tem como objetivo a construção de robôs de Autoatendimento para a Ambev, utilizando o TurtleBot3, a fim de auxiliar os colaboradores da Ambev que trabalham no setor de almoxarifado. O objetivo é auxiliar na busca por peças e reduzir o tempo de espera dos colaboradores.
-
+O projeto tem como objetivo a construção de um robô delivery para a Ambev, utilizando o TurtleBot3, a fim de auxiliar os colaboradores da Ambev que trabalham no setor de almoxarifado e os técnicos que precisem de peças do almoxarifado. Visa-se agilizar e facilitar o processo de retirada de ferramentas para ambas partes, por meio de um sistema que registra os pedidos feitos por meio de um chatbot, os retira no almoxarifado e leva até a estação de trabalho do técnico.
 
 ## 📝 Documentação do Projeto
 
@@ -56,50 +59,56 @@ A documentação do projeto pode ser consultada na pasta `docs` do repositório.
 
 [![Static Badge](https://img.shields.io/badge/Acesse%20a%20documenta%C3%A7%C3%A3o-green?logo=docusaurus&logoColor=white)](https://2023m8t2-inteli.github.io/grupo4/)
 
-
 ## 📁 Estrutura de pastas
 
 Dentre os arquivos presentes na raiz do projeto, definem-se:
+
 ```
 .
 ├── docs
+│   ├── docs
+│   │   ├── 1. Contexto da Indústria
+│   │   ├── 2. Proposta de Solução
+│   │   ├── 3. Desenvolvimento da Solução
+│   │   └── Referências
+│   ├── src
+│   │   ├── components
+│   │   ├── css
+│   │   └── pages
+│   └── static
+│   │   ├── files
+│   │   ├── img
+│   │   └── video
 ├── infrastructure
 ├── src
-│   ├── backend
-│   │   ├── prisma
+│   ├── bridge
+│   │   ├── assets
 │   │   ├── src
-│   │   │   ├── auth
-│   │   │   ├── flight
-│   │   │   ├── prisma
-│   │   │   └── users
+│   │   │   ├── battery
+│   │   │   ├── mapping_gazebo
+│   │   │   ├── mapping_turtlebot3
+│   │   │   ├── navigation_gazebo
+│   │   │   ├── navigation_turtlebot3
+│   │   │   └── streamer
 │   │   ├── test
 │   │   └── Dockerfile
-│   ├── lambdas
-│   │   ├── etl
-│   │   │    ├── services
-│   │   │    └── Dockerfile
-│   │   ├── prediction
-│   │   │   ├── services
+│   ├── chatbot
+│   │   ├── node_modules
+│   │   ├── src
+│   │   │   ├── cli
+│   │   │   ├── commands
+│   │   │   ├── handlers
+│   │   │   ├── messages
+│   │   │   ├── models
+│   │   │   ├── prisma
+│   │   │   ├── providers
+│   │   │   ├── types
+│   │   │   ├── .env
 │   │   │   └── Dockerfile
-│   ├── frontend
-│   │   ├── public
-│   │   └── src
-│   │       ├── app
-│   │       ├── assets
-│   │       ├── components
-│   │       ├── config
-│   │       ├── contexts
-│   │       └── utils
-│   ├── modelo-ia
-│   ├── notebooks
-│   │   ├── data_analysis
-│   │   ├── etl
-│   │   └── models
+│   ├── interfaces
+│   │   └── msg
 └── README.md
 ```
-
-
-
 
 ## 📋 Licença/License
 
@@ -109,7 +118,6 @@ Dentre os arquivos presentes na raiz do projeto, definem-se:
 
 Aqui estão as referências usadas no projeto:
 
-1. <https://creativecommons.org/share-your-work/>
-2. <https://aws.amazon.com/pt/getting-started/>
-3. <https://www.prisma.io/docs/>
-
+1. [https://creativecommons.org/share-your-work/](https://creativecommons.org/share-your-work/)
+2. [https://aws.amazon.com/pt/getting-started/](https://aws.amazon.com/pt/getting-started/)
+3. [https://www.prisma.io/docs/](https://www.prisma.io/docs/)
