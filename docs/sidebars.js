@@ -37,7 +37,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'Desenvolvimento da Solução',
-      items: ['Desenvolvimento da Solução/3.1 Design Patterns','Desenvolvimento da Solução/3.2 Mapeamento e navegação', 'Desenvolvimento da Solução/3.3 Chatbot', 'Desenvolvimento da Solução/3.4 Banco de Dados', 'Desenvolvimento da Solução/3.5 LLM', 'Desenvolvimento da Solução/3.6 Logs'],
+      items: ['Desenvolvimento da Solução/3.1 Design Patterns','Desenvolvimento da Solução/3.2 Mapeamento e navegação', 'Desenvolvimento da Solução/3.3 Chatbot', 'Desenvolvimento da Solução/3.4 Banco de Dados', 'Desenvolvimento da Solução/3.5 LLM', 'Desenvolvimento da Solução/3.6 Logs', 'Desenvolvimento da Solução/3.7 WebSocket'],
     },
     {
       type: 'doc',
