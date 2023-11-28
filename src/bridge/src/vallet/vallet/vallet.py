@@ -12,7 +12,10 @@ from nav2_simple_commander.robot_navigator import BasicNavigator
 class NavigatorController(Node):
     def __init__(self, nav2_simple_commander: BasicNavigator):
         super().__init__("navigator_controller")
-        self.robot_status = Publisher(self, "status", "/status", String)
+        self.robot_status = Publisher(self, 
+                                      "status", 
+                                      "/status", 
+                                      String)
         self.nav2_simple_commander = nav2_simple_commander
 
     def publish_status(self, status):
@@ -41,7 +44,10 @@ class NavigatorController(Node):
 class Vallet(Node):
     def __init__(self, nav2_simple_commander: BasicNavigator):
         super().__init__("navigation")
-        self.pose = Subscriber(self, "dequeue", "/dequeue", Pose)
+        self.pose = Subscriber(self, 
+                               "dequeue", 
+                               "/dequeue", 
+                               Pose)
         self.pose.create_timer(1.0, self.timer_callback)
         self.pose.create_sub(self.listener_callback)
         self.nav2_simple_commander = nav2_simple_commander

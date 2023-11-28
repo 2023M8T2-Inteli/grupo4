@@ -1,23 +1,28 @@
 import rclpy
 from rclpy.node import Node
 from vallet_msgs.msg import Log
+from .streamer import Streamer
 from .publisher import Publisher
 from .subscriber import Subscriber
+from .__init__ import socket_client
 from sensor_msgs.msg import BatteryState
 
 
 class BatteryPercentage(Node):
     def __init__(self):
         super().__init__("battery_percentage")
-        self.logger = Publisher(self, 
-                                "log", 
-                                "/logs", 
+        self.logger = Publisher(self,
+                                "log",
+                                "/logs",
                                 Log)
-        self.battery = Subscriber(self, 
-                                  "battery_state", 
-                                  "/battery_state", 
-                                  BatteryState, 
-                                  1)
+        self.battery = Subscriber(self,
+                                  "battery_state",
+                                  "/battery_state",
+                                  BatteryState)
+        self.streamer = Streamer(self,
+                                 socket_client,
+                                 self.battery)
+        
         self.battery.create_sub(self.listener_callback)
 
     def listener_callback(self, battery: BatteryState) -> None:
@@ -27,7 +32,7 @@ class BatteryPercentage(Node):
                       action=f'{battery_percentage}',
                       unix_time=int(self.get_clock().now().to_msg().sec))
         self.logger.publish(log_msg)
-        
+
         self.get_logger().info(
             f'Receiving battery percentage: {battery_percentage}')
 

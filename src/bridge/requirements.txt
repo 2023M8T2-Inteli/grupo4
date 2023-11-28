@@ -4,5 +4,7 @@ wheel
 numpy
 eventlet
 transforms3d
+python-dotenv
+transformations
 python-socketio
 python-socketio[client]

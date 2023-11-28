@@ -12,7 +12,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         Node(
-            package='vallet',
+            package='turtlebot3_teleop',
             executable='teleop_keyboard',
             name='teleop',
             prefix='xterm -e',

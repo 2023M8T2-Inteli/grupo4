@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 echo "Updating packages..."
 sudo apt-get update -y > /dev/null 2>&1
@@ -18,7 +18,8 @@ echo "Building with colcon..."
 colcon build > /dev/null 2>&1
 
 echo "Configuring environment..."
-source install/local_setup.zsh
+source install/local_setup.bash
+export SOCKET_URL=f"$1"
 
 echo "Runing the launch file..."
-ros2 launch vallet navigation_gazebo.launch.py
+ros2 launch vallet navigation_turtlebot3.launch.py

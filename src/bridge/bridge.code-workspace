@@ -14,7 +14,8 @@
 			"/opt/ros/humble/local/lib/python3.10/dist-packages"
 		],
 		"conventionalCommits.scopes": [
-			"navigation and mapping"
+			"navigation and mapping",
+			"bridge"
 		]
 	}
 }

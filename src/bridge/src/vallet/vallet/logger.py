@@ -10,7 +10,10 @@ class Logger(Node):
     def __init__(self):
         super().__init__("logger")
         self.package_name = os.path.basename(os.path.dirname(__file__))
-        self.sub = Subscriber(self, "log", "/logs", Log)
+        self.sub = Subscriber(self, 
+                              "log", 
+                              "/logs", 
+                              Log)
         self.sub.create_sub(self.log_callback)
 
     def log_callback(self, msg: Log):

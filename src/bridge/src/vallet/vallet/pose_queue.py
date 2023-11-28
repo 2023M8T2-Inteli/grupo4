@@ -3,9 +3,9 @@ from enum import Enum
 from queue import Queue
 from rclpy.node import Node
 from vallet_msgs.msg import Log
+from std_msgs.msg import String
 from .publisher import Publisher
 from .subscriber import Subscriber
-from std_msgs.msg import String
 from geometry_msgs.msg import Pose
 
 
@@ -17,11 +17,26 @@ class RobotStatus(Enum):
 class PoseQueue(Node):
     def __init__(self):
         super().__init__("pose_queue")
-        self.enqueue = Subscriber(self, "enqueue", "/enqueue", Pose)
-        self.status = Subscriber(self, "status", "/status", String)
-        self.dequeue = Publisher(self, "dequeue", "/dequeue", Pose)
-        self.logger = Publisher(self, "log", "/logs", Log)
-
+        self.enqueue = Subscriber(self, 
+                                  "enqueue", 
+                                  "/enqueue", 
+                                  Pose)
+        
+        self.status = Subscriber(self, 
+                                 "status", 
+                                 "/status", 
+                                 String)
+        
+        self.dequeue = Publisher(self, 
+                                 "dequeue", 
+                                 "/dequeue", 
+                                 Pose)
+        
+        self.logger = Publisher(self, 
+                                "log", 
+                                "/logs", 
+                                Log)
+        
         self.enqueue.create_sub(self.enqueue_pose)
         self.status.create_sub(self.status_callback)
 
@@ -33,6 +48,7 @@ class PoseQueue(Node):
                       action=f'{msg}',
                       unix_time=int(self.get_clock().now().to_msg().sec))
         self.logger.publish(log_msg)
+
         self.queue.put(msg)
 
     def status_callback(self, msg: String) -> None:
@@ -42,11 +58,14 @@ class PoseQueue(Node):
             self.get_logger().info(f"Robot is busy, waiting for it to be free.")
         elif self.robot_status == RobotStatus.FREE and not self.queue.empty():
             next_pose = self.queue.get()
+
             log_msg = Log(node_name=self.dequeue.topic_name,
                           action=f'{next_pose}',
                           unix_time=int(self.get_clock().now().to_msg().sec))
-            self.dequeue.publish(next_pose)
             self.logger.publish(log_msg)
+            
+            self.dequeue.publish(next_pose)
+
             self.get_logger().info(
                 f"Publishing {next_pose} on {self.dequeue.topic_name}")
         elif self.robot_status == RobotStatus.FREE and self.queue.empty():
