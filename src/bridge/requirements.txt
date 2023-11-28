@@ -1,5 +1,6 @@
-empy
+empy==3.3.4
 lxml
+lark
 wheel
 numpy
 eventlet

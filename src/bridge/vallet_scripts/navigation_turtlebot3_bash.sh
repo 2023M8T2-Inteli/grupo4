@@ -19,7 +19,7 @@ colcon build > /dev/null 2>&1
 
 echo "Configuring environment..."
 source install/local_setup.bash
-export SOCKET_URL=f"$1"
+export $1
 
 echo "Runing the launch file..."
 ros2 launch vallet navigation_turtlebot3.launch.py
