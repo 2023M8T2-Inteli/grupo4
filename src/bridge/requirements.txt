@@ -1,8 +1,9 @@
-em
+empy
 lxml
 wheel
 numpy
 eventlet
+catkin_pkg
 transforms3d
 python-dotenv
 transformations

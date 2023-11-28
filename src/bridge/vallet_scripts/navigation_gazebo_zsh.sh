@@ -19,7 +19,6 @@ colcon build > /dev/null 2>&1
 
 echo "Configuring environment..."
 source install/local_setup.zsh
-export SOCKET_URL=f"$1"
 
 echo "Runing the launch file..."
 ros2 launch vallet navigation_gazebo.launch.py
