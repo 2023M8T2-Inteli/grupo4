@@ -1,4 +1,5 @@
 import rclpy
+from typing import Any
 from rclpy.node import Node
 from vallet_msgs.msg import Log
 from .streamer import Streamer
@@ -21,11 +22,11 @@ class BatteryPercentage(Node):
                                   BatteryState)
         self.streamer = Streamer(self,
                                  socket_client,
-                                "/battery",
-                                 self.battery)
+                                 "/battery",
+                                 None,
+                                 self.battery,
+                                 self.listener_callback)
         
-        self.battery.create_sub(self.listener_callback)
-
     def listener_callback(self, battery: BatteryState) -> None:
         battery_percentage = (battery.voltage - 11)/1.6 * 100
 
@@ -34,7 +35,7 @@ class BatteryPercentage(Node):
                       unix_time=int(self.get_clock().now().to_msg().sec))
         self.logger.publish(log_msg)
 
-        self.streamer.emit_event("battery", battery_percentage)
+        self.streamer.emit_event(battery_percentage)
 
         self.get_logger().info(
             f'Receiving battery percentage: {battery_percentage}')
