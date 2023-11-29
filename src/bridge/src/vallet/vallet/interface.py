@@ -7,16 +7,16 @@ from geometry_msgs.msg import Pose, Point
 class Interface(Node):
     def __init__(self):
         super().__init__("interface")
-        self.oracle = Publisher(self, 
-                                "enqueue", 
-                                "/enqueue", 
+        self.enqueue = Publisher(self,
+                                "enqueue",
+                                "/enqueue",
                                 Pose)
-        self.oracle.create_timer(1.0, self.timer_callback)
+        self.enqueue.create_timer(1.0, self.timer_callback)
 
     def timer_callback(self):
         msg = Pose(position=Point(x=float(input("X: ")), y=float(input("Y: ")), z=0.0))
 
-        self.oracle.publish(msg)
+        self.enqueue.publish(msg)
 
         self.get_logger().info(f"Pose {msg.position.x, msg.position.y} published.")
 
