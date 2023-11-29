@@ -7,36 +7,38 @@ from .subscriber import Subscriber
 
 
 class Streamer:
-    def __init__(self, node: Node, client: Client, socket_event: str, sub: Subscriber = None, socket_callback: Any = None):
+    def __init__(self, node: Node, client: Client, socket_event: str, socket_callback: Any = None, subscriber: Subscriber = None, function_callback: Any = None):
         self.node = node
         self.client = client
         self.socket_event = socket_event
         self.socket_callback = socket_callback
-        self.sub = sub if isinstance(sub, Subscriber) else None
+        self.function_callback = function_callback
+        self.subscriber = subscriber if isinstance(subscriber, Subscriber) else None
 
         self._set_strategies()
 
     def emit_event(self, msg: Any) -> None:
         try:
             json_msg = json.dumps(self._message_to_dictionary(msg))
+            self.node.get_logger().info(f"Emitting data on {self.socket_event}: {json_msg}")
             self.client.emit(self.socket_event, json_msg)
-            self.node.get_logger().info(f"Receiving data from topic {self.sub.name} and emitting on {self.socket_event}")
+            self.node.get_logger().info(f"Receiving data from topic {self.subscriber.name} and emitting on {self.socket_event}")
             return json_msg
         except Exception as e:
-            raise ValueError(f"Error transforming data: {e}")
+            self.node.get_logger().info(f"Error transforming data: {e}")
 
     def _message_to_dictionary(self, msg: Any):
         if hasattr(msg, '__slots__'):
             return {slot: self._message_to_dictionary(getattr(msg, slot)) for slot in msg.__slots__}
-        elif isinstance(msg, list):
-            return [self._message_to_dictionary(sub_msg) for sub_msg in msg]
+        elif isinstance(msg, float):
+            return {"data": msg}
         else:
-            return msg
+            self.node.get_logger().info(f"Message type {type(msg)} not supported.")
 
     def _set_strategies(self) -> None:
-        if self.sub is not None:
-            self.sub.create_sub(self.emit_event)
-            self.node.get_logger().info(f"Subscriber {self.sub.name} created.")
+        if self.subscriber is not None:
+            self.subscriber.create_sub(self.function_callback)
+            self.node.get_logger().info(f"Subscriber {self.subscriber.name} created.")
         else:
             self.node.get_logger().info("No subscriber was found on this streamer.")
 

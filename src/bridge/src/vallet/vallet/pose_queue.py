@@ -14,7 +14,6 @@ from tf_transformations import quaternion_from_euler
 from geometry_msgs.msg import Pose, Point, Quaternion
 
 
-
 class RobotStatus(Enum):
     FREE = 0
     BUSY = 1
@@ -46,7 +45,6 @@ class PoseQueue(Node):
         self.streamer = Streamer(self,
                                  socket_client,
                                  "/enqueue",
-                                 None,
                                  self.enqueue_pose)
         
         self.enqueue.create_sub(self.enqueue_pose)

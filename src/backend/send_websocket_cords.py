@@ -17,7 +17,7 @@ running = True
 def send_points():
     while running:
         time.sleep(2)
-        sio.emit('enqueue', {'x': 2.5, 'y': 2.5})
+        sio.emit('enqueue', {'x': 1.4, 'y': -1.4})
         print("Enviado: ", {'x': 2.5, 'y': 2.5})
         time.sleep(2)
         sio.emit('enqueue', {'x': 0.0, 'y': 0.0})

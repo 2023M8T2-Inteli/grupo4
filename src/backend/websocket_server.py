@@ -15,11 +15,10 @@ def message(sid, data):
     print(f'Mensagem recebida de {sid}: {data}')
     sio.emit("/enqueue", data)
 
-@sio.on('robot_status')
+@sio.on('/battery')
 def message(sid, data):
     print(f'Mensagem recebida de {sid}: {data}')
-    sio.emit("/navigation", data)
-
+    # sio.emit("/navigation", data)
 
 # Evento de desconexão
 @sio.event
