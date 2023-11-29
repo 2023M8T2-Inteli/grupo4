@@ -21,6 +21,7 @@ class BatteryPercentage(Node):
                                   BatteryState)
         self.streamer = Streamer(self,
                                  socket_client,
+                                "/battery",
                                  self.battery)
         
         self.battery.create_sub(self.listener_callback)
@@ -32,6 +33,8 @@ class BatteryPercentage(Node):
                       action=f'{battery_percentage}',
                       unix_time=int(self.get_clock().now().to_msg().sec))
         self.logger.publish(log_msg)
+
+        self.streamer.emit_event("battery", battery_percentage)
 
         self.get_logger().info(
             f'Receiving battery percentage: {battery_percentage}')

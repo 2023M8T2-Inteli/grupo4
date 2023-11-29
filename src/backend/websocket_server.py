@@ -10,11 +10,10 @@ def connect(sid, environ):
     print('Cliente conectado:', sid)
 
 # Evento para lidar com mensagens recebidas
-@sio.on('send_points')
+@sio.on('enqueue')
 def message(sid, data):
-    if data['x'] and data['y']:
-        print(f'Mensagem recebida de {sid}: {data}')
-        sio.emit("/navigation", data)
+    print(f'Mensagem recebida de {sid}: {data}')
+    sio.emit("/enqueue", data)
 
 @sio.on('robot_status')
 def message(sid, data):

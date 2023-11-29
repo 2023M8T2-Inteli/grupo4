@@ -1,25 +1,25 @@
 import json
 from typing import Any
+from socketio import Client
 from rclpy.node import Node
 from .publisher import Publisher
 from .subscriber import Subscriber
 
 
 class Streamer:
-    def __init__(self, node: Node, client: Any, socket_event: str, sub: Subscriber = None, socket_callback: Any = None, pub: Publisher = None):
+    def __init__(self, node: Node, client: Client, socket_event: str, sub: Subscriber = None, socket_callback: Any = None):
         self.node = node
-        self.sio = client
+        self.client = client
         self.socket_event = socket_event
-        self.latest_received_data = None
-        self.pub = pub if isinstance(pub, Publisher) else None
+        self.socket_callback = socket_callback
         self.sub = sub if isinstance(sub, Subscriber) else None
 
-        self._set_strategies(socket_callback)
+        self._set_strategies()
 
     def emit_event(self, msg: Any) -> None:
         try:
             json_msg = json.dumps(self._message_to_dictionary(msg))
-            self.sio.emit(self.socket_event, json_msg)
+            self.client.emit(self.socket_event, json_msg)
             self.node.get_logger().info(f"Receiving data from topic {self.sub.name} and emitting on {self.socket_event}")
             return json_msg
         except Exception as e:
@@ -33,15 +33,15 @@ class Streamer:
         else:
             return msg
 
-    def _set_strategies(self, socket_callback) -> None:
+    def _set_strategies(self) -> None:
         if self.sub is not None:
             self.sub.create_sub(self.emit_event)
             self.node.get_logger().info(f"Subscriber {self.sub.name} created.")
         else:
             self.node.get_logger().info("No subscriber was found on this streamer.")
 
-        if self.pub is not None:
-            self.sio.on(self.socket_event, socket_callback)
+        if self.socket_callback is not None:
+            self.client.on(self.socket_event, self.socket_callback)
             self.node.get_logger().info(f"Socket event {self.socket_event} created.")
         else:
             self.node.get_logger().info("No publisher was found on this streamer.")
