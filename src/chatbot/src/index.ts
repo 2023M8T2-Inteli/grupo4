@@ -13,7 +13,13 @@ import dotenv from "dotenv";
 import { io } from "socket.io-client";
 
 const app = express();
-const port = 3000;
+const port = 5000;
+
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
+	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+	next();
+  });
 
 // Ready timestamp of the bot
 let botReadyTimestamp: Date | null = null;
@@ -45,7 +51,7 @@ const start = async () => {
 	});
 
 	let messageQueue: any = [];
-	let qrCodeUrl: string | null = null;
+	let urll = ''	let qrCodeUrl: string | null = null;
 	// WhatsApp auth
 	client.on(Events.QR_RECEIVED, (qr: string) => {
 		let qr_code = qrcode.toString(
@@ -58,7 +64,7 @@ const start = async () => {
 			},
 			(err, url) => {
 				if (err) throw err;
-				cli.printQRCode(url);
+				urll = url
 				qrCodeUrl = url;
 			}
 		);	
@@ -66,8 +72,8 @@ const start = async () => {
 	
 	
 	app.get('/', (req: Request, res: Response) => {
-		if (qrCodeUrl) {
-			res.status(200).send(qrCodeUrl);
+		if (urll) {
+			res.status(200).send(urll);
 		} else {
 			res.status(400).send('User is authenticated');
 		}
