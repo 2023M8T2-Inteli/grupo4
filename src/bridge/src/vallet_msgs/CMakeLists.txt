@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.8)
 project(vallet_msgs)
 
+# Variável de ambiente para garantir o encontro do caminho do NUMPY
+# Caso necessário, set a variável de ambiente FNMPMAC com true
+if($ENV{FNMPMAC})
+    find_package(Python3 3.10.13 EXACT COMPONENTS Interpreter Development.NumPy)
+endif()
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
