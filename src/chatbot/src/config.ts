@@ -1,8 +1,5 @@
 import process from "process";
 
-import { TranscriptionMode } from "./types/transcription-mode";
-import { TTSMode } from "./types/tts-mode";
-
 // Environment variables
 import dotenv from "dotenv";
 dotenv.config();
@@ -41,9 +38,7 @@ interface IConfig {
 	openAIServerUrl: string;
 	whisperApiKey: string;
 	ttsEnabled: boolean;
-	ttsMode: TTSMode;
 	transcriptionEnabled: boolean;
-	transcriptionMode: TranscriptionMode;
 	transcriptionLanguage: string;
 }
 
@@ -82,11 +77,10 @@ export const config: IConfig = {
 
 	// Text-to-Speech
 	ttsEnabled: getEnvBooleanWithDefault("TTS_ENABLED", false), // Default: false
-	ttsMode: getEnvTTSMode(), // Default: speech-api
+
 
 	// Transcription
 	transcriptionEnabled: getEnvBooleanWithDefault("TRANSCRIPTION_ENABLED", false), // Default: false
-	transcriptionMode: getEnvTranscriptionMode(), // Default: local
 	transcriptionLanguage: process.env.TRANSCRIPTION_LANGUAGE || "" // Default: null
 };
 
@@ -130,32 +124,5 @@ function getEnvPromptModerationBlacklistedCategories(): string[] {
 		return JSON.parse(envValue.replace(/'/g, '"'));
 	}
 }
-
-/**
- * Get the transcription mode from the environment variable
- * @returns The transcription mode
- */
-function getEnvTranscriptionMode(): TranscriptionMode {
-	const envValue = process.env.TRANSCRIPTION_MODE?.toLowerCase();
-	if (envValue == undefined || envValue == "") {
-		return TranscriptionMode.Local;
-	}
-
-	return envValue as TranscriptionMode;
-}
-
-/**
- * Get the tss mode from the environment variable
- * @returns The tts mode
- */
-function getEnvTTSMode(): TTSMode {
-	const envValue = process.env.TTS_MODE?.toLowerCase();
-	if (envValue == undefined || envValue == "") {
-		return TTSMode.SpeechAPI;
-	}
-
-	return envValue as TTSMode;
-}
-
 
 export default config;

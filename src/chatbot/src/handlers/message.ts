@@ -1,20 +1,9 @@
 import { PrismaClient, User as PrismaUser } from "@prisma/client";
 import UserService from "../models/user";
 import { Client, Message, List } from "whatsapp-web.js";
-import * as cli from "../cli/ui";
-import config from "../config";
-
 import {handleCancelOrder, handleCreateUser, handleLeadAcess, handleNewOrder, handleProcessRequest, handleRequestMenu, handleStatusOrder, handleUpdateName, handleUpdateUser} from "../messages/user/user-messages"
 
 import {handleAdminProcessRequest, handleAdminRequestMenu, handleNewPoint, handleUpdateUserAccess} from "../messages/admin/admin-messages"
-
-// // Speech API & Whisper
-import { TranscriptionMode } from "../types/transcription-mode";
-import { transcribeRequest } from "../providers/speech";
-import { transcribeAudioLocal } from "../providers/whisper-local";
-import { transcribeWhisperApi } from "../providers/whisper-api";
-
-const { v4: uuidv4 } = require("uuid");
 
 // Define interfaces for the Command and Chain of Responsibility patterns
 interface IRequestUserHandler {

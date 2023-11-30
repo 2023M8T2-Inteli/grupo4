@@ -21,6 +21,7 @@
 		"openai": "^3.3.0",
 		"picocolors": "^1.0.0",
 		"qrcode": "^1.5.3",
+		"socket.io": "^4.7.2",
 		"socket.io-client": "^4.7.2",
 		"uuid": "^9.0.1",
 		"whatsapp-web.js": "^1.23.0"
