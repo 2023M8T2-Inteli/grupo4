@@ -39,7 +39,9 @@ void ClientStreamer::_on_connected() {
 
 
 void ClientStreamer::_on_close(sio::client::close_reason const &reason){
-   RCLCPP_INFO(this->get_logger(), "SocketIO conection CLOSED!");
+   std::string reason_str = reason == sio::client::close_reason_normal ? "closed normally" : "closed with reason";
+
+   RCLCPP_INFO(this->get_logger(), reason_str.c_str());
    exit(0);
 }
 
