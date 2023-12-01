@@ -25,5 +25,3 @@ private:
 };
 
 #endif // CLIENTCLASS_H
-
-// 10.128.68.115

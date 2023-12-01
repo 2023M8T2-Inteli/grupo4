@@ -59,6 +59,7 @@ find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(slam_toolbox REQUIRED)
+find_package(vallet_msgs REQUIRED)
 
 # -----------------> streamer <-----------------
 add_executable(streamer src/streamer/main.cpp src/streamer/client/client.cpp)
@@ -83,6 +84,14 @@ target_link_libraries(streamer sioclient)
 ament_target_dependencies(streamer rclcpp geometry_msgs nav2_msgs tf2 tf2_geometry_msgs tf2_ros slam_toolbox)
 
 install(TARGETS streamer DESTINATION lib/${PROJECT_NAME}/)
+# -----------------> streamer <-----------------
+
+# -----------------> logger <-----------------
+add_executable(logger src/logger/main.cpp src/logger/text_saver/text_saver.cpp)
+
+ament_target_dependencies(logger rclcpp geometry_msgs nav2_msgs tf2 tf2_geometry_msgs tf2_ros slam_toolbox vallet_msgs)
+
+install(TARGETS logger DESTINATION lib/${PROJECT_NAME}/)
 # -----------------> streamer <-----------------
 
 
