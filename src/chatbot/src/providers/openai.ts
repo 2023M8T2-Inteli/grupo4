@@ -99,25 +99,20 @@ export async function transcribeOpenAI(Message: Message, Client: Client, audioBu
 		});
 	} catch (e) {
 		console.error(e);
-	} finally {
-		fs.unlinkSync(oggPath);
-		fs.unlinkSync(wavPath);
-	}
-
-	if (!response || response.status != 200) {
-		console.error(response);
 		return {
 			text: "",
 			language: language
 		};
-	}
+	} finally {
+		fs.unlinkSync(oggPath);
+		fs.unlinkSync(wavPath);
+		const transcription = await response.data;
 
-	const transcription = await response.data;
-	speechOpenAI(Message, Client, transcription.text);
-	return {
-		text: transcription.text,
-		language
-	};
+		return {
+			text: transcription.text,
+			language
+		};
+	}
 }
 
 async function convertOggToWav(oggPath: string, wavPath: string): Promise<void> {
