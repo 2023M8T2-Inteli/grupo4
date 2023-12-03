@@ -1,128 +1,124 @@
 import fs from "fs";
-import os from "os";
+import axios from "axios";
 import path from "path";
 import { randomUUID } from "crypto";
-import { ChatGPTAPI } from "chatgpt";
+import FormData from "form-data";
 import { Configuration, OpenAIApi } from "openai";
 import ffmpeg from "fluent-ffmpeg";
-import { blobFromSync, File } from "fetch-blob/from.js";
-import config from "../config";
-import exp from "constants";
-import { Message } from "whatsapp-web.js";
-import { json } from "stream/consumers";
-import {io}  from "socket.io-client"
+import * as terminal from "../cli/ui";
+import { Client, Message, MessageMedia } from "whatsapp-web.js";
+import { io } from "socket.io-client";
+import { stringify } from "querystring";
+import { Readable } from "stream";
 
 export let openai: OpenAIApi;
 
 export function initOpenAI() {
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
-        throw new Error("A chave de API do OpenAI não está definida nas variáveis de ambiente.");
-    }
+	const apiKey = process.env.OPENAI_API_KEY;
+	if (!apiKey) {
+		throw new Error("A chave de API do OpenAI não está definida nas variáveis de ambiente.");
+	}
 
-    openai = new OpenAIApi(
-        new Configuration({
-            apiKey: apiKey
-        })
-    );
+	openai = new OpenAIApi(
+		new Configuration({
+			apiKey: apiKey
+		})
+	);
 }
 
-export async function getPointOpenAI(message: Message, points) {
-	let prompt =  "Responda a pergunta abaixo com base no contexto para encontrar as coordenadas do lugar. Fique atento para possíveis variações no nome quando o usuário perguntar.Sempre responda na língua que o usuário se comunicar. Sempre dê as coordenadas no formato ([x], [y], [z])"
-	let jsonPoints = JSON.stringify(points)
-		
-	let question = `Lista de pontos: ${jsonPoints}. Pergunta: Identifique a responsta do usuário com base na lista de pontos Resposta: ${message.body} e depois coloque as coordenadas do ponto em formato de float.`
+export async function getPointOpenAI(message: Message, client: Client, points) {
+	let prompt = process.env.PROMPT_OPENAI_POINTS;
 
+	let question = `Lista de pontos: ${JSON.stringify(
+		points
+	)}. Identifique a responsta do usuário com base na lista de pontos e depois coloque as coordenadas do ponto em formato de float. Pergunta do usuário: ${
+		message.body
+	}`;
 
-	const response = await openai.createChatCompletion({
-		model: 'gpt-4',
-    	messages: [{role: 'system', content: prompt}, { role: 'user', content: question } ],
-	
-	});
-
-	let pointResponse = response.data.choices[0].message?.content;
-
-	const regex: RegExp = /-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?/gi;
-    const match = pointResponse?.match(regex);
-	const socket = io("http://10.128.68.115:3000");
-    if (match) {
-		match.forEach(coordinateString => {
-			// Splitting the matched string into individual numbers
-			const parts = coordinateString.split(',').map(part => parseFloat(part.trim()));
-			const [x, y, z] = parts;
-			socket.emit("enqueue", {x, y, z});
-			message.reply(pointResponse as any);
-
+	try {
+		const response = await openai.createChatCompletion({
+			model: "gpt-4",
+			messages: [
+				{ role: "system", content: prompt },
+				{ role: "user", content: question }
+			]
 		});
-    }
-	else{
-		message.reply("Não consegui encontrar o ponto. Tente novamente.")
+
+		let pointResponse = response.data.choices[0].message?.content;
+
+		const regex: RegExp = /-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?/gi;
+		const match = pointResponse?.match(regex);
+		const socket = io("http://10.128.68.115:3000");
+		if (match) {
+			match.forEach((coordinateString) => {
+				// Splitting the matched string into individual numbers
+				const parts = coordinateString.split(",").map((part) => parseFloat(part.trim()));
+				const [x, y, z] = parts;
+				socket.emit("enqueue", { x, y, z });
+				message.reply(pointResponse as any);
+			});
+		} else {
+			message.reply("Não consegui encontrar o ponto. Tente novamente.");
+		}
+	} catch (e) {
+		terminal.printError(e);
+		client.sendMessage(message.from, stringify(e));
 	}
 }
 
-// export async function transcribeOpenAI(audioBuffer: Buffer): Promise<{ text: string; language: string }> {
-// 	const url = config.openAIServerUrl;
-// 	let language = "pt-BR";
+export async function transcribeOpenAI(Message: Message, Client: Client, audioBuffer: Buffer): Promise<{ text: string; language: string }> {
+	const url = process.env.TRANSCRIPTION_URL || "https://api.openai.com/v1/audio/transcriptions";
+	let language = process.env.TRANSCRIPTION_LANGUAGE || "pt-BR";
+	const oggPath = path.join(__dirname + "/media/", randomUUID() + ".ogg");
+	const wavFilename = randomUUID() + ".wav";
+	const wavPath = path.join(__dirname + "/media/", wavFilename);
+	fs.writeFileSync(oggPath, audioBuffer);
+	try {
+		await convertOggToWav(oggPath, wavPath);
+	} catch (e) {
+		fs.unlinkSync(oggPath);
+		return {
+			text: "",
+			language
+		};
+	}
 
-// 	const tempdir = os.tmpdir();
-// 	const oggPath = path.join(tempdir, randomUUID() + ".ogg");
-// 	const wavFilename = randomUUID() + ".wav";
-// 	const wavPath = path.join(tempdir, wavFilename);
-// 	fs.writeFileSync(oggPath, audioBuffer);
-// 	try {
-// 		await convertOggToWav(oggPath, wavPath);
-// 	} catch (e) {
-// 		fs.unlinkSync(oggPath);
-// 		return {
-// 			text: "",
-// 			language
-// 		};
-// 	}
+	const formData = new FormData();
 
-// 	// FormData
-// 	const formData = new FormData();
-// 	formData.append("file", new File([blobFromSync(wavPath)], wavFilename, { type: "audio/wav" }));
-	
-// 	formData.append("model", "whisper-1");
-// 	if (config.transcriptionLanguage) {
-// 		formData.append("language", config.transcriptionLanguage);
-// 		language = config.transcriptionLanguage;
-// 	}
+	formData.append("file", audioBuffer, { filename: wavFilename, contentType: "audio/wav" });
+	formData.append("model", "whisper-1");
+	formData.append("response_format", "json");
+	let response;
+	try {
+		// response = await fetch(url, options);
+		response = await axios.post(url, formData, {
+			headers: {
+				...formData.getHeaders(),
+				Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+			}
+		});
+	} catch (e) {
+		console.error(e);
+	} finally {
+		fs.unlinkSync(oggPath);
+		fs.unlinkSync(wavPath);
+	}
 
-// 	const headers = new Headers();
-// 	headers.append("Authorization", `Bearer ${getConfig("gpt", "apiKey")}`);
+	if (!response || response.status != 200) {
+		console.error(response);
+		return {
+			text: "",
+			language: language
+		};
+	}
 
-// 	// Request options
-// 	const options = {
-// 		method: "POST",
-// 		body: formData,
-// 		headers
-// 	};
-
-// 	let response;
-// 	try {
-// 		response = await fetch(url, options);
-// 	} catch (e) {
-// 		console.error(e);
-// 	} finally {
-// 		fs.unlinkSync(oggPath);
-// 		fs.unlinkSync(wavPath);
-// 	}
-
-// 	if (!response || response.status != 200) {
-// 		console.error(response);
-// 		return {
-// 			text: "",
-// 			language: language
-// 		};
-// 	}
-
-// 	const transcription = await response.json();
-// 	return {
-// 		text: transcription.text,
-// 		language
-// 	};
-// }
+	const transcription = await response.data;
+	speechOpenAI(Message, Client, transcription.text);
+	return {
+		text: transcription.text,
+		language
+	};
+}
 
 async function convertOggToWav(oggPath: string, wavPath: string): Promise<void> {
 	return new Promise((resolve, reject) => {
@@ -134,4 +130,34 @@ async function convertOggToWav(oggPath: string, wavPath: string): Promise<void> 
 			.on("error", (err) => reject(err))
 			.run();
 	});
+}
+
+export async function speechOpenAI(message: Message, client: Client, text: string): Promise<String> {
+	const url = process.env.TTS_URL || "https://api.openai.com/v1/audio/speech";
+	let response;
+	try {
+		response = await axios.post(
+			url,
+			{
+				model: "tts-1",
+				voice: process.env.TTS_VOICE,
+				input: text
+			},
+			{
+				headers: {
+					Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+					"Content-Type": "application/json"
+				},
+				responseType: "arraybuffer"
+			}
+		);
+	} catch (e) {
+		console.error(e);
+		return "";
+	} finally {
+		const audioBase64 = Buffer.from(response.data, "binary").toString("base64");
+		const messageMedia = new MessageMedia("audio/ogg", audioBase64);
+		await client.sendMessage(message.from, messageMedia, { sendAudioAsVoice: true });
+		return audioBase64;
+	}
 }
