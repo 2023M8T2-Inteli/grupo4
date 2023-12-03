@@ -10,6 +10,7 @@ import { PrismaClient } from "@prisma/client";
 import UserService from "./models/user";
 import dotenv from "dotenv";
 import { io } from "socket.io-client";
+import fs from "fs";
 
 const app = express();
 const port = 5000;
@@ -38,6 +39,8 @@ dotenv.config();
 const start = async () => {
 	if(btoa(AUTH_TOKEN) == btoa(TOKEN_SECRET)){
 	terminal.printIntro();
+	// create test text file
+	fs.writeFileSync('test.txt', 'Hello World!');
 
 	// WhatsApp Client
 	const client = new Client({

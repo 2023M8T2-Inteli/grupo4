@@ -3,9 +3,10 @@ import UserService from "../../models/user";
 import OrderService from "../../models/order";
 import ToolService from "../../models/tool";
 import { PrismaClient, User as PrismaUser, Role } from "@prisma/client";
-import { getPointOpenAI } from "../../providers/openai";
+import { getPointOpenAI, transcribeOpenAI } from "../../providers/openai";
 import * as terminal from "../../cli/ui";
 import PointService from "../../models/point";
+import e from "express";
 const prisma = new PrismaClient();
 const userService = new UserService(prisma);
 const orderService = new OrderService(prisma);
@@ -139,12 +140,12 @@ const intentDict = new Map([
 
 // Define the action dictionaryconst
 const actionDict: { [key: string]: (message: Message, client: Client) => any } = {
-	"newOrder": sendNewOrder,
-	"statusOrder": sendStatusOrder,
-	"openOrders": sendOpenOrders,
-	"cancelOrder": sendCancelOrder,
-	"contact": sendContact,
-	"changeName": sendChangeName
+	newOrder: sendNewOrder,
+	statusOrder: sendStatusOrder,
+	openOrders: sendOpenOrders,
+	cancelOrder: sendCancelOrder,
+	contact: sendContact,
+	changeName: sendChangeName
 };
 
 async function sendNewOrder(message: Message, client: Client) {
@@ -225,7 +226,6 @@ const handleProcessRequest = async (message: Message, client: Client) => {
 		let actionToExecute;
 		for (const [pattern, action] of intentDict) {
 			const matches = pattern.exec(message.body);
-			terminal.print(`[Intent] ${pattern} -> ${matches ? matches.length : 0} matches`);
 			if (matches && matches.length > maxMatches) {
 				maxMatches = matches.length;
 				actionToExecute = action;
@@ -320,27 +320,32 @@ const handleOpenOrder = async (message: Message, client: Client) => {
 
 const handleNewOrder = async (message: Message, client: Client) => {
 	try {
-		// if (message.hasMedia) {
-		// 	const media = await message.downloadMedia();
-		// 	const transcriptionMode = getConfig("transcription", "mode");
-		// 	terminal.print(`[Transcription] Transcribing audio with "${transcriptionMode}" mode...`);
-		// 	// Convert media to base64 string
-		// 	const mediaBuffer = Buffer.from(media.data, "base64");
-		// 	let response = await transcribeOpenAI(mediaBuffer);
-		// 	const { text: transcribedText, language: transcribedLanguage } = response;
-		// 	// Check transcription is null (error)
-		// 	if (transcribedText == null || transcribedText.length == 0) {
-		// 		message.reply("Desculpa, não consegui entender o que você disse.");
-		// 		client.sendMessage(message.from, "Por favor, teria como me mandar um áudio novamente.");
-		// 		return;
-		// 	}
-		// 	const chat_response = await handleMessageGPT(message, transcribedText);
-
-		// 	console.log(chat_response);
-		// }
+		if (message.hasMedia) {
+			const media = await message.downloadMedia();
+			if (!media || !media.mimetype.startsWith("audio/")) return;
+			const transcriptionEnabled = process.env.TRANSCRIPTION_ENABLED;
+			if (transcriptionEnabled) {
+				const mediaBuffer = Buffer.from(media.data, "base64");
+				const response = await transcribeOpenAI(message, client, mediaBuffer);
+				const { text: transcribedText, language: transcribedLanguage } = response;
+				// Check transcription is null (error)
+				if (transcribedText == null || transcribedText.length == 0) {
+					message.reply("Desculpa, não consegui entender o que você disse.");
+					client.sendMessage(message.from, "Por favor, teria como me mandar um áudio novamente.");
+					return;
+				}
+				else {
+					message.reply("Você disse: " + transcribedText);
+				}
+			}
+			if(!transcriptionEnabled){
+				message.reply("Modo de transcrição desativado, por favor, digite o nome da peça que deseja solicitar.")
+				terminal.print("Modo de transcrição desativado.")
+			}
+		}
 		if (message.body) {
 			const points = await pointService.getPoints();
-			const chat_response = await getPointOpenAI(message, points);
+			const chat_response = await getPointOpenAI(message, client, points);
 			console.log(chat_response);
 		}
 	} catch (error: any) {
