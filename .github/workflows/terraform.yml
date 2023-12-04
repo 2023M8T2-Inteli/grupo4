@@ -2,12 +2,12 @@ name: "Terraform - Up Infrastructure"
 
 on:
   push:
-    branches: ["main"]
+    branches: ["feat/terraform-inicial"]
     paths:
       - 'infrastructure/**'
   pull_request:
     types: [closed]
-    branches: ["main"]
+    branches: ["feat/terraform-inicial"]
     paths:
       - 'infrastructure/**'
 

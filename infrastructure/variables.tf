@@ -6,18 +6,18 @@ variable "AWS_REGION" {
 variable "AWS_ACCESS_KEY_ID" {
   type        = string
   description = "AWS Access Key ID"
-  default = "ASIAWUPUSUIE3H3D3OFU"
+  default = "ASIAWUPUSUIEYZEZUYCH"
 }
 variable "AWS_SECRET_ACCESS_KEY" {
   type        = string
   description = "AWS Secret Access Key"
-  default = "xPYZ8DEVFU+Yv/ql3mF+pg0s5Cjd6XcCkreSXRPl"
+  default = "0EcGH+9nUAnZSaQFNeBlnU33627MCV9YPZI5TGrw"
 }
 
 variable "AWS_SESSION_TOKEN" {
   type        = string
   description = "AWS Session Token"
-  default = "FwoGZXIvYXdzECQaDDl6VhfIfwdRsP/KGyLNAS9uCknPVHGRK51pEZx4EtkhOBAiInx5ni3cRHa6J44DpUB7lz/3e34pOtvbi1b1hM21xZ5U08lirUeSalO8tJxo1RJTNgop87Sme4daMyFXRbzw8xxGaI5SRr20IC5No2S19/JtGuXrATSkQIX3EKP2JcCEyWzc7gdO+/bRAjXm5qTN76ObPvkbBVKcoU2/Nhzo93nFqRhiOlFKI8NepqhV1guHFnz1b4FNktziPHdQM4ky/5Cu1d+XHxE32vphxC+WqLhC45VDUbBSs+0oxN3cqQYyLayN71qJSYc/qFeMVUYf5LBYhn899qg8izMW9GrD4o6XxkR230jgnUWGoPSKKQ=="
+  default = "FwoGZXIvYXdzEAsaDEB7eQNvQsjnv9D+OSLNAblu0fP8PrzYjPponWEiNGPY1QQMatENkX+Iwz5Gcl9eyMZ3b+FJu2WGAqLEJAIa5BuILrHUyEaOiLDUh6p3/IcaM5KcZWgCfQ2xoBIw+/1pP9MQX+rJ5gAinHR6Uyu2OoKJymRAxGj+fy5jzwxauqnexaX04QLwLqxTO5NH5NTmU/alPJquVCVsci+tY9FX1Mkplpr0J4HTKeybbP6z75r7nLhzBYZarpZjE2n1HfVFbpeAa1O+FviMQbiHWi8TJHIr3Iub80pG/02DsR0ovJK4qwYyLXXUsK2WRh0agCDuft2FiosDHB8bxL51HmNvmvXEY1t5M6bBMVq4tMzPIVUQkg=="
 }
 
 variable "public_subnet_cidrs" {
