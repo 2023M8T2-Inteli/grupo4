@@ -47,5 +47,3 @@ resource "aws_security_group" "chatbot_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
-
