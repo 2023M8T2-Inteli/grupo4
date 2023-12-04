@@ -3,8 +3,8 @@ name: "Terraform - Up Infrastructure"
 on:
   push:
     branches: ["main"]
-    paths:
-      - 'infrastructure/**'
+    # paths:
+    #   - 'infrastructure/**'
 
 permissions:
   contents: read
