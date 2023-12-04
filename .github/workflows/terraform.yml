@@ -2,7 +2,7 @@ name: "Terraform - Up Infrastructure"
 
 on:
   push:
-    branches: ["feat/terraform-inicial"]
+    branches: ["main"]
     paths:
       - 'infrastructure/**'
 
@@ -59,8 +59,8 @@ jobs:
           fi
 
       - name: Terraform Plan
-        run: terraform plan -input=false
+        run: cd infrastructure && terraform plan -input=false
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -input=false
+        run: cd infrastructure && terraform apply -auto-approve -input=false
