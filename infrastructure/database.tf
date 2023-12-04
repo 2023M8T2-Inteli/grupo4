@@ -22,4 +22,3 @@ resource "aws_db_instance" "main_postgresql_db" {
   skip_final_snapshot = true
   db_subnet_group_name      = aws_db_subnet_group.db_subnet_group.name
 }
-
