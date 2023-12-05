@@ -40,8 +40,5 @@ jobs:
             exit 0  # Encerra o fluxo de trabalho sem erro
           fi
 
-      - name: Terraform Plan
-        run: cd infrastructure && terraform plan -input=false -out=tfplan
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve -input=false tfplan
+      - name: Terraform Plan e Terraform Apply
+        run: cd infrastructure && terraform plan -input=false -out=tfplan && terraform apply -auto-approve -input=false tfplan
