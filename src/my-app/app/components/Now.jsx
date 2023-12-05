@@ -2,7 +2,7 @@ const Now = () => {
   return (
     <div className="shadow-md border-gray-100 border-[2px] rounded-md flex flex-col justify-between p-4 w-full">
       <span className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold mb-4">Agora</h1>
+        <h1 className="text-2xl font-semibold">Agora</h1>
         <h3>Bateria: 50%</h3>
       </span>
       <span>
