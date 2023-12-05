@@ -1,57 +1,71 @@
 #include "client.h"
 #include <websocketpp/client.hpp>
 
-ClientStreamer::ClientStreamer(sio::client &client) : rclcpp::Node("STREAMER"), _client(client), _connect_finish(false)
-{
-   this->_client.set_open_listener(std::bind(&ClientStreamer::_on_connected, this));
+ClientStreamer::ClientStreamer() : rclcpp::Node("STREAMER"),
+                                   _client(std::make_unique<sio::client>()), _connect_finish(false) {
 
-   this->_client.set_close_listener(std::bind(&ClientStreamer::_on_close, this, std::placeholders::_1));
+    this->_client->set_open_listener(std::bind(&ClientStreamer::on_connected_, this));
 
-   this->_client.set_fail_listener(std::bind(&ClientStreamer::_on_fail, this));
+    this->_client->set_close_listener(std::bind(&ClientStreamer::on_close_, this, std::placeholders::_1));
 
-   this->_client.connect("http://localhost:3000");
+    this->_client->set_fail_listener(std::bind(&ClientStreamer::on_fail_, this));
 
-   this->_lock.lock();
+    this->_client->connect("http://localhost:3000");
 
-   if (!this->_connect_finish) {
-      RCLCPP_INFO(this->get_logger(), "Waiting SocketIO conection ...");
-      _cond.wait(this->_lock);
-   }
+    this->_lock.lock();
 
-   this->_lock.unlock();
+    if (!this->_connect_finish) {
+        RCLCPP_INFO(this->get_logger(), "Waiting SocketIO conection ...");
+        _cond.wait(this->_lock);
+    }
 
-   RCLCPP_INFO(this->get_logger(), "Start-up COMPLETED!");
+    this->_lock.unlock();
 
-   this->_emit("/battery", std::string("Foi apenas um teste"));
+    RCLCPP_INFO(this->get_logger(), "Start-up COMPLETED!");
+
+    // Example
+    // this->emit_("/battery", std::string("Foi apenas um teste"));
+
+    /* Example
+    this->_client.socket()->on("message", sio::socket::event_listener_aux(
+                                                  [&](std::string const &name, sio::message::ptr const &data, bool isAck,
+                                                      sio::message::list &ack_resp) {
+                                                      this->on_message_(name, data, isAck, ack_resp);
+                                                  }));
+    */
 }
 
-ClientStreamer::~ClientStreamer(){
-   this->_client.sync_close();
-   this->_client.clear_con_listeners();
+ClientStreamer::~ClientStreamer() {
+    this->_client->sync_close();
+    this->_client->clear_con_listeners();
 }
 
-void ClientStreamer::_on_connected() {
-   this->_lock.lock();
-   this->_cond.notify_all();
-   this->_connect_finish = true;
-   this->_lock.unlock();
+void ClientStreamer::on_connected_() {
+    this->_lock.lock();
+    this->_cond.notify_all();
+    this->_connect_finish = true;
+    this->_lock.unlock();
 }
 
 
-void ClientStreamer::_on_close(sio::client::close_reason const &reason){
-   std::string reason_str = reason == sio::client::close_reason_normal ? "closed normally" : "closed with reason";
+void ClientStreamer::on_close_(sio::client::close_reason const &reason) {
+    std::string reason_str = reason == sio::client::close_reason_normal ? "closed normally" : "closed with reason";
 
-   RCLCPP_INFO(this->get_logger(), reason_str.c_str());
-   exit(0);
+    RCLCPP_INFO(this->get_logger(), reason_str.c_str());
+    exit(0);
 }
 
-void ClientStreamer::_on_fail(){
-   RCLCPP_INFO(this->get_logger(), "SocketIO conection FAILED!");
-   exit(0);
+void ClientStreamer::on_fail_() {
+    RCLCPP_INFO(this->get_logger(), "SocketIO conection FAILED!");
+    exit(0);
 }
 
-void ClientStreamer::_emit(const char *topic, const std::string &message){
-   RCLCPP_INFO(this->get_logger(), "Emitindo evento");
-   this->_client.socket()->emit(topic, message);
+void ClientStreamer::emit_(const char *topic, const std::string &message) {
+    RCLCPP_INFO(this->get_logger(), "Emitindo evento");
+    this->_client->socket()->emit(topic, message);
 }
 
+void ClientStreamer::on_message_(const std::string &name, sio::message::ptr const &data, bool isAck,
+                                 sio::message::list &ack_resp) {
+    RCLCPP_INFO(this->get_logger(), "Received data: %s", data->get_string().c_str());
+}
