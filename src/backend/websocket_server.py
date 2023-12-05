@@ -18,7 +18,7 @@ def message(sid, data):
 @sio.on('/battery')
 def message(sid, data):
     print(f'Mensagem recebida de {sid}: {data}')
-    # sio.emit("/navigation", data)
+    sio.emit("message", data)
 
 # Evento de desconexão
 @sio.event

@@ -14,3 +14,4 @@
 *__pycache__
 **/google.json
 src/.idea/
+*.idea

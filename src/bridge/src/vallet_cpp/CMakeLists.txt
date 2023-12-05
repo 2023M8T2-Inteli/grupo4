@@ -55,6 +55,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav2_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
@@ -92,7 +93,30 @@ add_executable(logger src/logger/main.cpp src/logger/text_saver/text_saver.cpp)
 ament_target_dependencies(logger rclcpp geometry_msgs nav2_msgs tf2 tf2_geometry_msgs tf2_ros slam_toolbox vallet_msgs)
 
 install(TARGETS logger DESTINATION lib/${PROJECT_NAME}/)
-# -----------------> streamer <-----------------
+# -----------------> logger <-----------------
+
+# -----------------> pose_queue <-----------------
+add_executable(pose_queue src/pose_queue/main.cpp src/pose_queue/queue/queue.cpp src/streamer/client/client.cpp)
+
+target_include_directories(pose_queue PUBLIC
+        ${socketio_client_cpp_SOURCE_DIR}/src
+        ${socketio_client_cpp_SOURCE_DIR}/lib/asio/asio/include
+        ${socketio_client_cpp_SOURCE_DIR}/lib/websocketpp
+        ${socketio_client_cpp_SOURCE_DIR}/lib/rapidjson/include
+)
+
+target_sources(pose_queue PRIVATE
+        ${socketio_client_cpp_SOURCE_DIR}/src/sio_client.cpp
+        ${socketio_client_cpp_SOURCE_DIR}/src/sio_socket.cpp
+        ${socketio_client_cpp_SOURCE_DIR}/src/internal/sio_client_impl.cpp
+)
+
+target_link_libraries(pose_queue sioclient)
+
+ament_target_dependencies(pose_queue rclcpp geometry_msgs nav2_msgs tf2 tf2_geometry_msgs tf2_ros slam_toolbox vallet_msgs std_msgs)
+
+install(TARGETS pose_queue DESTINATION lib/${PROJECT_NAME}/)
+# -----------------> pose_queue <-----------------
 
 
 if(BUILD_TESTING)
