@@ -2,9 +2,9 @@ name: "Terraform - Up Infrastructure"
 
 on:
   push:
-    branches: ["main"]
-    # paths:
-    #   - 'infrastructure/**'
+    branches: ["feat/terraform-inicial"]
+    paths:
+      - 'infrastructure/**'
 
 permissions:
   contents: read
