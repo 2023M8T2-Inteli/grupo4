@@ -40,9 +40,5 @@ jobs:
             exit 0  # Encerra o fluxo de trabalho sem erro
           fi
 
-      - name: Terraform Plan
-        run: cd infrastructure && terraform plan -input=false -out=tfplan
-
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: cd infrastructure && terraform apply tfplan -auto-approve -input=false
+      - name: Terraform Plan and Terraform Apply
+        run: cd infrastructure && terraform plan -input=false -out=tfplan && terraform apply "tfplan" -auto-approve -input=false
