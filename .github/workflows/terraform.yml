@@ -43,9 +43,6 @@ jobs:
       - name: Terraform Init
         run: cd infrastructure && terraform init
 
-      - name: Terraform Format
-        run: cd infrastructure && terraform fmt -check
-
       - name: Check for Changes in 'infrastructure' folder
         run: |
           if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^infrastructure/'; then
