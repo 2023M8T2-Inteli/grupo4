@@ -53,7 +53,7 @@ jobs:
           fi
 
       - name: Terraform Plan
-        run: cd infrastructure && terraform plan -input=false
+        run: cd infrastructure && terraform plan -input=false -out
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
