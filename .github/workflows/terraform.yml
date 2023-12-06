@@ -2,7 +2,7 @@ name: "Terraform - Up Infrastructure"
 
 on:
   push:
-    branches: ["feat/terraform-inicial"]
+    branches: ["main"]
     paths:
       - 'infrastructure/**'
 
