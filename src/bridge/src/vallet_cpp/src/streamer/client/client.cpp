@@ -2,15 +2,15 @@
 #include <websocketpp/client.hpp>
 
 ClientStreamer::ClientStreamer() : rclcpp::Node("STREAMER"),
-                                   _client(std::make_unique<sio::client>()), _connect_finish(false) {
+                                   client(std::make_unique<sio::client>()), _connect_finish(false) {
 
-    this->_client->set_open_listener(std::bind(&ClientStreamer::on_connected_, this));
+    this->client->set_open_listener(std::bind(&ClientStreamer::on_connected_, this));
 
-    this->_client->set_close_listener(std::bind(&ClientStreamer::on_close_, this, std::placeholders::_1));
+    this->client->set_close_listener(std::bind(&ClientStreamer::on_close_, this, std::placeholders::_1));
 
-    this->_client->set_fail_listener(std::bind(&ClientStreamer::on_fail_, this));
+    this->client->set_fail_listener(std::bind(&ClientStreamer::on_fail_, this));
 
-    this->_client->connect("http://localhost:3000");
+    this->client->connect("http://localhost:3000");
 
     this->_lock.lock();
 
@@ -36,8 +36,8 @@ ClientStreamer::ClientStreamer() : rclcpp::Node("STREAMER"),
 }
 
 ClientStreamer::~ClientStreamer() {
-    this->_client->sync_close();
-    this->_client->clear_con_listeners();
+    this->client->sync_close();
+    this->client->clear_con_listeners();
 }
 
 void ClientStreamer::on_connected_() {
@@ -60,9 +60,9 @@ void ClientStreamer::on_fail_() {
     exit(0);
 }
 
-void ClientStreamer::emit_(const char *topic, const std::string &message) {
+void ClientStreamer::emit_(const std::string &topic, const std::string &message) {
     RCLCPP_INFO(this->get_logger(), "Emitindo evento");
-    this->_client->socket()->emit(topic, message);
+    this->client->socket()->emit(topic, message);
 }
 
 void ClientStreamer::on_message_(const std::string &name, sio::message::ptr const &data, bool isAck,
@@ -70,10 +70,26 @@ void ClientStreamer::on_message_(const std::string &name, sio::message::ptr cons
     RCLCPP_INFO(this->get_logger(), "Received data: %s", data->get_string().c_str());
 }
 
-void ClientStreamer::on_JSON(const std::string &event, callback_json callback) {
-    this->_client->socket()->on(event, sio::socket::event_listener_aux(
-                                               [&](std::string const &name, sio::message::ptr const &data, bool isAck,
-                                                   sio::message::list &ack_resp) {
-                                                   callback(json::parse(data->get_string()));
-                                               }));
+// FIXME: The callback received is a dinging reference
+void ClientStreamer::on_JSON(const std::string &event, callback_json const &&callback) {
+    this->client->socket()->on(event, sio::socket::event_listener_aux(
+                                              [&](std::string const &name, sio::message::ptr const &data, bool isAck,
+                                                  sio::message::list &ack_resp) {
+                                                  try {
+                                                      RCLCPP_INFO(this->get_logger(), "Received data: %s",
+                                                                  data->get_string().c_str());
+                                                      json parsedData = json::parse(data->get_string());
+
+                                                      if (callback) {
+                                                          callback(json::parse(data->get_string()));
+                                                      } else {
+                                                          RCLCPP_ERROR(this->get_logger(), "Callback is NULL");
+                                                      }
+                                                  } catch (const json::parse_error &e) {
+                                                      RCLCPP_ERROR(this->get_logger(), "JSON Parse Error: %s", e.what());
+                                                      return;
+                                                  } catch (const std::exception &e) {
+                                                      RCLCPP_ERROR(this->get_logger(), "Error: %s", e.what());
+                                                  }
+                                              }));
 };
