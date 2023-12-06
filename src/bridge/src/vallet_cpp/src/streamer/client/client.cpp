@@ -70,8 +70,7 @@ void ClientStreamer::on_message_(const std::string &name, sio::message::ptr cons
     RCLCPP_INFO(this->get_logger(), "Received data: %s", data->get_string().c_str());
 }
 
-template<typename Func>
-void ClientStreamer::on_JSON(const std::string &event, Func callback) {
+void ClientStreamer::on_JSON(const std::string &event, callback_json callback) {
     this->_client->socket()->on(event, sio::socket::event_listener_aux(
                                                [&](std::string const &name, sio::message::ptr const &data, bool isAck,
                                                    sio::message::list &ack_resp) {
