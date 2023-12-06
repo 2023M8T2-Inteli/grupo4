@@ -12,6 +12,9 @@ endif()
 # FetchContent for managing dependencies
 include(FetchContent)
 
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
+FetchContent_MakeAvailable(json)
+
 FetchContent_Declare(
     socketio_client_cpp
     GIT_REPOSITORY https://github.com/socketio/socket.io-client-cpp.git
@@ -79,7 +82,7 @@ target_sources(streamer PRIVATE
   )
 
 # Link the socketio_client_cpp library
-target_link_libraries(streamer sioclient)
+target_link_libraries(streamer sioclient nlohmann_json::nlohmann_json)
 
 
 ament_target_dependencies(streamer rclcpp geometry_msgs nav2_msgs tf2 tf2_geometry_msgs tf2_ros slam_toolbox)

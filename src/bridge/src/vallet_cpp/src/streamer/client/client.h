@@ -4,12 +4,18 @@
 #include "rclcpp/rclcpp.hpp"
 #include <condition_variable>
 #include <mutex>
+#include <nlohmann/json.hpp>
 #include <sio_client.h>
+
+using json = nlohmann::json;
 
 class ClientStreamer : public rclcpp::Node {
 public:
     explicit ClientStreamer();
     ~ClientStreamer() override;
+    
+    template<typename Func>
+    void on_JSON(const std::string &event, Func callback);
 
 private:
     std::unique_ptr<sio::client> _client;

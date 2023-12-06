@@ -15,6 +15,34 @@ Queue::Queue(const std::string &node_name, std::unique_ptr<ClientStreamer> sio_c
     // Pubs
     dequeue_publisher_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("dequeue", 10);
     log_publisher_ = this->create_publisher<vallet_msgs::msg::Log>("log", 10);
+
+    // SIO Events Listeners
+
+    this->sio_client->on_JSON("/enqueue", [&](const json &data) {
+        try {
+            RCLCPP_INFO(this->get_logger(), "Received pose: (%f, %f)", data.at("x").get<float>(), data.at("y").get<float>());
+
+            geometry_msgs::msg::Pose::SharedPtr pose;
+
+            pose->position.x = data.at("x").get<float>();
+            pose->position.y = data.at("y").get<float>();
+
+            this->enqueue_callback_(pose);
+
+        } catch (const std::exception &e) {
+            RCLCPP_ERROR(this->get_logger(), "Error: %s", e.what());
+
+            auto info = this->generate_log_("ERROR: " + std::string(e.what()));
+
+            this->log_publisher_->publish(info);
+        }
+    });
+
+    /*this->sio_client->socket()->on("message", sio::socket::event_listener_aux(
+                                                  [&](std::string const &name, sio::message::ptr const &data, bool isAck,
+                                                      sio::message::list &ack_resp) {
+                                                      this->on_message_(name, data, isAck, ack_resp);
+                                                  }));*/
 }
 
 Queue::~Queue() {
