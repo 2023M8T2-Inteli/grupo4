@@ -8,14 +8,14 @@
 #include <sio_client.h>
 
 using json = nlohmann::json;
+typedef std::function<void(json)> callback_json;
 
 class ClientStreamer : public rclcpp::Node {
 public:
     explicit ClientStreamer();
     ~ClientStreamer() override;
-    
-    template<typename Func>
-    void on_JSON(const std::string &event, Func callback);
+
+    void on_JSON(const std::string &event, callback_json callback);
 
 private:
     std::unique_ptr<sio::client> _client;
