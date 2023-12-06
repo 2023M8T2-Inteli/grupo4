@@ -10,7 +10,6 @@ import { Client, Message, MessageMedia } from 'whatsapp-web.js';
 import { io } from 'socket.io-client';
 import { stringify } from 'querystring';
 
-
 export let openai: OpenAIApi;
 
 export function initOpenAI() {
@@ -28,12 +27,12 @@ export function initOpenAI() {
   );
 }
 
-export async function getPointOpenAI(message: Message, client: Client, points) {
+export async function getPointOpenAI(message: Message, client: Client, points: any) {
   let prompt = process.env.PROMPT_OPENAI_POINTS;
 
   let question = `Lista de pontos: ${JSON.stringify(
     points
-  )}. Identifique a responsta do usuário com base na lista de pontos e depois coloque as coordenadas do ponto em formato de float. Pergunta do usuário: ${
+  )}. Identifique a responsta do usuário com base na lista de pontos e depois coloque as coordenadas do ponto em formato de float e responda apenas em português do Brasil. Pergunta do usuário: ${
     message.body
   }`;
 
@@ -60,7 +59,7 @@ export async function getPointOpenAI(message: Message, client: Client, points) {
           .map((part) => parseFloat(part.trim()));
         const [x, y, z] = parts;
         socket.emit('enqueue', { x, y, z });
-        message.reply(pointResponse as any);
+        speechOpenAI(message, client, pointResponse);
       });
     } else {
       message.reply('Não consegui encontrar o ponto. Tente novamente.');
@@ -147,7 +146,7 @@ async function convertOggToWav(
 export async function speechOpenAI(
   message: Message,
   client: Client,
-  text: string
+  text: string | undefined
 ): Promise<String> {
   const url = process.env.TTS_URL || 'https://api.openai.com/v1/audio/speech';
   let response;

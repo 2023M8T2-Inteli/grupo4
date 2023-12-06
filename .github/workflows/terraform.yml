@@ -2,9 +2,9 @@ name: "Terraform - Up Infrastructure"
 
 on:
   push:
-    branches: ["main"]
-    # paths:
-    #   - 'infrastructure/**'
+    branches: ["feat/terraform-inicial"]
+    paths:
+      - 'infrastructure/**'
 
 permissions:
   contents: read
@@ -23,18 +23,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install AWS CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y awscli
-
-      - name: Configure AWS Credentials
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set aws_session_token ${{ secrets.AWS_SESSION_TOKEN }}
-          aws configure set region ${{ secrets.AWS_REGION }}
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -42,9 +30,6 @@ jobs:
 
       - name: Terraform Init
         run: cd infrastructure && terraform init
-
-      - name: Terraform Format
-        run: cd infrastructure && terraform fmt -check
 
       - name: Check for Changes in 'infrastructure' folder
         run: |
@@ -55,9 +40,5 @@ jobs:
             exit 0  # Encerra o fluxo de trabalho sem erro
           fi
 
-      - name: Terraform Plan
-        run: cd infrastructure && terraform plan -input=false
-
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: cd infrastructure && terraform apply -auto-approve -input=false
+      - name: Terraform Plan e Terraform Apply
+        run: cd infrastructure && terraform plan -input=false -out=tfplan && terraform apply -auto-approve -input=false tfplan

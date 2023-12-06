@@ -320,6 +320,10 @@ const handleOpenOrder = async (message: Message, client: Client) => {
 
 const handleNewOrder = async (message: Message, client: Client) => {
 	try {
+		const points = await pointService.getPoints();
+		if (message.body) {
+			await getPointOpenAI(message, client, points);
+		}
 		if (message.hasMedia) {
 			const media = await message.downloadMedia();
 			if (!media || !media.mimetype.startsWith("audio/")) return;
@@ -335,7 +339,9 @@ const handleNewOrder = async (message: Message, client: Client) => {
 					return;
 				}
 				else {
-					message.reply("Você disse: " + transcribedText);
+					message.body = transcribedText
+					const chat_response = await getPointOpenAI(message, client, points);
+
 				}
 			}
 			if(!transcriptionEnabled){
@@ -343,11 +349,7 @@ const handleNewOrder = async (message: Message, client: Client) => {
 				terminal.print("Modo de transcrição desativado.")
 			}
 		}
-		if (message.body) {
-			const points = await pointService.getPoints();
-			const chat_response = await getPointOpenAI(message, client, points);
-			console.log(chat_response);
-		}
+		
 	} catch (error: any) {
 		console.error("An error occured", error);
 		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
