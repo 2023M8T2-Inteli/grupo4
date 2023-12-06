@@ -45,6 +45,8 @@ private:
 
     void timer_callback_();
 
+    void on_sio_enqueue_(const std::shared_ptr<sio::message> &data);
+
     vallet_msgs::msg::Log generate_log_(const std::string &action);
 
     geometry_msgs::msg::PoseStamped create_pose_stamped_(const float &pos_x, const float &pos_y, const float &rot_z);
