@@ -7,20 +7,20 @@ variable "AWS_ACCESS_KEY_ID" {
   type        = string
   description = "AWS Access Key ID"
   //O Padrão default é para subir a infraestrutura na AWS de forma manual
-  default = "ASIAWUPUSUIEWUALVFM5"
+  default = "ASIAWUPUSUIE52E5U52M"
 }
 variable "AWS_SECRET_ACCESS_KEY" {
   type        = string
   description = "AWS Secret Access Key"
   //O Padrão default é para subir a infraestrutura na AWS de forma manual
-  default = "ffDUTg/sZaNxjh9ll9kXaPmI5F4EstWg+JeU0Ilu"
+  default = "mKL7zQQ1JW0x3Vatt3py3VnNznjMnD15o2YDuxIb"
 }
 
 variable "AWS_SESSION_TOKEN" {
   type        = string
   description = "AWS Session Token"
   //O Padrão default é para subir a infraestrutura na AWS de forma manual
-  default = "FwoGZXIvYXdzECMaDJ8I7kI2v+ayEKiHhSLNARVirOTiPGwewgDLJ4w/YNVP8ySRVYbAHb34bczWd3eayl+EQKj9Tlqt+gCQQ+BPQVa/VcAlb9xKS7WAmAp5Oc5M9Z7YgVsB3MY8L4xOfqj2+7lqGGQwGS+Z569wmhbe+Ulzi0pZ5A+9UqWKbbW4TW8FvheKSjdArbzOMiw5oy/wQb/Lmf5WORIIynVHKZzwDr+XbYhz2vj735SZLvmAX0zVexBzO46YT7zwL3vnpGaov9F0+epKQRYjAUT23cGD4/L4H+rQYIz4rsnYIr8ouca9qwYyLSSWx8Ep07z/USPl7THA71ruNkh+fK1Xq9YqdHselTXGXuZtfONTQjOO/6accQ=="
+  default = "FwoGZXIvYXdzEEMaDObah7IDeEpk29S2dyLNASJWMpaZPzjczSVSedtHstnTucWOr2HOGbOgEu8BS19WsRq8gBYBvTFr8jnFAOQ0gDtPLiBwdpZSDDEnX9eqq8AhMklX5bQuWaC683dZb9N+s4wxOI2N+Do0afgL1AJNm0YaBSkP+ZJTahhnBR72WWyMNLOBx3W5XKqhKeJhUMvolN2FeBgisDbgejMwwa8n2Tp78lMqWNRVcuc45niBQFK17MJ3uarBWHrI1Zw80NzJxkd8b8QdEMRQ3iJ45nLsZzLM82HZM7sm/zaOmRIo8bXEqwYyLTsQU6tD/6LUxWbWv9DFDlYRYr3t9Zk0F1r+9fOZf/w/w44EONfczmg6qkB4Gw=="
 }
 
 variable "public_subnet_cidrs" {
