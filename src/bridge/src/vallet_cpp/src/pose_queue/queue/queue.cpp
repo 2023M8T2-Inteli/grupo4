@@ -2,7 +2,7 @@
 #include <iostream>
 
 Queue::Queue(const std::string &node_name, std::unique_ptr<ClientStreamer> sio_client) : rclcpp::Node(node_name), node_name_(node_name), robot_status_(RobotStatus::NOT_INITIALIZED),
-                                                                                         sio_client(std::move(sio_client)) {
+                                                                                         sio_client(std::move(sio_client)), timer_count_(0) {
     this->queue_ = std::vector<geometry_msgs::msg::PoseStamped>();
 
     this->timer_ = this->create_wall_timer(std::chrono::milliseconds(300), std::bind(&Queue::timer_callback_, this));
@@ -15,7 +15,7 @@ Queue::Queue(const std::string &node_name, std::unique_ptr<ClientStreamer> sio_c
 
     // Pubs
     dequeue_publisher_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("dequeue", 10);
-    log_publisher_ = this->create_publisher<vallet_msgs::msg::Log>("log", 10);
+    log_publisher_ = this->create_publisher<vallet_msgs::msg::Log>("/logs", 10);
 
     // SIO Events Listeners
     this->sio_client->client->socket()->on(
@@ -39,9 +39,15 @@ void Queue::timer_callback_() {
             if (this->queue_.empty()) {
                 RCLCPP_INFO(this->get_logger(), "Robot is free and queue is empty");
 
-                auto info = this->generate_log_("CHECKING QUEUE. ROBOT IS FREE AND QUEUE IS EMPTY");
+                if (timer_count_ == 3) {
+                    auto info = this->generate_log_("CHECKING QUEUE. ROBOT IS FREE AND QUEUE IS EMPTY");
 
-                this->log_publisher_->publish(info);
+                    this->log_publisher_->publish(info);
+                    timer_count_ = 0;
+                    RCLCPP_INFO(this->get_logger(), "Log sent to the logger node");
+                } else {
+                    timer_count_++;
+                }
                 break;
             } else {
                 RCLCPP_INFO(this->get_logger(), "Robot is free and queue is not empty, preparing dequeue ...");
@@ -50,17 +56,23 @@ void Queue::timer_callback_() {
                 this->dequeue_publisher_->publish(pose);
                 RCLCPP_INFO(this->get_logger(), "Pose dequeued and sent to the robot");
 
-                std::ostringstream action;
+                if (timer_count_ == 3) {
+                    std::ostringstream action;
 
-                action << "POSE (" << pose.pose.position.x << ", " << pose.pose.position.y << ", "
-                       << pose.pose.position.z
-                       << ") sent to the robot";
+                    action << "POSE (" << pose.pose.position.x << ", " << pose.pose.position.y << ", "
+                           << pose.pose.position.z
+                           << ") sent to the robot";
 
-                auto info = this->generate_log_(action.str());
+                    auto info = this->generate_log_(action.str());
 
-                this->log_publisher_->publish(info);
+                    this->log_publisher_->publish(info);
+                    timer_count_ = 0;
 
-                RCLCPP_INFO(this->get_logger(), "Log sent to the logger node");
+                    RCLCPP_INFO(this->get_logger(), "Log sent to the logger node");
+                } else {
+                    timer_count_++;
+                }
+
 
                 this->robot_status_ = RobotStatus::BUSY;
 
@@ -70,10 +82,14 @@ void Queue::timer_callback_() {
             RCLCPP_INFO(this->get_logger(), "Robot is busy");
             if (!this->queue_.empty()) {
                 RCLCPP_INFO(this->get_logger(), "Robot is busy and queue is empty");
+                if (timer_count_ == 3) {
+                    auto info = this->generate_log_("CHECKING QUEUE. ROBOT IS BUSY AND QUEUE IS EMPTY");
 
-                auto info = this->generate_log_("CHECKING QUEUE. ROBOT IS BUSY AND QUEUE IS EMPTY");
-
-                this->log_publisher_->publish(info);
+                    this->log_publisher_->publish(info);
+                    RCLCPP_INFO(this->get_logger(), "Log sent to the logger node");
+                } else {
+                    timer_count_++;
+                }
                 break;
             }
             break;
@@ -162,7 +178,7 @@ void Queue::enqueue_callback_(const geometry_msgs::msg::Pose::SharedPtr msg) {
 
     std::ostringstream action;
     action << "POSE (" << msg->position.x << ", " << msg->position.y << ", " << msg->position.z
-           << ") sent to the robot";
+           << ") added in the queue";
 
     auto info = this->generate_log_(action.str());
 
@@ -201,7 +217,7 @@ Queue::create_pose_stamped_(const float &pos_x, const float &pos_y, const float 
 void Queue::on_sio_enqueue_(const std::shared_ptr<sio::message> &data) {
     try {
         json parsedData = json::parse(data->get_string());
-        
+
         auto x = parsedData.at("x").get<float>();
         auto y = parsedData.at("y").get<float>();
 
