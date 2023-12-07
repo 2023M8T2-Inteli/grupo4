@@ -8401,7 +8401,6 @@ input::-ms-clear {
 
 @media screen and (max-width:880px), screen and (max-height:720px) {
   #wrapper {
-    position: fixed;
     display: flex;
     align-items: center;
     background-color: #dfdfdf;
