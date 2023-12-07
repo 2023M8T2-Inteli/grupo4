@@ -30,6 +30,7 @@ private:
     std::vector<geometry_msgs::msg::PoseStamped> queue_;
     RobotStatus robot_status_;
     std::unique_ptr<ClientStreamer> sio_client;
+    uint8_t timer_count_;
 
     rclcpp::TimerBase::SharedPtr timer_;
 

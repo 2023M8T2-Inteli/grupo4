@@ -121,6 +121,14 @@ ament_target_dependencies(pose_queue rclcpp geometry_msgs nav2_msgs tf2 tf2_geom
 install(TARGETS pose_queue DESTINATION lib/${PROJECT_NAME}/)
 # -----------------> pose_queue <-----------------
 
+# -----------------> vallet <-----------------
+add_executable(vallet src/vallet/main.cpp src/vallet/robot/robot.cpp)
+
+ament_target_dependencies(vallet rclcpp geometry_msgs nav2_msgs tf2 tf2_geometry_msgs tf2_ros slam_toolbox vallet_msgs)
+
+install(TARGETS vallet DESTINATION lib/${PROJECT_NAME}/)
+# -----------------> vallet <-----------------
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -133,5 +141,10 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+install(DIRECTORY
+        launch
+        DESTINATION share/${PROJECT_NAME}/
+)
 
 ament_package()
