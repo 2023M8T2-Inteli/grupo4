@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Create .env file (ETL)
-        working-directory: ./src/lambdas/etl
+        working-directory: ./src/chatbot/
         run: |
           echo "DB_USER=$DB_USER" >> .env
           echo "DB_PASSWORD=$DB_PASSWORD" >> .env

@@ -80,6 +80,44 @@ export default class UserService {
 		}
 	}
 
+	async updateVoice(user: PrismaUser): Promise<PrismaUser> {
+		try {
+			const updatedUser = await this.prisma.user.update({
+				where: {
+					cellPhone: user.cellPhone
+				},
+				data: {
+					voice: user.voice
+				}
+			});
+			return updatedUser;
+		} catch (error) {
+			console.error("An error occurred while updating the user:", error);
+			throw error;
+		} finally {
+			await this.prisma.$disconnect();
+		}
+	}
+
+	async updateSpeedVoice(user: PrismaUser): Promise<PrismaUser> {
+		try {
+			const updatedUser = await this.prisma.user.update({
+				where: {
+					cellPhone: user.cellPhone
+				},
+				data: {
+					speedVoice: user.speedVoice
+				}
+			});
+			return updatedUser;
+		} catch (error) {
+			console.error("An error occurred while updating the user:", error);
+			throw error;
+		} finally {
+			await this.prisma.$disconnect();
+		}
+	}
+
 	async updateName(cellPhone: string, name: string): Promise<PrismaUser> {
 		try {
 			const updatedUser = await this.prisma.user.update({

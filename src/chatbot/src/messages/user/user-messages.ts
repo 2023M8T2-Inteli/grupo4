@@ -53,10 +53,68 @@ const handleCreateUser = async (message: Message, client: Client) => {
 			name: "",
 			cellPhone: message.from,
 			requestState: 0,
+			voice: "",
+			speedVoice: 0.0,
 			role: [Role.LEAD],
 			createdAt: new Date()
 		};
 		userService.createAccountUser(newUser);
+	} catch (error: any) {
+		console.error("An error occured", error);
+		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
+	}
+};
+
+const handleUpdateUserVoice = async (message: Message, client: Client) => {
+	try {
+		message.reply(`Certo, ${message.body}!`);
+		await delay(1000);
+
+		client.sendMessage(message.from, "Aguarde um momento por favor.");
+		const user = await userService.getUser(message.from);
+		const newUser: PrismaUser = {
+			id: user?.id || uuidv4(),
+			name: user?.name || message.body,
+			cellPhone: message.from,
+			requestState: 1,
+			voice: user?.voice || "",
+			speedVoice: 0.0,
+			role: ["LEAD"],
+			createdAt: user?.createdAt || new Date()
+		};
+
+		userService.updateVoice(newUser);
+		client.sendMessage(message.from, "Qual tipo a velocidade da voz você prefere?");
+		client.sendMessage(message.from, "Digite um número de 1 a 10, sendo 1 a velocidade mais lenta e 10 a mais rápida.");
+		client.sendMessage(message.from, "Recomendamos que você escolha a velocidade 8,7.");
+		
+	} catch (error: any) {
+		console.error("An error occured", error);
+		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
+	}
+};
+
+const handleUpdateUserSpeedVoice = async (message: Message, client: Client) => {
+	try {
+		message.reply(`Certo, ${message.body}!`);
+		await delay(1000);
+
+		client.sendMessage(message.from, "Aguarde um momento por favor.");
+		const user = await userService.getUser(message.from);
+		const velocity = parseFloat(message.body) / 10;
+		const newUser: PrismaUser = {
+			id: user?.id || uuidv4(),
+			name: user?.name || message.body,
+			cellPhone: message.from,
+			requestState: 1,
+			voice: user?.voice || "",
+			speedVoice: velocity || 0.0,
+			role: ["LEAD"],
+			createdAt: user?.createdAt || new Date()
+		};
+
+		userService.updateVoice(newUser);
+		handleLeadAcess(message, client);
 	} catch (error: any) {
 		console.error("An error occured", error);
 		message.reply("An error occured, please contact the administrator. (" + error.message + ")");
@@ -75,11 +133,17 @@ const handleUpdateUser = async (message: Message, client: Client) => {
 			name: message.body,
 			cellPhone: message.from,
 			requestState: 1,
+			voice: "",
+			speedVoice: 0.0,
 			role: ["LEAD"],
 			createdAt: new Date()
 		};
 
 		userService.updateAccountUser(newUser);
+		client.sendMessage(message.from, "Qual tipo de voz você prefere?");
+		client.sendMessage(message.from, "1. Alloy \n2. Echo \n3. Fable \n4. Onyx \n5. Nova \n Shimmer");
+		client.sendMessage(message.from, "Por favor, digite apenas o nome da voz que você deseja.");
+
 		handleLeadAcess(message, client);
 	} catch (error: any) {
 		console.error("An error occured", error);
@@ -366,5 +430,7 @@ export {
 	handleStatusOrder,
 	handleOpenOrder,
 	handleNewOrder,
-	handleUpdateName
+	handleUpdateName,
+	handleUpdateUserVoice,
+	handleUpdateUserSpeedVoice
 };
