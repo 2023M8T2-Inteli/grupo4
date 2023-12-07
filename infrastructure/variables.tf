@@ -13,7 +13,7 @@ variable "AWS_SECRET_ACCESS_KEY" {
   type        = string
   description = "AWS Secret Access Key"
   //O Padrão default é para subir a infraestrutura na AWS de forma manual
-  default = "Z2DghTTTuyF+h06m2iGFw9mt5+bopVOxQDdR3+9Eg"
+  default = "2DghTTTuyF+h06m2iGFw9mt5+bopVOxQDdR3+9Eg"
 }
 
 variable "AWS_SESSION_TOKEN" {
