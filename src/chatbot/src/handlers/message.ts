@@ -1,7 +1,7 @@
 import { PrismaClient, User as PrismaUser } from "@prisma/client";
 import UserService from "../models/user";
 import { Client, Message, List } from "whatsapp-web.js";
-import {handleCancelOrder, handleCreateUser, handleLeadAcess, handleNewOrder, handleProcessRequest, handleRequestMenu, handleStatusOrder, handleUpdateName, handleUpdateUser} from "../messages/user/user-messages"
+import {handleCancelOrder, handleCreateUser, handleLeadAcess, handleNewOrder, handleProcessRequest, handleRequestMenu, handleStatusOrder, handleUpdateName, handleUpdateUser, handleUpdateUserSpeedVoice, handleUpdateUserVoice} from "../messages/user/user-messages"
 
 import {handleAdminProcessRequest, handleAdminRequestMenu, handleNewPoint, handleUpdateUserAccess} from "../messages/admin/admin-messages"
 
@@ -99,8 +99,14 @@ class RequestLeadHandler implements IRequestLeadHandler {
 		if(user?.name == "" && user != null){
             handleUpdateUser(message, this.whatsappClient)
 		}
-        if(user?.name != "" && user != null){
+        if(user?.name != "" && user != null && user?.voice != "" && user?.speedVoice != 0.0){
             handleLeadAcess(message, this.whatsappClient)
+        }
+        if(user?.name != "" && user != null && user?.voice == "" && user?.speedVoice == 0.0){
+            handleUpdateUserVoice(message, this.whatsappClient)
+        }
+        if(user?.name != "" && user != null && user?.voice != "" && user?.speedVoice == 0.0){
+            handleUpdateUserSpeedVoice(message, this.whatsappClient)
         }
         
     }
