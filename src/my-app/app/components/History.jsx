@@ -33,7 +33,7 @@ const History = () => {
   const fetchHistoryData = async () => {
     try {
       // Replace this with your API endpoint or data source
-      const response = await fetch("YOUR_API_ENDPOINT_FOR_HISTORY");
+      const response = await fetch("http://localhost:5000/orders/history");
       const data = await response.json();
       setHistoryData(data);
     } catch (error) {
@@ -47,7 +47,7 @@ const History = () => {
   }, []);
 
   return (
-    <div className="border-lg h-full overflow-y-auto p-4 shadow-md border-gray-100 border-[2px] rounded-md m-4">
+    <div className="border-lg h-full overflow-y-auto p-4 shadow-md border-gray-100 border-[2px] rounded-md mx-4">
       <span className="flex justify-between m-2">
         <h1 className="text-2xl font-semibold mb-4">Histórico</h1>
         <button className=" border-green-400 border-[1px] text-green-400 rounded-md py-0 px-2">
