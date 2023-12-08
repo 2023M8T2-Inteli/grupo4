@@ -1,9 +1,30 @@
+'use client'
+import React, { useEffect } from 'react';
+import {io} from 'socket.io-client';
+
+
 const Now = ({now}) => {
+  const [battery, setBattery] = React.useState(0);
+
+  useEffect(() => {
+    console.log('Connecting to server...')
+    // Create a Socket.IO client and connect to the server
+    const socket = io('http://10.128.68.115:3000'); // Replace with your server URL
+    console.log(socket)
+    // Handle events from the server
+    socket.on('battery', (data) => {
+      console.log('Received message from server:', data);
+      let quantity = JSON.parse(data);
+      console.log(quantity)
+      setBattery(String(quantity.data).substring(0, 2));
+    });
+  }, []);
+
   return (
     <div className="shadow-md border-gray-100 border-[2px] rounded-md flex flex-col justify-between p-4 w-full h-full">
       <span className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Agora</h1>
-        <h3>Bateria: 50%</h3>
+        <h3>Bateria: {battery}%</h3>
       </span>
       <span>
         <h3 className="text-gray-400 font-semibold text-sm">DESTINO</h3>

@@ -16,7 +16,8 @@
     "react-audio-voice-recorder": "^2.2.0",
     "react-dom": "^18",
     "react-media-recorder": "^1.6.6",
-    "recorder-js": "^1.0.7"
+    "recorder-js": "^1.0.7",
+    "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",

@@ -95,12 +95,13 @@ let conversationHistory = [buildContext()];
 router.post("/speak", upload.single("audioFile"), async (req, res) => {
   try {
     conversationHistory[0] = await buildContext();
-    console.log(conversationHistory[0]);
+  
     const audioBuffer = req.file.buffer;
     const transcription = await recognizeSpeech(audioBuffer);
 
     conversationHistory.push({ role: "user", content: transcription });
 
+    console.log("Conversation history:", conversationHistory)
     const chatCompletion = await getOpenAIChatCompletion(conversationHistory);
     const modelResponse = chatCompletion.choices[0].message.content;
 
