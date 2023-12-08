@@ -12,6 +12,11 @@ const page = () => {
 
   useEffect(() => {
     fetchOrders();
+
+    const intervalId = setInterval(fetchOrders, 10000);
+
+    // Clear the interval when the component is unmounted
+    return () => clearInterval(intervalId);
   })
 
   const fetchOrders = async () => {
@@ -24,6 +29,7 @@ const page = () => {
     const data = await response.json();
     setNow(data[0])
     setQueue(data.slice(1));
+    
   };
 
   return (
@@ -34,7 +40,7 @@ const page = () => {
           <Now now={now}/>
           <Fila queue={queue}/>
         </div>
-        <div className="">
+        <div className="overflow-y-auto">
         <History/>
         </div>
         

@@ -73,6 +73,39 @@ router.get("/history", async (req, res) => {
   }
 });
 
+// Read - Get all orders
+router.get("/all", async (req, res) => {
+  try {
+    const orders = await prisma.order.findMany({
+      include: {
+        tool: {
+          select: {
+            name: true,
+          },
+        },
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        point: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "asc", // or 'desc' for descending order
+      },
+    });
+    res.json(orders);
+  } catch (error) {
+    console.error("Error fetching queue data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+);
+
 // Read - Get a specific order by ID
 router.get("/queue/:id", async (req, res) => {
   const { id } = req.params;
@@ -97,12 +130,12 @@ router.get("/queue/:id", async (req, res) => {
 
 // Create - Add a new order
 router.post("/queue", async (req, res) => {
-  const { toolId, userId, pointId } = req.body;
+  const { toolId, userId, pointId, type } = req.body;
 
   try {
     const order = await prisma.order.create({
       data: {
-        type: "In Progress",
+        type: type || "In Progress",
         toolId,
         userId,
         pointId,

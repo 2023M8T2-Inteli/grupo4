@@ -1,5 +1,6 @@
 import requests
 from faker import Faker
+import random
 
 fake = Faker()
 users = []
@@ -43,7 +44,7 @@ def add_random_tools(n):
 
     for i in range(n):
         payload = {
-            "name": mockToolNames.choice(),
+            "name": random.choice(mockToolNames),
             "tag": fake.word(),
             "minQuantity": fake.random_int(min=1, max=10),
             "maxQuantity": fake.random_int(min=10, max=100),
@@ -59,24 +60,25 @@ def add_random_points(n):
     for i in range(n):
         url = "http://localhost:5000/points"
         payload = {
-            "name": Faker.company(),
-            "pointX": Faker.random_float(min=1, max=10),
-            "pointY": Faker.random_float(min=1, max=10),
-            "pointZ": Faker.random_float(min=1, max=10),
+            "name": fake.company(),
+            "pointX": random.uniform(0, 10),
+            "pointY": random.uniform(0, 10),
+            "pointZ": random.uniform(0, 10),
         }
         response = requests.request("POST", url, json=payload)
         points.append(response.json()["id"])
 
 def add_random_orders(n):
-    for i in n:
+    for i in range(n):
         url = "http://localhost:5000/orders/queue"
         payload = {
-            "toolId": tool_ids.choice(),
-            "userId": users.choice(),
-            "pointId": points.choice(),
-            "type": ["In Progress", "Complete"].choice()
+            "toolId": random.choice(tool_ids),
+            "userId": random.choice(users),
+            "pointId":  random.choice(points),
+            "type": random.choice(["In Progress", "Completed"])
         }
         response = requests.request("POST", url, json=payload)
+        print(response.json())
         
 
 def delete_all():
@@ -93,3 +95,7 @@ def delete_all():
 
 if __name__ == "__main__":
     add_random_users(10)
+    add_random_tools(10)
+    add_random_points(10)
+    add_random_orders(10)
+

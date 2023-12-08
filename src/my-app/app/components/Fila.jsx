@@ -1,6 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
-
+import formatTime from "../utils/formatTime";
 const Fila = ({queue}) => {
 
  
@@ -15,6 +14,7 @@ const Fila = ({queue}) => {
             <th className="py-2 px-4 border-b">Item</th>
             <th className="py-2 px-4 border-b">Destino</th>
             <th className="py-2 px-4 border-b">Requisitante</th>
+            <th className="py-2 px-4 border-b">Horário</th>
           </tr>
         </thead>
         <tbody>
@@ -25,6 +25,7 @@ const Fila = ({queue}) => {
               <td className="py-2 px-4">
                 <span>{item.user.name}</span>
               </td>
+              <td className="py-2 px-4">{formatTime(item.createdAt)}</td>
             </tr>
           ))}
         </tbody>

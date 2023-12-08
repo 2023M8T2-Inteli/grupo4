@@ -1,14 +1,14 @@
 "use client";
 
 import Sidebar from "../components/Sidebar";
-import Users from "../components/Users";
+import Points from "../components/Points";
 
 const page = () => {
   return (
     <div className="h-screen w-full flex">
       <Sidebar />
       <div className="flex flex-col w-full">
-        <Users/>
+        <Points/>
       </div>
     </div>
   );
