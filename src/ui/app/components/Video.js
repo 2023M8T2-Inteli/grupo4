@@ -8,7 +8,7 @@ export default function VideoComponent() {
 
   return (
     <div>
-      {/* <video
+      <video
         className="object-cover w-full h-full absolute inset-0"
         autoPlay
         muted
@@ -16,7 +16,7 @@ export default function VideoComponent() {
       >
         <source src="happy.mp4" type="video/mp4" />
         Your browser does not support the video tag.
-      </video> */}
+      </video>
       
     </div>
   );

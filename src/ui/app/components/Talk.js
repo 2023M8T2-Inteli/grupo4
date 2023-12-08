@@ -2,9 +2,12 @@
 
 // Import necessary modules and components
 import { useRef, useState } from "react";
+import fs from 'fs';
+import path from 'path';
+
 
 // Export the MicrophoneComponent function component
-export default function MicrophoneComponent() {
+export default function Talk() {
   // State variables to manage recording status, completion, and transcript
 
   const [audioBlob, setAudioBlob] = useState(null);
@@ -45,6 +48,10 @@ export default function MicrophoneComponent() {
 
   // Send the MP3 file to your endpoint
   const saveAudioToEndpoint = async (blob) => {
+    let exclamations = ['hmm', 'pensada', 'ponderar', 'possibilidades', 'ver'];
+    let chosen = exclamations[Math.floor(Math.random() * exclamations.length)];
+    setAudioSrc(`/exclamations/${chosen}.mp3`);
+    console.log(audioSrc)
     const endpointUrl = "http://localhost:5000/speech/speak"; // Replace with your actual endpoint URL
 
     try {
@@ -55,6 +62,8 @@ export default function MicrophoneComponent() {
         method: "POST",
         body: formData,
       });
+    
+      
 
       if (response.ok) {
         console.log("Audio file sent successfully");
@@ -68,28 +77,10 @@ export default function MicrophoneComponent() {
       console.error("Error sending audio file", error);
     }
   };
-  const playAudio = () => {
-    if (audioBlob) {
-      // Create an audio element
-      const audioElement = new Audio();
-      // Set the source of the audio element to the recorded blob
-      audioElement.src = URL.createObjectURL(audioBlob);
-
-      // Ensure the audio is loaded before playing
-      audioElement.addEventListener("loadedmetadata", () => {
-        audioElement.play();
-      });
-
-      // Clean up resources after playing
-      audioElement.addEventListener("ended", () => {
-        URL.revokeObjectURL(audioElement.src);
-      });
-    }
-  };
-
+  
   // Render the microphone component with appropriate UI based on recording state
   return (
-    <div className="flex items-center justify-center h-screen w-full">
+    <div className="flex items-end justify-center h-screen w-full z-10">
       <div className="flex flex-col items-center justify-center">
         <button
           className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${
@@ -102,12 +93,6 @@ export default function MicrophoneComponent() {
         </button>
         {audioBlob && (
           <div className="mt-2">
-            <button
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-              onClick={playAudio}
-            >
-              Play
-            </button>
             {audioSrc && <audio autoPlay={true} src={audioSrc} ref={audioRef} className='hidden' />}
           </div>
         )}

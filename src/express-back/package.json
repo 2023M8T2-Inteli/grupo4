@@ -19,6 +19,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.0.2",
+    "openai": "^4.20.1",
     "prisma": "^5.7.0",
     "react-audio-voice-recorder": "^2.2.0",
     "wav-file-info": "^0.0.10"
