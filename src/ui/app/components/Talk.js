@@ -2,18 +2,14 @@
 
 // Import necessary modules and components
 import { useRef, useState } from "react";
-import fs from 'fs';
-import path from 'path';
-
 
 // Export the MicrophoneComponent function component
-export default function Talk() {
+export default function Talk({ emotion, setEmotion }) {
   // State variables to manage recording status, completion, and transcript
 
   const [audioBlob, setAudioBlob] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const audioRef = useRef(null);
-
 
   const [audioSrc, setAudioSrc] = useState(null);
   const getAudio = async () => {
@@ -48,10 +44,10 @@ export default function Talk() {
 
   // Send the MP3 file to your endpoint
   const saveAudioToEndpoint = async (blob) => {
-    let exclamations = ['hmm', 'pensada', 'ponderar', 'possibilidades', 'ver'];
+    let exclamations = ["hmm", "pensada", "ponderar", "possibilidades", "ver"];
     let chosen = exclamations[Math.floor(Math.random() * exclamations.length)];
     setAudioSrc(`/exclamations/${chosen}.mp3`);
-    console.log(audioSrc)
+    console.log(audioSrc);
     const endpointUrl = "http://localhost:5000/speech/speak"; // Replace with your actual endpoint URL
 
     try {
@@ -62,13 +58,12 @@ export default function Talk() {
         method: "POST",
         body: formData,
       });
-    
-      
 
       if (response.ok) {
         console.log("Audio file sent successfully");
         const data = await response.json();
-        console.log(data);
+        console.log(data.emotion)
+        setEmotion(data.emotion);
         setAudioSrc(`data:audio/mp3;base64,${data.base64Audio}`);
       } else {
         console.error("Failed to send audio file");
@@ -77,7 +72,7 @@ export default function Talk() {
       console.error("Error sending audio file", error);
     }
   };
-  
+
   // Render the microphone component with appropriate UI based on recording state
   return (
     <div className="flex items-end justify-center h-screen w-full z-10">
@@ -93,7 +88,14 @@ export default function Talk() {
         </button>
         {audioBlob && (
           <div className="mt-2">
-            {audioSrc && <audio autoPlay={true} src={audioSrc} ref={audioRef} className='hidden' />}
+            {audioSrc && (
+              <audio
+                autoPlay={true}
+                src={audioSrc}
+                ref={audioRef}
+                className="hidden"
+              />
+            )}
           </div>
         )}
       </div>

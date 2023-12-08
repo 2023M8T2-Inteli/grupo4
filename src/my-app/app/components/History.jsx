@@ -45,7 +45,7 @@ const History = () => {
             <th className="py-2 px-4 border-b">Horário</th>
           </tr>
         </thead>
-        <tbody className="" style={{ maxHeight: "300px" }}>
+        <tbody className="">
           {historyData.map((item) => (
             <tr key={item.id} className="border-b text-center">
               <td className="py-2 px-4">{item.tool.name}</td>
