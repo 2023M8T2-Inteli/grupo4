@@ -1,4 +1,5 @@
 #include "client.h"
+#include <cstdlib>
 #include <websocketpp/client.hpp>
 
 ClientStreamer::ClientStreamer() : rclcpp::Node("STREAMER"),
@@ -10,7 +11,11 @@ ClientStreamer::ClientStreamer() : rclcpp::Node("STREAMER"),
 
     this->client->set_fail_listener(std::bind(&ClientStreamer::on_fail_, this));
 
-    this->client->connect("http://localhost:3000");
+    auto url = std::getenv("SOCKET_SERVER_URL") ? std::getenv("SOCKET_SERVER_URL") : "http://localhost:3000";
+
+    RCLCPP_INFO(this->get_logger(), "URL: %s", url);
+    //    this->client->connect("http://localhost:3000");
+    this->client->connect(url);
 
     this->_lock.lock();
 

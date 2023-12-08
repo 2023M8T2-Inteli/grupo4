@@ -13,6 +13,7 @@
   <test_depend>ament_lint_common</test_depend>
 
   <exec_depend>vallet_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
