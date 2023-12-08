@@ -38,7 +38,6 @@ router.get("/queue", async (req, res) => {
 });
 
 router.get("/history", async (req, res) => {
-  console.log("hit");
   try {
     const orders = await prisma.order.findMany({
       where: {
@@ -65,7 +64,6 @@ router.get("/history", async (req, res) => {
         createdAt: "asc", // or 'desc' for descending order
       },
     });
-    console.log(orders);
     res.json(orders);
   } catch (error) {
     console.error("Error fetching queue data:", error);
