@@ -6,11 +6,13 @@ export default class PointService {
 		this.prisma = prisma;
 	}
 
-	async getPoint(name: string): Promise<PrismaPoint | null> {
+	async getPoint(x, y, z): Promise<PrismaPoint | null> {
 		try {
 			const point = await this.prisma.point.findFirst({
 				where: {
-					name: name
+					pointX: x,
+					pointY: y,
+					pointZ: z,
 				}
 			});
 			if (point == null) {
@@ -27,7 +29,7 @@ export default class PointService {
 
 	async getPoints(): Promise<PrismaPoint[] | null> {
 		try {
-			const points = await this.prisma.point.findMany();
+			const points = await this.prisma.point.findMany({where:{name:{not:"default"}}});
 			if (points == null) {
 				return null;
 			}

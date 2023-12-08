@@ -20,7 +20,6 @@ const toolService = new ToolService(prisma);
 const pointService = new PointService(prisma);
 const orderService = new OrderService(prisma);
 
-
 export let openai: OpenAIApi;
 
 export function initOpenAI() {
@@ -67,34 +66,35 @@ async function extractPoints(
   const regex: RegExp =
     /-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?/gi;
   const match = pointResponse?.match(regex);
-  const socket = io('http://10.128.68.115:3000');
+  const socket = io(process.env.SOCKET_URL || '');
+
   if (match) {
-    match.forEach((coordinateString) => {
+    match.forEach(async (coordinateString) => {
       // Splitting the matched string into individual numbers
       const parts = coordinateString
         .split(',')
         .map((part) => parseFloat(part.trim()));
       const [x, y, z] = parts;
       socket.emit('enqueue', { x, y, z });
-      speechOpenAI(message, client, pointResponse);
+      const point = await pointService.getPoint(x, y, z);
+      if (point) await orderService.updateOrder(message.from, point.id);
+      await speechOpenAI(message, client, pointResponse);
+      await userService.updateRequestUser(message.from, 1);
+      client.sendMessage(message.from, 'Pedido finalizado com sucesso!');
     });
   } else {
     message.reply('Não consegui encontrar o ponto. Tente novamente.');
   }
 }
 
-async function extractToolId(
-  message: Message,
-  client: Client,
-  response: any
-) {
+async function extractToolId(message: Message, client: Client, response: any) {
   const regex: RegExp =
-  /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/g;
+    /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/g;
   const match = response?.match(regex);
   if (match) {
     match.forEach(async (idString) => {
       // Splitting the matched string into individual numbers
-      orderService.createOrder(message.from, idString)
+      orderService.createOrder(message.from, idString);
       await speechOpenAI(message, client, response);
     });
   } else {
@@ -116,9 +116,18 @@ export async function getToolOpenAI(message: Message, client: Client) {
       ],
     });
 
-    let idResponse = response.data.choices[0].message?.content;
-    await extractToolId(message, client, idResponse)
-    client.sendMessage(message.from, "Certo, você pode me dizer onde está?")
+    let responseChat = response.data.choices[0].message?.content;
+    await extractToolId(message, client, responseChat);
+    client.sendMessage(message.from, 'Certo, você pode me dizer onde está?');
+    message.reply('Você pode me dizer onde você está?');
+    const points = await pointService.getPoints();
+    let listPoints = '';
+    if (points && points.length > 0) {
+      for (const point of points) {
+        listPoints += '*' + point.name + '*\n';
+      }
+      message.reply(listPoints);
+    }
   } catch (e) {
     terminal.printError(e);
     client.sendMessage(message.from, stringify(e));

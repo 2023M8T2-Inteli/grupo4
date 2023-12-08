@@ -205,14 +205,12 @@ export class MessageEventHandler {
     if (!(await this.messageValidator.validate(message))) {
       return;
     }
-    console.log(message);
-    const userData = await this.userService.getUser(message.from);
-    console.log(userData);
     if (message.body == '!sair' || message.body == '!Sair') {
       await this.whatsappClient.sendMessage(message.from, 'Até mais!');
       this.userService.updateRequestUser(message.from, 1);
       return;
     }
+    const userData = await this.userService.getUser(message.from);
 
     if (userData?.role?.includes('USER')) {
       let requestState = userData?.requestState;

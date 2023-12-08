@@ -3,10 +3,13 @@ import UserService from '../../models/user';
 import OrderService from '../../models/order';
 import ToolService from '../../models/tool';
 import { PrismaClient, User as PrismaUser, Role } from '@prisma/client';
-import { getPointOpenAI, getToolOpenAI, transcribeOpenAI } from '../../providers/openai';
+import {
+  getPointOpenAI,
+  getToolOpenAI,
+  transcribeOpenAI,
+} from '../../providers/openai';
 import * as terminal from '../../cli/ui';
 import PointService from '../../models/point';
-import e from 'express';
 const prisma = new PrismaClient();
 const userService = new UserService(prisma);
 const orderService = new OrderService(prisma);
@@ -274,16 +277,13 @@ async function sendNewOrder(message: Message, client: Client) {
   try {
     message.reply('Certo, você deseja solicitar uma nova peça.');
     userService.updateRequestUser(message.from, 3);
-    message.reply('Você pode me dizer qual peça deseja solicitar ou situação que está enfrentando?');
-	client.sendMessage(message.from, "Se preferir, você pode me enviar um áudio com a sua solicitação.")
-    const points = await pointService.getPoints();
-    let listPoints = '';
-    if (points && points.length > 0) {
-      for (const point of points) {
-        listPoints += '*' + point.name + '*\n';
-      }
-      message.reply(listPoints);
-    }
+    message.reply(
+      'Você pode me dizer qual peça deseja solicitar ou situação que está enfrentando?'
+    );
+    client.sendMessage(
+      message.from,
+      'Se preferir, você pode me enviar um áudio com a sua solicitação.'
+    );
   } catch (error: any) {
     console.error('An error occured', error);
     message.reply(
@@ -519,19 +519,23 @@ const handleOpenOrder = async (message: Message, client: Client) => {
 
 const handleNewOrder = async (message: Message, client: Client) => {
   try {
+    const order = await orderService.verifyOpenOrder(message);
     if (message.body) {
-      await getToolOpenAI(message, client);
+      if (order == null) await getToolOpenAI(message, client);
+      if (order != null) await getPointOpenAI(message, client);
     }
+
     if (message.hasMedia) {
       const media = await message.downloadMedia();
       if (!media || !media.mimetype.startsWith('audio/')) return;
       const transcriptionEnabled = process.env.TRANSCRIPTION_ENABLED;
       if (transcriptionEnabled) {
         const mediaBuffer = Buffer.from(media.data, 'base64');
-        const response = await transcribeOpenAI( mediaBuffer);
-        const transcribedText = response.text;
-        message.body = transcribedText;
-        await getToolOpenAI(message, client);
+        const response = await transcribeOpenAI(mediaBuffer);
+        message.body = response.text;
+        console.log(order)
+        if (order == null) await getToolOpenAI(message, client);
+        if (order != null) await getPointOpenAI(message, client);
       }
       if (!transcriptionEnabled) {
         message.reply(

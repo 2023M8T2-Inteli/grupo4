@@ -12,16 +12,16 @@ export default class OrderService {
         where: { cellPhone: message.from },
       });
       if (user != null) {
-        const orders = await this.prisma.order.findFirst({
+        const order = await this.prisma.order.findFirst({
           where: {
             code: Number(message.body),
             userId: user.id,
           },
         });
-        if (orders == null) {
+        if (order == null) {
           return null;
         }
-        return orders;
+        return order;
       } else {
         return null;
       }
@@ -45,12 +45,10 @@ export default class OrderService {
         const orders = await this.prisma.order.create({
           data: {
             id: uuidv4(),
-            code: 123,
             type: 'In Progress',
             toolId: toolId,
             userId: user.id,
             pointId: '123e4567-e89b-12d3-a456-426614174013',
-            createdAt: new Date(),
           },
         });
         if (orders == null) {
@@ -68,6 +66,56 @@ export default class OrderService {
     }
   }
 
+  async updateOrder(
+    cellPhone: string,
+    pointId: string
+  ): Promise<Number | null> {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: { cellPhone: cellPhone },
+      });
+      if (user != null) {
+        const order = await this.prisma.order.updateMany({ where: { userId: user.id, type: "In Progress", pointId: "123e4567-e89b-12d3-a456-426614174013" }, data: { pointId: pointId } });
+        if (order == null) {
+          return null;
+        }
+        return order.count;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error('An error occurred while fetching the user:', error);
+      throw error;
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
+
+  async verifyOpenOrder(message: Message): Promise<PrismaOrder | null> {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: { cellPhone: message.from },
+      });
+      if (user != null) {
+        const orders = await this.prisma.order.findFirst({
+          where: {
+            pointId: '123e4567-e89b-12d3-a456-426614174013',
+            userId: user.id,
+          },
+        });
+        if (orders == null) {
+          return null;
+        }
+        return orders;
+      }
+      return null;
+    } catch (error) {
+      console.error('An error occurred while fetching the user:', error);
+      throw error;
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
   async getOpenOrder(message: Message): Promise<PrismaOrder[] | null> {
     try {
       const user = await this.prisma.user.findFirst({
