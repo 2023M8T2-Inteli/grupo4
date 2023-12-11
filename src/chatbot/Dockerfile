@@ -7,21 +7,25 @@ RUN apt install -y chromium
 
 # For transcription
 RUN apt install -y ffmpeg
-## It will install latest model of OpenAI Whisper (around 6~7 GB)
-## Uncomment below command if you want to use the local version of transcription module
-# RUN pip install -y python pip
-# RUN pip install -U openai-whisper
 
-WORKDIR /app/
+# Definir o diretório de trabalho no container
+WORKDIR /usr/src/app
 
-ENV OPENAI_API_KEY ""
-ENV PREFIX_ENABLED ""
-
-COPY package.json package-lock.json ./
-
-RUN npm install
-RUN npm install vite-node
+# Copiar o arquivo 'package.json' e, se disponível, 'package-lock.json'
+COPY package*.json ./
 
 COPY . .
+
+RUN cd src/ && npm install
+
+RUN cd src/ && npm install vite-node
+
+RUN cd src/ &&  npm install -g prisma
+
+RUN cd src/ && npm install -g @prisma/client
+
+RUN cd src/ && npx prisma generate
+
+EXPOSE 3000
 
 CMD ["npm", "run", "start"]

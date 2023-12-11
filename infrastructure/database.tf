@@ -8,11 +8,11 @@ resource "aws_db_subnet_group" "db_subnet_group" {
 }
 
 resource "aws_db_instance" "main_postgresql_db" {
-  identifier             = "prod-db"
+  identifier             = "db-chatbot"
   engine                 = "postgres"
   engine_version         = "15.3"
   username               = "admin123"
-  db_name                = "prod_ambev"
+  db_name                = "postgres"
   instance_class         = "db.t3.micro"
   vpc_security_group_ids = [aws_security_group.db_sg.id]
   allocated_storage      = 20
@@ -22,4 +22,3 @@ resource "aws_db_instance" "main_postgresql_db" {
   skip_final_snapshot = true
   db_subnet_group_name      = aws_db_subnet_group.db_subnet_group.name
 }
-

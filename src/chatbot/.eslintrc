@@ -1,0 +1,11 @@
+{
+    "plugins": ["import", "unused-imports"],
+    "rules": {
+      "unused-imports/no-unused-imports-ts": "error",
+      "import/order": ["error", {
+        "groups": ["builtin", "external", "internal"],
+        "newlines-between": "always"
+      }]
+    }
+  }
+  
