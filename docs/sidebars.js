@@ -58,6 +58,7 @@ const sidebars = {
         "Desenvolvimento da Solução/3.6 Logs",
         "Desenvolvimento da Solução/3.5 LLM",
         "Desenvolvimento da Solução/3.7 WebSocket",
+        "Desenvolvimento da Solução/3.8 Demonstração",
       ],
     },
     {
