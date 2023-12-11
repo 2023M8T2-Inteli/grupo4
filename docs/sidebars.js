@@ -61,6 +61,7 @@ const sidebars = {
         "Desenvolvimento da Solução/3.8 Logs",
         "Desenvolvimento da Solução/3.9 WebSocket",
         "Desenvolvimento da Solução/3.10 Demonstração",
+        "Desenvolvimento da Solução/3.11 Terraform e AWS",        
       ],
     },
     {
