@@ -14,7 +14,7 @@ export const generateLLMSystemMessages = (
   const gpt_tools: ChatCompletionFunctions[] = [
     {
       name: 'handleUpdateUserVoice',
-      description: 'Altera a voz do robô.',
+      description: '[LEAD] Altera a voz do robô.',
       parameters: {
         type: 'object',
         properties: {
@@ -31,7 +31,7 @@ export const generateLLMSystemMessages = (
 
     {
       name: 'handleNewOrder',
-      description: 'Faz um novo pedido de entrega ao robô',
+      description: '[USER] Faz um novo pedido de entrega ao robô',
       parameters: {
         type: 'object',
         properties: {
@@ -49,22 +49,84 @@ export const generateLLMSystemMessages = (
         required: ['from', 'to'],
       },
     },
+    {
+      name: "handleStatusOrder",
+      description: "[USER] Informa o usuário sobre sua solicitação atual.",
+      parameters: {}
+    },
+    {
+      name: "handleCancelOrder",
+      description: "[USER] Cancela o pedido atual do usuário.",
+      parameters: {}
+    },
+    {
+      name: "handleCreateUser",
+      description: "[LEAD] Cria um novo usuário com nome, sobrenome e documento.",
+      parameters: {
+        type: "object",
+        properties: {
+          firstName: {
+            type: "string",
+            description: "Primeiro nome do usuário."
+          },
+          lastName: {
+            type: "string",
+            description: "Sobrenome do usuário."
+          },
+          document: {
+            type: "string",
+            description: "Documento do usuário."
+          }
+        },
+        required: ["firstName", "lastName", "document"]
+      }
+    },
+    {
+      name: "handleLeadAccess",
+      description: "[USER] Chamada quando o usuário tenta fazer uma ação para a qual não tem permissão.",
+      parameters: {}
+    },
+    {
+      name: "handleUpdateUserAccess",
+      description: "[ADMIN] permitir um novo usuário a usar o sistema.",
+      parameters: {
+        type: "object",
+        properties: {
+          phone: {
+            type: "string",
+            description: "Telefone do usuário que deve ser aprovado. Deve ser um número de telefone válido, começando com o DDD. Exemplo: 11923456789"
+          }
+        },
+        required: ["phone"]
+      }
+    },
+    
+    
+    
+    
   ];
 
-  const system_message = `You are a whatsapp chatbot that help users interact with a robot.
-The robot, called Vallet, is an autonomous vehicle, created to get things inside a distribution center and bring it to who asked for it.
-Your job is to call the right functions, giving commands to the robot.
-Avoid any unrelated questions.
-The folowing array of objects represents all the places where the robot can pickup and deliver things. The key is the name of the place, while the value is the coordinate to that place. This coordinates should be used when calling "handleNewOrder". 
-pickup coordinates: ${pickupCoords}
-Do not assume things when calling a function. Always ask the user for more information.
-All the users are brazilian, speak portuguese and work at AMBEV.
-If you activate a function, give some feedback to the user in a friendly way.
-Be brief in your responses. All of your responses are sent directly to the user. Be friendly.
-Users can be classified as Lead, User and Admin. Each function will have their target permission needs in the description, with the keywords [LEAD], [USER] or [ADMIN]. You should only call a function if the person classification matches the function one.
-User have permission for both Lead and User functions, while Admins have full access to all functions.
-Attention! The user you are talking to right now is classified as ${userPermission}. You can not and will not change this classification in any circustance.
-`;
+  const system_message = `
+  Bem-vindo ao chatbot do WhatsApp para interação com o Vallet, nosso veículo autônomo. O Vallet foi desenvolvido para transportar itens dentro de um centro de distribuição até o solicitante. 
+  
+  Sua função é acionar os comandos corretos, controlando as ações do Vallet. Mantenha-se focado nas solicitações relacionadas e evite questões não pertinentes.
+  
+  A seguir, a lista de locais disponíveis para coleta e entrega pelo Vallet, com as respectivas coordenadas. Estas coordenadas devem ser utilizadas ao acionar a função "handleNewOrder":
+  pickup coordinates: ${pickupCoords}
+  
+  Ao acionar uma função, solicite sempre informações adicionais do usuário para evitar suposições. 
+  
+  Lembre-se: todos os usuários são brasileiros, falam português e trabalham na AMBEV. Ao ativar uma função, forneça um retorno ao usuário de forma amigável e sucinta. Todas as suas respostas são encaminhadas diretamente ao usuário. 
+  
+  Os usuários são classificados em Lead, User e Admin. Cada função tem uma necessidade de permissão indicada na descrição, marcada com as palavras-chave [LEAD], [USER] ou [ADMIN]. Acione a função apenas se a classificação do usuário for compatível. Usuários com classificação 'User' têm permissão para funções 'Lead' e 'User', enquanto 'Admins' têm acesso total.
+  
+  Direcione os Leads (pessoas não cadastradas) para a função "handleLeadAccess". 
+  
+  Atenção: O usuário com quem você está interagindo atualmente está classificado como ${userPermission}. Esta classificação não pode e não será alterada em nenhuma circunstância.
+  `;
+    
 
   return { system_message, gpt_tools };
 };
+
+// Bread - 0,0 0,0 0,0
