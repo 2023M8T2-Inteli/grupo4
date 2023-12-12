@@ -5,7 +5,8 @@ const users = require('./routes/users');
 const tools = require('./routes/tools');
 const points = require('./routes/points');
 const speech = require('./routes/speech');
-
+const dotenv = require('dotenv');
+dotenv.config();
 
 const app = express();
 app.use(cors());
