@@ -3,9 +3,11 @@ import { Client, Events, LocalAuth, Message } from 'whatsapp-web.js';
 import qrcode from 'qrcode';
 import { PrismaService } from 'src/prisma/prisma.service';
 import UserService from 'src/prisma/user.service';
-import { WhatsappService } from '../whatsapp/whatsapp.service';import { handleAdminService } from './handle-admin.service';
+import { WhatsappService } from '../whatsapp/whatsapp.service';
+import { handleAdminService } from './handle-admin.service';
 import { handleLeadService } from './handle-lead.service';
 import { handleUserService } from './handle-user.service';
+import {validate_message, check_out} from "./utils/validate_msg";
 
 @Injectable()
 export class HandlerService {
@@ -18,30 +20,34 @@ export class HandlerService {
     @Inject(handleUserService) private handleUserService: handleUserService,
   ) {}
 
-
   async handleIncomingMessage(message: Message): Promise<void> {
-    
-    // TODO: message validation
+    if (
+      !(await validate_message(message, this.whatsappService.botReadyTimestamp))
+    ) {
+      return;
+    }
+    // checka se a mensagem enviada é "!sair"
+    if (await check_out(message, this.whatsappService, this.userService)) {
+      return;
+    }
 
     const userData = await this.userService.getUser(message.from);
 
-    if (message.body == "!sair" || message.body == "!Sair") {
-        this.whatsappService.sendMessage(message.from, "Até mais!");
-        this.userService.updateRequestUser(message.from, 1);
-        return;
+    switch (userData?.role) {
+      case 'USER': {
+        const requestState = userData?.requestState;
+        this.handleUserService.handle(requestState, message);
+        break;
+      }
+      case 'ADMIN': {
+        const requestState = userData?.requestState;
+        this.handleAdminService.handle(requestState, message);
+        break;
+      }
+      default: {
+        this.handleLeadService.handle(userData, message);
+        break;
+      }
     }
-
-    if (userData?.role?.includes("USER")) {
-        let requestState = userData?.requestState;
-        this.handleUserService.handle(requestState, message)
-    } 
-    if(userData?.role?.includes("ADMIN")){
-        let requestState = userData?.requestState;
-        this.handleAdminService.handle(requestState, message)
-    }
-    if(userData?.role?.includes("LEAD") || userData == null) {
-        this.handleLeadService.handle(userData, message)
-    }
-}
-
+  }
 }

@@ -1,14 +1,14 @@
 interface IConstants {
-	// WhatsApp status broadcast
-	statusBroadcast: string;
+  // WhatsApp status broadcast
+  statusBroadcast: string;
 
-	// WhatsApp session storage
-	sessionPath: string;
+  // WhatsApp session storage
+  sessionPath: string;
 }
 
 const constants: IConstants = {
-	statusBroadcast: "status@broadcast",
-	sessionPath: "./"
+  statusBroadcast: 'status@broadcast',
+  sessionPath: './',
 };
 
 export default constants;

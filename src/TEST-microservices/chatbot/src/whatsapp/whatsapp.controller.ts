@@ -5,7 +5,7 @@ import { MessagePattern } from '@nestjs/microservices';
 @Controller()
 export class WhatsappController {
   constructor(private readonly whatsappService: WhatsappService) {}
-  
+
   @MessagePattern({ cmd: 'qrcode' })
   getQrCode(): string {
     return this.whatsappService.getQrCodeUrl();
@@ -16,5 +16,4 @@ export class WhatsappController {
   getPage() {
     return this.whatsappService.getPage(data);
   }
-
 }

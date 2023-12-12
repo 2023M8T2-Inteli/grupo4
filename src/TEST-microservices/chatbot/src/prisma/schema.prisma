@@ -14,7 +14,7 @@ model User {
   voice        String
   speedVoice   Float
   requestState Int      @default(0)
-  role         Role[]   @default([LEAD])
+  role         Role   @default(LEAD)
   Order        Order[]
   createdAt    DateTime @default(now())
 }
