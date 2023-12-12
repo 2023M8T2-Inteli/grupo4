@@ -58,7 +58,7 @@ const sidebars = {
         "Desenvolvimento da Solução/3.5 LLM",
         "Desenvolvimento da Solução/3.6 Interface de admin",
         "Desenvolvimento da Solução/3.7 Interface do robô",
-        "Desenvolvimento da Solução/3.8 Backend das interfaces",
+        "Desenvolvimento da Solução/3.8 Backend de interfaces",
         "Desenvolvimento da Solução/3.9 Logs",
         "Desenvolvimento da Solução/3.10 WebSocket",
         "Desenvolvimento da Solução/3.12 Demonstração",
