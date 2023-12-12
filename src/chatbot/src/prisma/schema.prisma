@@ -11,10 +11,12 @@ model User {
   id           String   @id @default(uuid())
   name         String
   cellPhone    String   @unique
-  createdAt    DateTime @default(now())
+  voice        String
+  speedVoice   Float
   requestState Int      @default(0)
   role         Role[]   @default([LEAD])
   Order        Order[]
+  createdAt    DateTime @default(now())
 }
 
 model Tool {
@@ -32,7 +34,7 @@ model Tool {
 model Order {
   id        String   @id @default(uuid())
   code      Int      @unique @default(autoincrement())
-  type      String   @default("Peding")
+  type      String   @default("In Progress")
   toolId    String
   userId    String
   pointId   String

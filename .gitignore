@@ -7,8 +7,10 @@
 *.terraform.tfstate.lock.info
 *terraform.tfstate.backup
 .DS_Store
-
+**/node_modules
 *build
 *install
 *log
 *__pycache__
+**/google.json
+src/.idea/

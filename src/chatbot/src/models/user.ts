@@ -1,5 +1,5 @@
 import { PrismaClient, User as PrismaUser, Role } from "@prisma/client";
-
+import { Message } from "whatsapp-web.js";
 
 export default class UserService {
 	constructor(private prisma: PrismaClient) {
@@ -30,10 +30,13 @@ export default class UserService {
 			const user = await this.prisma.user.findFirst({
 				where: {
 					role: {
-						equals: [Role.ADMIN]
+						equals: ["ADMIN"]
 					}
 				}
 			});
+			if (user) {
+				return user;
+			}
 			return user;
 		} catch (error) {
 			console.error("An error occurred while fetching the user:", error);
@@ -66,6 +69,63 @@ export default class UserService {
 				data: {
 					name: user.name,
 					requestState: user.requestState
+				}
+			});
+			return updatedUser;
+		} catch (error) {
+			console.error("An error occurred while updating the user:", error);
+			throw error;
+		} finally {
+			await this.prisma.$disconnect();
+		}
+	}
+
+	async updateVoice(user: PrismaUser): Promise<PrismaUser> {
+		try {
+			const updatedUser = await this.prisma.user.update({
+				where: {
+					cellPhone: user.cellPhone
+				},
+				data: {
+					voice: user.voice
+				}
+			});
+			return updatedUser;
+		} catch (error) {
+			console.error("An error occurred while updating the user:", error);
+			throw error;
+		} finally {
+			await this.prisma.$disconnect();
+		}
+	}
+
+	async updateSpeedVoice(user: PrismaUser): Promise<PrismaUser> {
+		try {
+			const updatedUser = await this.prisma.user.update({
+				where: {
+					cellPhone: user.cellPhone
+				},
+				data: {
+					speedVoice: user.speedVoice
+				}
+			});
+			return updatedUser;
+		} catch (error) {
+			console.error("An error occurred while updating the user:", error);
+			throw error;
+		} finally {
+			await this.prisma.$disconnect();
+		}
+	}
+
+	async updateName(cellPhone: string, name: string): Promise<PrismaUser> {
+		try {
+			const updatedUser = await this.prisma.user.update({
+				where: {
+					cellPhone: cellPhone
+				},
+				data: {
+					name: name
 				}
 			});
 			return updatedUser;

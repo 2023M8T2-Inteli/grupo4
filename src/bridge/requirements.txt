@@ -1,0 +1,12 @@
+empy==3.3.4
+lxml
+lark
+wheel
+numpy
+eventlet
+catkin_pkg
+transforms3d
+python-dotenv
+transformations
+python-socketio
+python-socketio[client]

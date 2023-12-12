@@ -6,12 +6,14 @@
 	"author": "Askrella Software Agency UG (haftungsbeschränkt)",
 	"scripts": {
 		"start": "npx vite-node src/index.ts",
-		"prettier": "prettier --write ./src"
+		"prettier": "prettier --write ./src",
+		"dev": "nodemon src/index.ts"
 	},
 	"license": "MIT",
 	"dependencies": {
 		"@prisma/client": "^5.6.0",
 		"aws-sdk": "^2.1467.0",
+		"axios": "^1.6.2",
 		"chatgpt": "^5.2.5",
 		"dotenv": "^16.3.1",
 		"express": "^4.18.2",
@@ -21,6 +23,8 @@
 		"openai": "^3.3.0",
 		"picocolors": "^1.0.0",
 		"qrcode": "^1.5.3",
+		"socket.io": "^4.7.2",
+		"socket.io-client": "^4.7.2",
 		"uuid": "^9.0.1",
 		"whatsapp-web.js": "^1.23.0"
 	},
@@ -29,8 +33,14 @@
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.21",
+		"@types/fluent-ffmpeg": "^2.1.24",
 		"@types/node": "^20.9.4",
-		"@types/qrcode": "^1.5.2",
+		"@types/qrcode": "^1.5.5",
+		"@typescript-eslint/eslint-plugin": "^6.13.1",
+		"@typescript-eslint/parser": "^6.13.1",
+		"eslint": "^8.55.0",
+		"eslint-plugin-import": "^2.29.0",
+		"eslint-plugin-unused-imports": "^3.0.0",
 		"prettier": "^3.0.3",
 		"prisma": "^5.6.0",
 		"typescript": "^5.3.2"
