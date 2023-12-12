@@ -6,18 +6,15 @@ import { HandlerService } from './handler.service';
 
 @Injectable()
 export class WhatsappService {
-  
   private client: Client;
   private qrCodeUrl: string | null = null;
-  private botReadyTimestamp: Date | null = null;
+  public botReadyTimestamp: Date | null = null;
   private messageQueue: any = [];
 
-  constructor(
-    @Inject(HandlerService) private handlerService: HandlerService,
-  ) {
+  constructor(@Inject(HandlerService) private handlerService: HandlerService) {
     if (btoa(process.env.AUTH_TOKEN) != btoa(process.env.TOKEN_SECRET))
       throw new Error('Token inválido para o chatbot');
-    console.log("starting chatbot...")
+    console.log('starting chatbot...');
     this.client = new Client({
       puppeteer: {
         args: ['--no-sandbox'],
@@ -29,39 +26,37 @@ export class WhatsappService {
     this.initializeClient();
   }
 
-  initializeClient(){
-
+  initializeClient() {
     this.client.on(Events.QR_RECEIVED, (qr: string) => {
       qrcode.toString(
         qr,
-      {
-        type: 'svg',
-        margin: 2,
-        scale: 1,
-      },
-      (err, url) => {
-        if (err) throw err;
-        console.log(url);
-        this.qrCodeUrl = url;
-      }
+        {
+          type: 'svg',
+          margin: 2,
+          scale: 1,
+        },
+        (err, url) => {
+          if (err) throw err;
+          console.log(url);
+          this.qrCodeUrl = url;
+        },
       );
     });
 
-
     this.client.on(Events.LOADING_SCREEN, (percent) => {
       if (percent == '0') {
-        console.log("loading");
+        console.log('loading');
       }
     });
 
     // WhatsApp authenticated
     this.client.on(Events.AUTHENTICATED, () => {
-      console.log("authenticated to whatsapp!")
+      console.log('authenticated to whatsapp!');
     });
 
     // WhatsApp authentication failure
     this.client.on(Events.AUTHENTICATION_FAILURE, () => {
-      console.log("authentication failure")
+      console.log('authentication failure');
     });
 
     // WhatsApp ready
@@ -86,8 +81,6 @@ export class WhatsappService {
         this.handlerService.handleIncomingMessage(message);
       }
     });
-
-
   }
 
   getQrCodeUrl(): string | null {

@@ -8,6 +8,7 @@ import { Client, Message, MessageMedia } from 'whatsapp-web.js';
 import * as fs from 'fs';
 import axios from 'axios';
 import ffmpeg from 'fluent-ffmpeg';
+import gpt_tools from './chatgpt_funtions';
 
 @Injectable()
 export class OpenaiService {
@@ -24,9 +25,9 @@ export class OpenaiService {
   }
 
   async getPointOpenAI(message: Message, client: Client, points: any) {
-    let prompt = process.env.PROMPT_OPENAI_POINTS;
+    const prompt = process.env.PROMPT_OPENAI_POINTS;
 
-    let question = `Lista de pontos: ${JSON.stringify(
+    const question = `Lista de pontos: ${JSON.stringify(
       points,
     )}. Identifique a responsta do usuário com base na lista de pontos e depois coloque as coordenadas do ponto em formato de float e responda apenas em português do Brasil. Pergunta do usuário: ${
       message.body
@@ -41,7 +42,7 @@ export class OpenaiService {
         ],
       });
 
-      let pointResponse = response.data.choices[0].message?.content;
+      const pointResponse = response.data.choices[0].message?.content;
 
       const regex: RegExp =
         /-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?/gi;
@@ -75,7 +76,7 @@ export class OpenaiService {
     const url =
       process.env.TRANSCRIPTION_URL ||
       'https://api.openai.com/v1/audio/transcriptions';
-    let language = process.env.TRANSCRIPTION_LANGUAGE || 'pt-BR';
+    const language = process.env.TRANSCRIPTION_LANGUAGE || 'pt-BR';
     const oggPath = path.join(__dirname + '/media/', randomUUID() + '.ogg');
     const wavFilename = randomUUID() + '.wav';
     const wavPath = path.join(__dirname + '/media/', wavFilename);
@@ -129,7 +130,7 @@ export class OpenaiService {
     message: Message,
     client: Client,
     text: string | undefined,
-  ): Promise<String> {
+  ): Promise<string> {
     const url = process.env.TTS_URL || 'https://api.openai.com/v1/audio/speech';
     let response;
     try {
@@ -172,6 +173,15 @@ export class OpenaiService {
         .on('end', () => resolve())
         .on('error', (err) => reject(err))
         .run();
+    });
+  }
+
+  async interpretNewMessage() {
+    return this.openai.createChatCompletion({
+      model: 'gpt-3.5-turbo-1106',
+      functions: gpt_tools,
+      messages: [],
+      temperature: 0.3,
     });
   }
 }

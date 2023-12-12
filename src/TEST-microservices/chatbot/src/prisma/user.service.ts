@@ -3,8 +3,7 @@ import { PrismaClient, User as PrismaUser, Role } from '@prisma/client';
 import { Message } from 'whatsapp-web.js';
 
 export default class UserService {
-  constructor(@Inject(PrismaClient) private prisma: PrismaClient) {
-  }
+  constructor(@Inject(PrismaClient) private prisma: PrismaClient) {}
 
   async getUser(cellPhone: string): Promise<PrismaUser | null> {
     try {
@@ -19,9 +18,7 @@ export default class UserService {
       return user;
     } catch (error) {
       console.error('An error occurred while fetching the user:', error);
-      throw error;
-    } finally {
-      await this.prisma.$disconnect();
+      return null;
     }
   }
 
