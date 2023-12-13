@@ -31,6 +31,7 @@ RUN echo "#!/bin/bash" > /entrypoint.sh && \
    echo "export TURTLEBOT3_MODEL=burger" >> /entrypoint.sh && \
    echo "export ROS_DOMAIN_ID=50" >> /entrypoint.sh && \
    echo "export SOCKET_SERVER_URL=http://host.docker.internal:3000" >> /entrypoint.sh && \
+   echo "export ROS_DISCOVERY_SERVER=host.docker.internal:11811" >> /entrypoint.sh && \
    echo "ros2 launch vallet_cpp navigation_turtlebot3.launch.py" >> /entrypoint.sh
 
 # Tornar o script executável
