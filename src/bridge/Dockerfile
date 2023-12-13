@@ -1,7 +1,3 @@
-#FROM ubuntu:latest
-#LABEL authors="henriquematias"
-#
-#ENTRYPOINT ["top", "-b"]
 # Stage 1: Build Stage
 FROM henriquemarlon/ros:humble-vallet-desktop AS builder
 # FROM osrf/ros:humble-desktop
@@ -28,13 +24,6 @@ WORKDIR /bridge
 COPY --from=builder /bridge/install /bridge/install
 COPY --from=builder /bridge/build /bridge/build
 
-# ENV SOCKET_SERVER_URL="http://localhost:3000"
-
-# Configura o ambiente
-# RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc
-
-# RUN echo "source /bridge/install/setup.bash" >> /root/.bashrc
-
 # Criar o script entrypoint.sh
 RUN echo "#!/bin/bash" > /entrypoint.sh && \
    echo "source /opt/ros/humble/setup.bash" >> /entrypoint.sh && \
@@ -50,5 +39,4 @@ RUN chmod +x /entrypoint.sh
 EXPOSE 3000
 
 # Executa o lançamento
-# CMD ["/entrypoint.sh"]
 ENTRYPOINT ["/entrypoint.sh"]
