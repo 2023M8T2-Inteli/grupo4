@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { writeFileSync } from 'fs';
 import { Configuration, OpenAIApi } from 'openai';
 import path from 'path';
 import FormData from 'form-data';
@@ -8,11 +7,27 @@ import { Client, Message, MessageMedia } from 'whatsapp-web.js';
 import * as fs from 'fs';
 import axios from 'axios';
 import ffmpeg from 'fluent-ffmpeg';
-import gpt_tools from './chatgpt_funtions';
+import { generateLLMSystemMessages } from './chatgpt_funtions';
 
+interface ChatHistory {
+  role: 'user' | 'system' | 'assistant' | 'function';
+  content: string;
+}
+
+export interface GPTResponseFunctionCall {
+  type: 'function_call';
+  function: string;
+  arguments: object;
+}
+
+export interface GPTResponseMessage {
+  type: 'message';
+  message: string;
+}
 @Injectable()
-export class OpenaiService {
+export class AIService {
   private readonly openai: OpenAIApi;
+  public readonly vectorizedData: any;
 
   constructor() {
     if (!process.env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY not set');
@@ -24,49 +39,45 @@ export class OpenaiService {
     );
   }
 
-  async getPointOpenAI(message: Message, client: Client, points: any) {
-    const prompt = process.env.PROMPT_OPENAI_POINTS;
+  // função principal para gerar uma resposta pelo GPT
+  callGPT = async (
+    userRole: 'ADMIN' | 'USER' | 'LEAD',
+    coordinates: string,
+    chatHistory: ChatHistory[],
+  ): Promise<GPTResponseFunctionCall | GPTResponseMessage> => {
+    const openai = new OpenAIApi(
+      new Configuration({
+        apiKey: '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',
+      }),
+    );
 
-    const question = `Lista de pontos: ${JSON.stringify(
-      points,
-    )}. Identifique a responsta do usuário com base na lista de pontos e depois coloque as coordenadas do ponto em formato de float e responda apenas em português do Brasil. Pergunta do usuário: ${
-      message.body
-    }`;
+    const { gpt_tools, system_message } = generateLLMSystemMessages(
+      userRole,
+      coordinates,
+    );
 
-    try {
-      const response = await this.openai.createChatCompletion({
-        model: 'gpt-4',
-        messages: [
-          { role: 'system', content: prompt },
-          { role: 'user', content: question },
-        ],
-      });
+    const res = await openai.createChatCompletion({
+      functions: gpt_tools,
+      messages: [{ role: 'system', content: system_message }, ...chatHistory],
+      model: 'gpt-4',
+      temperature: 0.8,
+    });
 
-      const pointResponse = response.data.choices[0].message?.content;
-
-      const regex: RegExp =
-        /-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?,\s*-?\d+(?:\.\d+)?/gi;
-      const match = pointResponse?.match(regex);
-      // TODO: EMIT TO SOCKET
-      // const socket = io('http://10.128.68.115:3000');
-      if (match) {
-        match.forEach((coordinateString) => {
-          // Splitting the matched string into individual numbers
-          const parts = coordinateString
-            .split(',')
-            .map((part) => parseFloat(part.trim()));
-          const [x, y, z] = parts;
-          // socket.emit('enqueue', { x, y, z });
-          this.speechOpenAI(message, client, pointResponse);
-        });
-      } else {
-        message.reply('Não consegui encontrar o ponto. Tente novamente.');
-      }
-    } catch (e) {
-      console.error(e);
-      client.sendMessage(message.from, JSON.stringify(e));
+    if (res.data.choices[0].message.function_call.name) {
+      return {
+        type: 'function_call',
+        function: res.data.choices[0].message.function_call.name,
+        arguments: JSON.parse(
+          res.data.choices[0].message.function_call.arguments,
+        ),
+      };
+    } else {
+      return {
+        type: 'message',
+        message: res.data.choices[0].message.content,
+      };
     }
-  }
+  };
 
   async transcribeOpenAI(
     Message: Message,
@@ -173,15 +184,6 @@ export class OpenaiService {
         .on('end', () => resolve())
         .on('error', (err) => reject(err))
         .run();
-    });
-  }
-
-  async interpretNewMessage() {
-    return this.openai.createChatCompletion({
-      model: 'gpt-3.5-turbo-1106',
-      functions: gpt_tools,
-      messages: [],
-      temperature: 0.3,
     });
   }
 }

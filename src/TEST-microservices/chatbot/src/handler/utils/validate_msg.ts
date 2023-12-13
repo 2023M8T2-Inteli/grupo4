@@ -1,5 +1,4 @@
 import { Chat, Message } from 'whatsapp-web.js';
-import UserService from '../../prisma/user.service';
 import { WhatsappService } from '../../whatsapp/whatsapp.service';
 
 export const validate_message = async (
@@ -21,12 +20,11 @@ export const validate_message = async (
 
 export const check_out = async (
   message: Message,
-  whatsAppClient: WhatsappService,
-  userService: UserService,
+  whatsAppClient: WhatsappService
 ): Promise<boolean> => {
   if (message.body == '!sair' || message.body == '!Sair') {
     await whatsAppClient.sendMessage(message.from, 'Até mais!');
-    userService.updateRequestUser(message.from, 1);
+    // userService.updateRequestUser(message.from, 1);
     return true;
   }
 

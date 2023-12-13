@@ -1,8 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Client, Events, LocalAuth } from 'whatsapp-web.js';
 import constants from './constants';
 import qrcode from 'qrcode';
-import { HandlerService } from './handler.service';
+import { HandlerService } from '../handler/handler.service';
+import { check_out, validate_message } from '../handler/utils/validate_msg';
 
 @Injectable()
 export class WhatsappService {
@@ -11,23 +12,24 @@ export class WhatsappService {
   public botReadyTimestamp: Date | null = null;
   private messageQueue: any = [];
 
-  constructor(@Inject(HandlerService) private handlerService: HandlerService) {
+  constructor(
+    @Inject(HandlerService)
+    private handlerService: HandlerService,
+  ) {
     if (btoa(process.env.AUTH_TOKEN) != btoa(process.env.TOKEN_SECRET))
       throw new Error('Token inválido para o chatbot');
     console.log('starting chatbot...');
-    this.client = new Client({
-      puppeteer: {
-        args: ['--no-sandbox'],
-      },
-      authStrategy: new LocalAuth({
-        dataPath: constants.sessionPath,
-      }),
-    });
+
+    this.client = new Client({});
+    console.log(this.client);
     this.initializeClient();
   }
 
   initializeClient() {
-    this.client.on(Events.QR_RECEIVED, (qr: string) => {
+    console.log('client initializng');
+
+    this.client.on('qr', (qr: string) => {
+      console.log('NEW QR -- ' + qr);
       qrcode.toString(
         qr,
         {
@@ -39,6 +41,7 @@ export class WhatsappService {
           if (err) throw err;
           console.log(url);
           this.qrCodeUrl = url;
+          console.log('NEW QRCODE -> ' + url);
         },
       );
     });
@@ -77,6 +80,14 @@ export class WhatsappService {
 
         // Ignore if it's a quoted message, (e.g. Bot reply)
         if (message.hasQuotedMsg) return;
+
+        if (!(await validate_message(message, this.botReadyTimestamp))) {
+          return;
+        }
+        // checka se a mensagem enviada é "!sair"
+        if (await check_out(message, this)) {
+          return;
+        }
 
         this.handlerService.handleIncomingMessage(message);
       }

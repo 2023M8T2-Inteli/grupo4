@@ -1,9 +1,10 @@
-import { Inject } from '@nestjs/common';
-import { PrismaClient, User as PrismaUser, Role } from '@prisma/client';
-import { Message } from 'whatsapp-web.js';
+import {Inject, Injectable} from '@nestjs/common';
+import { User as PrismaUser, Role } from '@prisma/client';
+import {PrismaService} from "./prisma.service";
 
-export default class UserService {
-  constructor(@Inject(PrismaClient) private prisma: PrismaClient) {}
+@Injectable()
+export class UserService {
+  constructor(@Inject(PrismaService) private prisma: PrismaService) {}
 
   async getUser(cellPhone: string): Promise<PrismaUser | null> {
     try {
@@ -27,7 +28,7 @@ export default class UserService {
       const user = await this.prisma.user.findFirst({
         where: {
           role: {
-            equals: ['ADMIN'],
+            equals: 'ADMIN',
           },
         },
       });
@@ -164,7 +165,7 @@ export default class UserService {
           cellPhone: cellPhone,
         },
         data: {
-          role: [Role.USER],
+          role: Role.USER,
         },
       });
 
