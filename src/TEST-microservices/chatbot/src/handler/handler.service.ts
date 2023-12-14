@@ -4,6 +4,8 @@ import { UserService } from 'src/prisma/user.service';
 import { AIService } from '../AI/AI.service';
 import transformConversation from './utils/transformConversation';
 import { UserDoesntExists } from 'src/prisma/user.service';
+import { PointService } from 'src/prisma/coordinates.service';
+import parseCoordinates from './utils/parseCoordinates';
 
 interface CreateUserArgs {
   firstName: string;
@@ -16,6 +18,7 @@ export class HandlerService {
   constructor(
     @Inject(UserService) private userService: UserService,
     @Inject(AIService) private aiService: AIService,
+    @Inject(PointService) private pointService: PointService,
   ) {}
 
   async handleIncomingMessage(message: Message): Promise<any> {
@@ -27,17 +30,17 @@ export class HandlerService {
 
     const parsedMessages = transformConversation(messages);
 
+    const toolCoordinates = await this.toolService.getAllCoordinates();
+    const locationCoordinates = await this.locationService.getAllCoordinates();
+    const {parsedToolCoordinates, parsedLocationCoordinates} = parseCoordinates(tools, locations);
+
     console.log(chat);
 
     const res = await this.aiService.callGPT(
       (userData?.role as 'USER' | 'ADMIN' | 'LEAD') || 'LEAD',
-      `
-        Brahma - [0,5]
-        Skol - [3,5]
-        Heigenen - [-345, 234]
-        Salgadinhos - [-23, 120]
-        `,
-      parsedMessages,
+      parsedToolCoordinates,
+      parsedLocationCoordinates,
+
     );
     console.log(res);
 
