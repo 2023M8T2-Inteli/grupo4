@@ -75,12 +75,6 @@ export class HandlerService {
       case 'function_call':
         try {
           console.log(res.function);
-          console.log(
-            this[res.function](
-              message.from,
-              res.arguments ? res.arguments : {},
-            ),
-          );
           return await this.functionMapping[UserRole][res.function](
             message.from,
             res.arguments && res.arguments,

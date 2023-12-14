@@ -1,5 +1,7 @@
 import { ChatCompletionFunctions } from 'openai';
 
+
+
 export const generateLLMSystemMessages = (
   userPermission: 'LEAD' | 'USER' | 'ADMIN',
   toolsCoords: string,
@@ -83,13 +85,8 @@ export const generateLLMSystemMessages = (
             description:
               'Sobrenome do usuário. Deve ser fornecido pelo usuário.',
           },
-          document: {
-            type: 'string',
-            description:
-              'Documento do usuário. Deve ser fornecido pelo usuário.',
-          },
         },
-        required: ['firstName', 'lastName', 'document'],
+        required: ['firstName', 'lastName'],
       },
     },
     {
@@ -145,6 +142,8 @@ Por exemplo, para criar uma conta, o usuário deve fornecer todas as informaçõ
 xdos os usuários são brasileiros, falam português e trabalham na AMBEV. Ao ativar uma função, forneça um retorno ao usuário de forma amigável e sucinta. Todas as suas respostas são encaminhadas diretamente ao usuário. 
   
   Os usuários são classificados em Lead, User e Admin. Cada função tem uma necessidade de permissão indicada na descrição, marcada com as palavras-chave [LEAD], [USER] ou [ADMIN]. Acione a função apenas se a classificação do usuário for compatível. Usuários com classificação 'User' têm permissão para funções 'Lead' e 'User', enquanto 'Admins' têm acesso total.
+  
+  No primeiro contato de uma nova pessoa, comprimente-a e explique a ela o que você pode fazer. Lembre de respeitar a classificação do usuário e não mostrar informações que ela não tem acesso.
   
   Direcione os Leads (pessoas não cadastradas) para a função "handleLeadAccess". 
 

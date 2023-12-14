@@ -8,7 +8,6 @@ import {
 interface CreateUserArgs {
   firstName: string;
   lastName: string;
-  document: string;
 }
 
 @Injectable()
@@ -17,13 +16,11 @@ export class HandleLeadService {
   async handleCreateUser(userPhone: string, args: CreateUserArgs) {
     const firstName = args?.firstName || '';
     const lastName = args?.lastName || '';
-    const document = args?.document || '';
 
-    if (document && firstName && lastName)
+    if ( firstName && lastName)
       try {
         await this.userService.createAccountUser({
           name: firstName + ' ' + lastName,
-          document,
           cellPhone: userPhone,
         });
         return 'Sua conta foi criada! 😀 Agora, você deve aguardar que um administrador libere seu acesso!';
@@ -38,8 +35,7 @@ export class HandleLeadService {
     return `Preciso de mais algumas informações! Me envie: ${
       firstName ? '' : '\n - primeiro nome,'
     }
-    ${lastName ? '' : '\n -sobrenome,'}
-    ${document ? '' : '\n -documento'}. \n  😀`;
+    ${lastName ? '' : '\n -sobrenome,'} \n  😀`;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

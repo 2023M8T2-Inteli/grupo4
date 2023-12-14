@@ -4,7 +4,6 @@ import { PrismaService } from './prisma.service';
 
 interface UserCreationData {
   name: string;
-  document: string;
   cellPhone: string;
 }
 
