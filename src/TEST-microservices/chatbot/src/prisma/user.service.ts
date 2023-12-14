@@ -2,6 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { User as PrismaUser, Role } from '@prisma/client';
 import { PrismaService } from './prisma.service';
 
+interface UserCreationData {
+  name: string;
+  document: string;
+  cellPhone: string;
+}
+
 export class UserDoesntExists extends Error {
   constructor(message: string = 'User doesnt exists') {
     super(message);
@@ -9,6 +15,17 @@ export class UserDoesntExists extends Error {
     // Mantém o stack trace em V8
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, UserDoesntExists);
+    }
+  }
+}
+
+export class UserAlreadyExists extends Error {
+  constructor(message: string = 'User already exists') {
+    super(message);
+    this.name = 'UserAlreadyExists';
+    // Mantém o stack trace em V8
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, UserAlreadyExists);
     }
   }
 }
@@ -55,10 +72,25 @@ export class UserService {
     }
   }
 
-  async createAccountUser(user: PrismaUser): Promise<PrismaUser> {
+  async createAccountUser(user: UserCreationData): Promise<PrismaUser> {
+    const tempUser = await this.prisma.user.findFirst({
+      where: {
+        cellPhone: {
+          equals: user.cellPhone,
+        },
+      },
+    });
+    if (tempUser) {
+      throw new UserAlreadyExists();
+    }
+
     try {
       const createdUser = await this.prisma.user.create({
-        data: user,
+        data: {
+          ...user,
+          voice: 'DEFAULT',
+          speedVoice: 1.0,
+        },
       });
       return createdUser;
     } catch (error) {

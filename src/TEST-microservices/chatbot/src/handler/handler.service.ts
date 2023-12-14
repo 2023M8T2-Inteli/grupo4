@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Chat, Message } from 'whatsapp-web.js';
-import { UserService } from 'src/prisma/user.service';
+import { UserAlreadyExists, UserService } from 'src/prisma/user.service';
 import { AIService } from '../AI/AI.service';
 import transformConversation from './utils/transformConversation';
 import { UserDoesntExists } from 'src/prisma/user.service';
@@ -94,7 +94,20 @@ export class HandlerService {
     const document = args?.document || '';
 
     if (document && firstName && lastName)
-      return 'Sua conta foi criada! 😀 Você deve aguardar que um administrador libere seu acesso!';
+      try {
+        await this.userService.createAccountUser({
+          name: firstName + ' ' + lastName,
+          document,
+          cellPhone: userPhone,
+        });
+        return 'Sua conta foi criada! 😀 Agora, você deve aguardar que um administrador libere seu acesso!';
+      } catch (e) {
+        if (e instanceof UserAlreadyExists) {
+          return 'Parece que você já está cadastrado em nosso sistema, aguarde que um administrador lhe contatará.';
+        }
+        console.log(`Error: ${e}`);
+        return 'Ocorreu um erro ao criar sua conta, por favor contate um administrador.';
+      }
 
     return `Preciso de mais algumas informações! Me envie: ${
       firstName ? '' : '\n - primeiro nome,'
