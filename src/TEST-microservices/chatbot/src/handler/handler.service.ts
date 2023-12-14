@@ -9,6 +9,7 @@ import { ToolService } from '../prisma/tool.service';
 import { LocationService } from '../prisma/location.service';
 import { Role } from '@prisma/client';
 import { OrderService } from '../prisma/order.service';
+import parseCoordinates from './utils/parseCoordinates';
 
 interface CreateUserArgs {
   firstName: string;
@@ -43,9 +44,9 @@ export class HandlerService {
 
     const parsedMessages = transformConversation(messages);
 
-    const toolCoordinates = await this.toolService.getAllCoordinates();
-    const locationCoordinates = await this.locationService.getAllCoordinates();
-    const {parsedToolCoordinates, parsedLocationCoordinates} = parseCoordinates(tools, locations);
+    const toolCoordinates = await this.toolService.getAllTools();
+    const locationCoordinates = await this.locationService.getAllLocations();
+    const {parsedToolCoordinates, parsedLocationCoordinates} = parseCoordinates(toolCoordinates, locationCoordinates);
 
     console.log(chat);
 
