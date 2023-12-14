@@ -1,25 +1,24 @@
-import qrcode from 'qrcode';
-import { Client, Events, LocalAuth } from 'whatsapp-web.js';
-import process from 'process';
-import constants from './constants';
-import * as terminal from './cli/ui';
-import { MessageEventHandler } from './handlers/message';
-import { initOpenAI } from './providers/openai';
-import express, { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
-import UserService from './models/user';
-import dotenv from 'dotenv';
+import qrcode from "qrcode";
+import { Client, Events, LocalAuth } from "whatsapp-web.js";
+import process from "process";
+import constants from "./constants";
+import * as cli from "./cli/ui";
+import { initAiConfig } from "./handlers/ai-config";
+import { MessageEventHandler } from "./handlers/message";
+import { initOpenAI } from "./providers/openai";
+import express, { Request, Response } from "express";
+import { PrismaClient } from "@prisma/client";
+import UserService from "./models/user";
+import dotenv from "dotenv";
+import { io } from "socket.io-client";
 
 const app = express();
 const port = 3000;
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-  next();
+	res.header("Access-Control-Allow-Origin", "*"); // Allow requests from any origin
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	next();
 });
 
 // Ready timestamp of the bot
@@ -29,15 +28,12 @@ let botReadyTimestamp: Date | null = null;
 
 const prisma = new PrismaClient();
 const userService = new UserService(prisma);
-const AUTH_TOKEN = process.env.AUTH_TOKEN || '';
-const TOKEN_SECRET = process.env.TOKEN_SECRET || '';
 
 dotenv.config();
 
 // Entrypoint
 const start = async () => {
-  if (btoa(AUTH_TOKEN) == btoa(TOKEN_SECRET)) {
-    terminal.printIntro();
+	cli.printIntro();
 
     // WhatsApp Client
     const client = new Client({
@@ -103,6 +99,13 @@ const start = async () => {
       terminal.printAuthenticationFailure();
     });
 
+	// WhatsApp ready
+	client.on(Events.READY, () => {
+		// Set bot ready timestamp
+		botReadyTimestamp = new Date();
+		initAiConfig();
+		initOpenAI();
+	});
     // WhatsApp ready
     client.on(Events.READY, () => {
       // Set bot ready timestamp
