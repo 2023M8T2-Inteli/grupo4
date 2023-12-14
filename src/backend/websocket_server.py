@@ -20,6 +20,12 @@ def message(sid, data):
     print(f'Mensagem recebida de {sid}: {data}')
     # sio.emit("/navigation", data)
 
+@sio.on('cancel')
+def message(sid, data):
+    print(f'Mensagem recebida de {sid}: {data}')
+    sio.emit("/cancel", data)
+    # sio.emit("/navigation", data)
+
 # Evento de desconexão
 @sio.event
 def disconnect(sid):

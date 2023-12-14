@@ -1,5 +1,6 @@
 import { PrismaClient, User as PrismaUser } from '@prisma/client';
 import UserService from '../models/user';
+import { io } from 'socket.io-client';
 import { Client, Message, List } from 'whatsapp-web.js';
 import {
   handleCancelOrder,
@@ -221,6 +222,12 @@ export class MessageEventHandler {
       requestUserHandler.handle(requestState, message);
     }
     if (userData?.role?.includes('ADMIN')) {
+      const apiKey = process.env.OPENAI_API_KEY;
+      const socket = io(process.env.SOCKET_URL || '');
+      if (message.body == '!cancel' || message.body == '!Cancel'){
+        socket.emit('cancel', true);
+        return;
+      }
       let requestState = userData?.requestState;
       const requestAdminHandler = new RequestAdminHandler(
         this.whatsappClient,
