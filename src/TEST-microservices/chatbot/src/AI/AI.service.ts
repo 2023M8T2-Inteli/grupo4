@@ -46,7 +46,6 @@ export class AIService {
     locationCoordinates: string,
     chatHistory: ChatHistory[],
   ): Promise<GPTResponseFunctionCall | GPTResponseMessage> => {
-
     const { system_message, gpt_tools } = generateLLMSystemMessages(
       (userRole),
       toolsCordinates,

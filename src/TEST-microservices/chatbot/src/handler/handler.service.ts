@@ -17,6 +17,8 @@ import { HandleAdminService } from './handle-admin.service';
 export class HandlerService {
   private readonly sioClient: Socket;
   private readonly functionMapping;
+  private readonly readyTimestamp: number;
+
   constructor(
     @Inject(UserService) private userService: UserService,
     @Inject(AIService) private aiService: AIService,
@@ -34,6 +36,8 @@ export class HandlerService {
       ADMIN: this.handleAdminService,
       LEAD: this.handleLeadService,
     };
+
+    this.readyTimestamp = Math.floor(+new Date() / 1000);
   }
 
   async handleIncomingMessage(message: Message): Promise<any> {
@@ -51,12 +55,12 @@ export class HandlerService {
     const UserRole = (userData?.role as 'USER' | 'ADMIN' | 'LEAD') || 'LEAD';
 
     const chat: Chat = await message.getChat();
-
     const messages: Message[] = await chat.fetchMessages({ limit: 20 });
+    const parsedMessages = transformConversation(messages, this.readyTimestamp);
 
-    const parsedMessages = transformConversation(messages);
     const toolCoordinates = await this.toolService.getAllTools();
     const locationCoordinates = await this.locationService.getAllLocations();
+    
     const { parsedLocations, parsedTools } = parseCoordinates(
       toolCoordinates,
       locationCoordinates,

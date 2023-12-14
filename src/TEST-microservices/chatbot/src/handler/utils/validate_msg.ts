@@ -3,7 +3,7 @@ import { WhatsappService } from '../../whatsapp/whatsapp.service';
 
 export const validate_message = async (
   message: Message,
-  botReadyTimestamp: Date | null,
+  botReadyTimestamp: number | null,
 ): Promise<boolean> => {
   const messageFrom: Chat = await message.getChat();
 
@@ -11,7 +11,7 @@ export const validate_message = async (
     return false;
   } else if (botReadyTimestamp == null) {
     return false;
-  } else if (new Date(message.timestamp * 1000) < botReadyTimestamp) {
+  } else if (+new Date(message.timestamp) < botReadyTimestamp) {
     return false;
   }
 

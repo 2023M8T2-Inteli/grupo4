@@ -9,7 +9,7 @@ import { check_out, validate_message } from '../handler/utils/validate_msg';
 export class WhatsappService {
   private client: Client;
   private qrCodeUrl: string | null = null;
-  public botReadyTimestamp: Date | null = null;
+  public botReadyTimestamp: number | null = null
   private messageQueue: any = [];
 
   constructor(
@@ -25,12 +25,12 @@ export class WhatsappService {
         dataPath: './',
       }),
     });
-    console.log(this.client);
+    console.log("wpp client created");
     this.initializeClient();
   }
 
   initializeClient() {
-    console.log('client initializng');
+    console.log('client initializing');
 
     this.client.on('qr', (qr: string) => {
       console.log('NEW QR -- ' + qr);
@@ -38,9 +38,7 @@ export class WhatsappService {
     });
 
     this.client.on(Events.LOADING_SCREEN, (percent) => {
-      if (percent == '0') {
-        console.log('loading');
-      }
+        console.log(`loading... ${percent}%`);
     });
 
     // WhatsApp authenticated
@@ -55,7 +53,7 @@ export class WhatsappService {
 
     // WhatsApp ready
     this.client.on(Events.READY, () => {
-      this.botReadyTimestamp = new Date();
+      this.botReadyTimestamp = Math.floor(+new Date()/1000);
     });
 
     // WhatsApp message
