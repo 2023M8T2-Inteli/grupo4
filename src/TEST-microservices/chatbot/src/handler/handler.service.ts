@@ -36,7 +36,16 @@ export class HandlerService {
   }
 
   async handleIncomingMessage(message: Message): Promise<any> {
-    const userData = await this.userService.getUser(message.from);
+    let userData;
+    try {
+      userData = await this.userService.getUser(message.from);
+    } catch (e) {
+      if (e instanceof UserDoesntExists) {
+        userData = null;
+      } else {
+        return 'Um erro aconteceu, contate um administrador.';
+      }
+    }
 
     const chat: Chat = await message.getChat();
 
@@ -49,8 +58,6 @@ export class HandlerService {
       toolCoordinates,
       locationCoordinates,
     );
-
-
 
     const res = await this.aiService.callGPT(
       (userData?.role as 'USER' | 'ADMIN' | 'LEAD') || 'LEAD',
