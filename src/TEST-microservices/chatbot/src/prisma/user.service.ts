@@ -18,7 +18,6 @@ export class UserService {
   constructor(@Inject(PrismaService) private prisma: PrismaService) {}
 
   async getUser(cellPhone: string): Promise<PrismaUser | null> {
-    // try {
     const user = await this.prisma.user.findFirst({
       where: {
         cellPhone,
@@ -28,10 +27,11 @@ export class UserService {
       throw new UserDoesntExists();
     }
     return user;
-    // } catch (error) {
-    //   console.error('An error occurred while fetching the user:', error);
-    //   return null;
-    // }
+  }
+
+  async getUserRole(cellPhone: string): Promise<Role> {
+    const user = await this.getUser(cellPhone);
+    return user.role;
   }
 
   async getAdmin(): Promise<PrismaUser | null> {
