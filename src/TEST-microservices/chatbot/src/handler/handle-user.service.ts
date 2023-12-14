@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { io, Socket } from 'socket.io-client';
-import { Role } from '@prisma/client';
-import { UserService } from '../prisma/user.service';
-import { OrderService } from '../prisma/order.service';
+import { Order, Point, Role, Tool } from '@prisma/client';
+import { UserDoesntExists, UserService } from '../prisma/user.service';
+import { OrdersEmpty, OrderService } from '../prisma/order.service';
 import { LocationService } from '../prisma/location.service';
 import { ToolService } from '../prisma/tool.service';
+import { Order as PrismaOrder, Tool as PrismaTool } from '.prisma/client';
 
 interface CreateNewOrderArgs {
   from: number[];
@@ -35,6 +36,21 @@ export class HandleUserService {
     return `Não foi possível processar o seu pedido. As seguintes informações estão faltando: ${
       from?.length !== 2 && '\n - origem do pedido'
     } ${to?.length !== 2 && '\n - destino do pedido'}. \n  😀`;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async handleGetAllOrders(userPhone: string, _args: object) {
+    try {
+      const orders = await this.orderService.getAllOrders(userPhone);
+
+      return await this.formatOrders(orders);
+    } catch (e) {
+      if (e instanceof UserDoesntExists)
+        return 'Ops, parece que houve um erro aqui no sistema e você ainda não tem um cadastro conosco. Gostaria de fazer um agora? 😀';
+      if (e instanceof OrdersEmpty)
+        return 'Você ainda não possui nenhum pedido. Gostaria de fazer um agora?';
+      return 'Um erro aconteceu, contate um administrador.';
+    }
   }
 
   protected async generateNewOrder(
@@ -78,6 +94,29 @@ export class HandleUserService {
       console.log(e);
       return 'Não foi possível realizar o seu pedido, por favor contate um administrador.';
     }
+  }
+
+  protected async formatOrders(orders: Order[]) {
+    let message = 'Encontrei aqui no meu sistema os seguintes pedidos:';
+
+    for (const order of orders) {
+      try {
+        const tool: Tool = await this.toolService.getToolById(order.toolId);
+        const location: Point = await this.locationService.getLocationById(
+          order.pointId,
+        );
+        message += `
+      \n 📦 *Código do pedido*: ${order.code}
+      \n - Ferramenta pedida: ${tool.name}
+      \n - Destino de entrega: ${location.name}
+      \n - Status: ${order.type}
+      `;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    return message;
   }
 }
 

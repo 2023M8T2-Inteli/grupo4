@@ -66,4 +66,16 @@ export class LocationService {
     const location = await this.getLocationByCoords(coords);
     return location.id;
   }
+
+  async getLocationById(id: string): Promise<PrismaPoint> {
+    const location = await this.prisma.point.findFirst({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!location) throw new LocationDoesntExists();
+
+    return location;
+  }
 }

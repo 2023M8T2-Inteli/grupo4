@@ -66,4 +66,16 @@ export class ToolService {
     const tool = await this.getToolByCoords(coords);
     return tool.id;
   }
+
+  async getToolById(id: string): Promise<PrismaTool> {
+    const tool = await this.prisma.tool.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!tool) throw new ToolDoesntExists();
+
+    return tool;
+  }
 }
