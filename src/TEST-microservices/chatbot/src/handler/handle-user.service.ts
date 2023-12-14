@@ -92,6 +92,23 @@ export class HandleUserService {
     }
   }
 
+  async handleCancelOpenOrder(userPhone: string, args: { orderId: number }) {
+    try {
+      const order = await this.orderService.cancelOrder(
+        userPhone,
+        args.orderId,
+      );
+
+      return `Pedido ${order.code} cancelado com sucesso! \n Ficamos tristes em saber que você não quer mais o produto. 😢, gostaria de solicitar outro?`;
+    } catch (e) {
+      if (e instanceof UserDoesntExists)
+        return 'Ops, parece que houve um erro aqui no sistema e você ainda não tem um cadastro conosco. Gostaria de fazer um agora? 😀';
+      if (e instanceof OrderDoesntExists)
+        return 'Não consegui encontrar nenhuma ordem com esse código. Você gostaria de ver todos os seus pedidos?';
+      return 'Um erro aconteceu, contate um administrador.';
+    }
+  }
+
   protected async generateNewOrder(
     userPhone: string,
     from: number[],
