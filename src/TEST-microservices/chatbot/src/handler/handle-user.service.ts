@@ -4,6 +4,7 @@ import { Order, Point, Role, Tool } from '@prisma/client';
 import { UserDoesntExists, UserService } from '../prisma/user.service';
 import {
   OpenOrdersDoestExist,
+  OrderDoesntExists,
   OrdersEmpty,
   OrderService,
 } from '../prisma/order.service';
@@ -74,6 +75,23 @@ export class HandleUserService {
     }
   }
 
+  async handleGetOrderStatus(userPhone: string, args: { orderId: number }) {
+    try {
+      const order = await this.orderService.getOrderByCode(
+        userPhone,
+        args.orderId,
+      );
+
+      return await this.formatOrder(order);
+    } catch (e) {
+      if (e instanceof UserDoesntExists)
+        return 'Ops, parece que houve um erro aqui no sistema e você ainda não tem um cadastro conosco. Gostaria de fazer um agora? 😀';
+      if (e instanceof OrderDoesntExists)
+        return 'Não consegui encontrar nenhuma ordem com esse código. Você gostaria de ver todos os seus pedidos?';
+      return 'Um erro aconteceu, contate um administrador.';
+    }
+  }
+
   protected async generateNewOrder(
     userPhone: string,
     from: number[],
@@ -138,6 +156,23 @@ export class HandleUserService {
     }
 
     return message;
+  }
+
+  protected async formatOrder(order: Order) {
+    try {
+      const tool: Tool = await this.toolService.getToolById(order.toolId);
+      const location: Point = await this.locationService.getLocationById(
+        order.pointId,
+      );
+      return `
+      \n 📦 *Código do pedido*: ${order.code}
+      \n - Ferramenta pedida: ${tool.name}
+      \n - Destino de entrega: ${location.name}
+      \n - Status: ${order.type}
+      `;
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 
