@@ -43,20 +43,21 @@ export class HandlerService {
     const messages: Message[] = await chat.fetchMessages({ limit: 20 });
 
     const parsedMessages = transformConversation(messages);
-
     const toolCoordinates = await this.toolService.getAllTools();
     const locationCoordinates = await this.locationService.getAllLocations();
-    const {parsedToolCoordinates, parsedLocationCoordinates} = parseCoordinates(toolCoordinates, locationCoordinates);
+    const { parsedLocations, parsedTools } = parseCoordinates(
+      toolCoordinates,
+      locationCoordinates,
+    );
 
-    console.log(chat);
+
 
     const res = await this.aiService.callGPT(
       (userData?.role as 'USER' | 'ADMIN' | 'LEAD') || 'LEAD',
-      parsedToolCoordinates,
-      parsedLocationCoordinates,
-
+      parsedTools,
+      parsedLocations,
+      parsedMessages,
     );
-    console.log(res);
 
     switch (res.type) {
       case 'message':

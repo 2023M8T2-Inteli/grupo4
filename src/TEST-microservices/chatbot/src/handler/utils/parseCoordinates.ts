@@ -1,24 +1,24 @@
 import { Point, Tool } from "@prisma/client"
 
 interface ParsedCoordinates {
-    parsedToolCoordinates: string,
-    parsedLocationCoordinates: string
+    parsedTools: string,
+    parsedLocations: string
 
 }
 
 const parseCoordinates = (tools: Tool[], locations: Point[]): ParsedCoordinates => {
 
     const parsedTools = tools.map((coordinate) => {
-        const { name, x, y } = coordinate
-        return `${name} - [${x}, ${y}]`
-    })
+        const { name, pointX, pointY } = coordinate
+        return `${name} - [${pointX}, ${pointY}]`
+    }).join("/n")
 
     const parsedLocations = locations.map((coordinate) => {
-        const { name, x, y } = coordinate
-        return `${name} - [${x}, ${y}]`
-    })
+        const { name, pointX, pointY } = coordinate
+        return `${name} - [${pointX}, ${pointY}]`
+    }).join('\n')
 
-    return {parsedTools.join('\n'), parsedLocations.join('\n')}
+    return {parsedTools, parsedLocations}
 
 }
 

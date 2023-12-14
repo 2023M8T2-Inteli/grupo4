@@ -41,22 +41,19 @@ export class AIService {
 
   // função principal para gerar uma resposta pelo GPT
   callGPT = async (
-    userRole: 'ADMIN' | 'USER' | 'LEAD',
-    coordinates: string,
+    userRole: 'ADMIN' | 'USER' | 'LEAD' = 'LEAD',
+    toolsCordinates: string,
+    locationCoordinates: string,
     chatHistory: ChatHistory[],
   ): Promise<GPTResponseFunctionCall | GPTResponseMessage> => {
-    const openai = new OpenAIApi(
-      new Configuration({
-        apiKey: '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',
-      }),
+
+    const { system_message, gpt_tools } = generateLLMSystemMessages(
+      (userRole),
+      toolsCordinates,
+      locationCoordinates,
     );
 
-    const { gpt_tools, system_message } = generateLLMSystemMessages(
-      userRole,
-      coordinates,
-    );
-
-    const res = await openai.createChatCompletion({
+    const res = await this.openai.createChatCompletion({
       functions: gpt_tools,
       messages: [{ role: 'system', content: system_message }, ...chatHistory],
       model: 'gpt-4',
