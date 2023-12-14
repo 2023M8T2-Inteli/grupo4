@@ -1,7 +1,22 @@
-// import { Inject, Injectable } from '@nestjs/common';
-// import UserService from 'src/prisma/user.service';
-// import { WhatsappService } from 'src/whatsapp/whatsapp.service';
-//
+import { Inject, Injectable } from '@nestjs/common';
+import { HandleUserService } from './handle-user.service';
+import { UserService } from '../prisma/user.service';
+import { OrderService } from '../prisma/order.service';
+import { LocationService } from '../prisma/location.service';
+import { ToolService } from '../prisma/tool.service';
+
+@Injectable()
+export class HandleAdminService extends HandleUserService {
+  constructor(
+    @Inject(UserService) protected userService: UserService,
+    @Inject(OrderService) protected orderService: OrderService,
+    @Inject(LocationService) protected locationService: LocationService,
+    @Inject(ToolService) protected toolService: ToolService,
+  ) {
+    super(userService, orderService, locationService, toolService);
+  }
+}
+
 // @Injectable()
 // export class handleAdminService {
 //   constructor(

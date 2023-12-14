@@ -1,10 +1,86 @@
-// import { Inject, Injectable } from '@nestjs/common';
-// import UserService from 'src/prisma/user.service';
-// import { WhatsappService } from 'src/whatsapp/whatsapp.service';
-// import { Message } from 'whatsapp-web.js';
-// import { HandlerBase } from './classes/base';
-// import { io, Socket } from 'socket.io-client';
-// import { OrderService } from '../prisma/order.service';
+import { Inject, Injectable } from '@nestjs/common';
+import { io, Socket } from 'socket.io-client';
+import { Role } from '@prisma/client';
+import { UserService } from '../prisma/user.service';
+import { OrderService } from '../prisma/order.service';
+import { LocationService } from '../prisma/location.service';
+import { ToolService } from '../prisma/tool.service';
+
+interface CreateNewOrderArgs {
+  from: number[];
+  to: number[];
+}
+
+@Injectable()
+export class HandleUserService {
+  protected readonly sioClient: Socket;
+
+  constructor(
+    @Inject(UserService) protected userService: UserService,
+    @Inject(OrderService) protected orderService: OrderService,
+    @Inject(LocationService) protected locationService: LocationService,
+    @Inject(ToolService) protected toolService: ToolService,
+  ) {
+    this.sioClient = io(process.env.SOCKET_URL || '');
+  }
+
+  async handleNewOrder(userPhone: string, args: CreateNewOrderArgs) {
+    const from = args?.from;
+    const to = args?.to;
+
+    if (from?.length === 2 && to?.length === 2) {
+      return await this.generateNewOrder(userPhone, from, to);
+    }
+
+    return `Não foi possível processar o seu pedido. As seguintes informações estão faltando: ${
+      from?.length !== 2 && '\n - origem do pedido'
+    } ${to?.length !== 2 && '\n - destino do pedido'}. \n  😀`;
+  }
+
+  protected async generateNewOrder(
+    userPhone: string,
+    from: number[],
+    to: number[],
+  ) {
+    if ((await this.userService.getUserRole(userPhone)) === Role.LEAD)
+      return 'Ainda não é possível realizar pedidos, por favor aguarde um administrador liberar seu acesso.';
+
+    if (!(await this.toolService.coordsExists(from)))
+      return 'Infelizmente não temos esse produto em nosso estoque. Gostaria de fazer outro pedido?';
+
+    if (!(await this.locationService.locationExists(to)))
+      return 'Infelizmente não conseguimos entregar nesse endereço. Gostaria de fazer outro pedido?';
+
+    const toolId = await this.toolService.getToolIdByCoords(from);
+    const locationId = await this.locationService.getLocationIdByCoords(to);
+
+    try {
+      const order = await this.orderService.createOrder(
+        userPhone,
+        toolId,
+        locationId,
+      );
+
+      this.sioClient.emit('enqueue', {
+        x: from[0],
+        y: from[1],
+        z: 0.0,
+      });
+
+      this.sioClient.emit('enqueue', {
+        x: to[0],
+        y: to[1],
+        z: 0.0,
+      });
+
+      return `Pedido realizado com sucesso! O número do seu pedido é: \n - ${order.code} \n Assim que chegarmos na sua localização você será informado! 😀`;
+    } catch (e) {
+      console.log(e);
+      return 'Não foi possível realizar o seu pedido, por favor contate um administrador.';
+    }
+  }
+}
+
 //
 // @Injectable()
 // export class handleUserService extends HandlerBase {
