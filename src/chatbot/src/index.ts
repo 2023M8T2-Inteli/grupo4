@@ -4,9 +4,9 @@ import process from "process";
 import constants from "./constants";
 import * as cli from "./cli/ui";
 import { initAiConfig } from "./handlers/ai-config";
-import {MessageEventHandler} from "./handlers/message";
+import { MessageEventHandler } from "./handlers/message";
 import { initOpenAI } from "./providers/openai";
-import express, { Request, Response } from 'express';
+import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import UserService from "./models/user";
 import dotenv from "dotenv";
@@ -16,10 +16,10 @@ const app = express();
 const port = 5000;
 
 app.use((req, res, next) => {
-	res.header('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
-	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+	res.header("Access-Control-Allow-Origin", "*"); // Allow requests from any origin
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 	next();
-  });
+});
 
 // Ready timestamp of the bot
 let botReadyTimestamp: Date | null = null;
@@ -28,16 +28,11 @@ let botReadyTimestamp: Date | null = null;
 
 const prisma = new PrismaClient();
 const userService = new UserService(prisma);
-const AUTH_TOKEN = process.env.AUTH_TOKEN || "";
-const TOKEN_SECRET = process.env.TOKEN_SECRET || "";
-
-
 
 dotenv.config();
 
 // Entrypoint
 const start = async () => {
-	if(btoa(AUTH_TOKEN) == btoa(TOKEN_SECRET)){
 	cli.printIntro();
 
 	// WhatsApp Client
@@ -51,7 +46,8 @@ const start = async () => {
 	});
 
 	let messageQueue: any = [];
-	let urll = ''	let qrCodeUrl: string | null = null;
+	let urll = "";
+	let qrCodeUrl: string | null = null;
 	// WhatsApp auth
 	client.on(Events.QR_RECEIVED, (qr: string) => {
 		let qr_code = qrcode.toString(
@@ -64,21 +60,20 @@ const start = async () => {
 			},
 			(err, url) => {
 				if (err) throw err;
-				urll = url
+				urll = url;
 				qrCodeUrl = url;
 			}
-		);	
+		);
 	});
-	
-	
-	app.get('/', (req: Request, res: Response) => {
+
+	app.get("/", (req: Request, res: Response) => {
 		if (urll) {
 			res.status(200).send(urll);
 		} else {
-			res.status(400).send('User is authenticated');
+			res.status(400).send("User is authenticated");
 		}
 	});
-	
+
 	app.listen(port, () => {
 		console.log(`Server running on http://localhost:${port}`);
 	});
@@ -106,7 +101,6 @@ const start = async () => {
 		botReadyTimestamp = new Date();
 		initAiConfig();
 		initOpenAI();
-	
 	});
 
 	const messageEventHandler = new MessageEventHandler(prisma, userService, client);
@@ -131,7 +125,7 @@ const start = async () => {
 
 	// WhatsApp initialization
 	client.initialize();
-}};
+};
 
 start();
 
