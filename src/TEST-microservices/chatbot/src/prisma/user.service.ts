@@ -1,25 +1,53 @@
-import { Inject } from '@nestjs/common';
-import { PrismaClient, User as PrismaUser, Role } from '@prisma/client';
-import { Message } from 'whatsapp-web.js';
+import { Inject, Injectable } from '@nestjs/common';
+import { User as PrismaUser, Role } from '@prisma/client';
+import { PrismaService } from './prisma.service';
 
-export default class UserService {
-  constructor(@Inject(PrismaClient) private prisma: PrismaClient) {}
+interface UserCreationData {
+  name: string;
+  cellPhone: string;
+}
+
+export class UserDoesntExists extends Error {
+  constructor(message: string = 'User doesnt exists') {
+    super(message);
+    this.name = 'UserDoesntExists';
+    // Mantém o stack trace em V8
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, UserDoesntExists);
+    }
+  }
+}
+
+export class UserAlreadyExists extends Error {
+  constructor(message: string = 'User already exists') {
+    super(message);
+    this.name = 'UserAlreadyExists';
+    // Mantém o stack trace em V8
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, UserAlreadyExists);
+    }
+  }
+}
+
+@Injectable()
+export class UserService {
+  constructor(@Inject(PrismaService) private prisma: PrismaService) {}
 
   async getUser(cellPhone: string): Promise<PrismaUser | null> {
-    try {
-      const user = await this.prisma.user.findFirst({
-        where: {
-          cellPhone,
-        },
-      });
-      if (user == null) {
-        return null;
-      }
-      return user;
-    } catch (error) {
-      console.error('An error occurred while fetching the user:', error);
-      return null;
+    const user = await this.prisma.user.findFirst({
+      where: {
+        cellPhone,
+      },
+    });
+    if (user == null) {
+      throw new UserDoesntExists();
     }
+    return user;
+  }
+
+  async getUserRole(cellPhone: string): Promise<Role> {
+    const user = await this.getUser(cellPhone);
+    return user.role;
   }
 
   async getAdmin(): Promise<PrismaUser | null> {
@@ -27,7 +55,7 @@ export default class UserService {
       const user = await this.prisma.user.findFirst({
         where: {
           role: {
-            equals: ['ADMIN'],
+            equals: 'ADMIN',
           },
         },
       });
@@ -43,10 +71,25 @@ export default class UserService {
     }
   }
 
-  async createAccountUser(user: PrismaUser): Promise<PrismaUser> {
+  async createAccountUser(user: UserCreationData): Promise<PrismaUser> {
+    const tempUser = await this.prisma.user.findFirst({
+      where: {
+        cellPhone: {
+          equals: user.cellPhone,
+        },
+      },
+    });
+    if (tempUser) {
+      throw new UserAlreadyExists();
+    }
+
     try {
       const createdUser = await this.prisma.user.create({
-        data: user,
+        data: {
+          ...user,
+          voice: 'DEFAULT',
+          speedVoice: 1.0,
+        },
       });
       return createdUser;
     } catch (error) {
@@ -164,7 +207,7 @@ export default class UserService {
           cellPhone: cellPhone,
         },
         data: {
-          role: [Role.USER],
+          role: Role.USER,
         },
       });
 

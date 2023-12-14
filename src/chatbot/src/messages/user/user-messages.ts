@@ -522,7 +522,7 @@ const handleNewOrder = async (message: Message, client: Client) => {
     const order = await orderService.verifyOpenOrder(message);
     if (message.body) {
       if (order == null) await getToolOpenAI(message, client);
-      if (order != null) await getPointOpenAI(message, client);
+      if (order != null) await getPoin11111111111111111111111111111tOpenAI(message, client);
     }
 
     if (message.hasMedia) {
