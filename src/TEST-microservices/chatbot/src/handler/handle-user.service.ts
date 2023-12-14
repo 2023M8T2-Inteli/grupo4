@@ -2,7 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import { io, Socket } from 'socket.io-client';
 import { Order, Point, Role, Tool } from '@prisma/client';
 import { UserDoesntExists, UserService } from '../prisma/user.service';
-import { OrdersEmpty, OrderService } from '../prisma/order.service';
+import {
+  OpenOrdersDoestExist,
+  OrdersEmpty,
+  OrderService,
+} from '../prisma/order.service';
 import { LocationService } from '../prisma/location.service';
 import { ToolService } from '../prisma/tool.service';
 import { Order as PrismaOrder, Tool as PrismaTool } from '.prisma/client';
@@ -49,6 +53,23 @@ export class HandleUserService {
         return 'Ops, parece que houve um erro aqui no sistema e você ainda não tem um cadastro conosco. Gostaria de fazer um agora? 😀';
       if (e instanceof OrdersEmpty)
         return 'Você ainda não possui nenhum pedido. Gostaria de fazer um agora?';
+      return 'Um erro aconteceu, contate um administrador.';
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async handleGetAllOpenOrders(userPhone: string, _args: object) {
+    try {
+      const orders = await this.orderService.getAllOpenOrders(userPhone);
+
+      return await this.formatOrders(orders);
+    } catch (e) {
+      if (e instanceof UserDoesntExists)
+        return 'Ops, parece que houve um erro aqui no sistema e você ainda não tem um cadastro conosco. Gostaria de fazer um agora? 😀';
+      if (e instanceof OrdersEmpty)
+        return 'Você ainda não possui nenhum pedido. Gostaria de fazer um agora?';
+      if (e instanceof OpenOrdersDoestExist)
+        return 'Não há pedidos abertos. Gostaria de ver todos os seus pedidos?';
       return 'Um erro aconteceu, contate um administrador.';
     }
   }
