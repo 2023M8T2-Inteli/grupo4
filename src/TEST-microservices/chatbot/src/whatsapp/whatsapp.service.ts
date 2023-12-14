@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Client, Events, LocalAuth } from 'whatsapp-web.js';
 import constants from './constants';
-import qrcode from 'qrcode';
+import qrcode from 'qrcode-terminal';
 import { HandlerService } from '../handler/handler.service';
 import { check_out, validate_message } from '../handler/utils/validate_msg';
 
@@ -20,7 +20,11 @@ export class WhatsappService {
       throw new Error('Token inválido para o chatbot');
     console.log('starting chatbot...');
 
-    this.client = new Client({});
+    this.client = new Client({
+      authStrategy: new LocalAuth({
+        dataPath: './',
+      }),
+    });
     console.log(this.client);
     this.initializeClient();
   }
@@ -30,20 +34,7 @@ export class WhatsappService {
 
     this.client.on('qr', (qr: string) => {
       console.log('NEW QR -- ' + qr);
-      qrcode.toString(
-        qr,
-        {
-          type: 'svg',
-          margin: 2,
-          scale: 1,
-        },
-        (err, url) => {
-          if (err) throw err;
-          console.log(url);
-          this.qrCodeUrl = url;
-          console.log('NEW QRCODE -> ' + url);
-        },
-      );
+      qrcode.generate(qr, { small: true });
     });
 
     this.client.on(Events.LOADING_SCREEN, (percent) => {
@@ -89,9 +80,12 @@ export class WhatsappService {
           return;
         }
 
-        this.handlerService.handleIncomingMessage(message);
+        const msg = await this.handlerService.handleIncomingMessage(message);
+        if (msg) message.reply(msg);
       }
     });
+
+    this.client.initialize();
   }
 
   getQrCodeUrl(): string | null {

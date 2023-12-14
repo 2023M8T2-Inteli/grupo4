@@ -47,7 +47,7 @@ export class AIService {
   ): Promise<GPTResponseFunctionCall | GPTResponseMessage> => {
     const openai = new OpenAIApi(
       new Configuration({
-        apiKey: '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',
+        apiKey: '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',
       }),
     );
 
@@ -62,8 +62,8 @@ export class AIService {
       model: 'gpt-4',
       temperature: 0.8,
     });
-
-    if (res.data.choices[0].message.function_call.name) {
+    console.log(res.data.choices[0])
+    if (res.data.choices[0].message?.function_call?.name) {
       return {
         type: 'function_call',
         function: res.data.choices[0].message.function_call.name,

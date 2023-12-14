@@ -1,26 +1,37 @@
-import {Inject, Injectable} from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { User as PrismaUser, Role } from '@prisma/client';
-import {PrismaService} from "./prisma.service";
+import { PrismaService } from './prisma.service';
+
+export class UserDoesntExists extends Error {
+  constructor(message: string = 'User doesnt exists') {
+    super(message);
+    this.name = 'UserDoesntExists';
+    // Mantém o stack trace em V8
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, UserDoesntExists);
+    }
+  }
+}
 
 @Injectable()
 export class UserService {
   constructor(@Inject(PrismaService) private prisma: PrismaService) {}
 
   async getUser(cellPhone: string): Promise<PrismaUser | null> {
-    try {
-      const user = await this.prisma.user.findFirst({
-        where: {
-          cellPhone,
-        },
-      });
-      if (user == null) {
-        return null;
-      }
-      return user;
-    } catch (error) {
-      console.error('An error occurred while fetching the user:', error);
-      return null;
+    // try {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        cellPhone,
+      },
+    });
+    if (user == null) {
+      throw new UserDoesntExists();
     }
+    return user;
+    // } catch (error) {
+    //   console.error('An error occurred while fetching the user:', error);
+    //   return null;
+    // }
   }
 
   async getAdmin(): Promise<PrismaUser | null> {
