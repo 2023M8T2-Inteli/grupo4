@@ -8,11 +8,11 @@ interface ParsedMessage {
 
 const transformConversation = (chat: Message[], readyTimestamp: number): ParsedMessage[] => {
   const parsedMsgs: ParsedMessage[] = [];
-
   const nowTimestamp = Math.floor(+new Date() / 1000);
 
-  for (const wppMessage of chat) {
+  let iterations = 0;
 
+  for (const wppMessage of chat) {
     // checa se a mensagem foi mandada nas últimas 24h
     if (wppMessage.timestamp < nowTimestamp - 86400) continue;
 
@@ -22,10 +22,10 @@ const transformConversation = (chat: Message[], readyTimestamp: number): ParsedM
 
     const role = wppMessage.id.fromMe ? 'assistant' : 'user';
     parsedMsgs.push({ role, content: wppMessage.body });
+    iterations++;
   }
-  console.log("\n-------")
-  console.log(parsedMsgs)
-  console.log("-------\n")
+ console.log(`-> Added ${iterations} messages to Context.`)
+ console.log("-> last message: ", parsedMsgs[parsedMsgs.length-1].content)
   return parsedMsgs;
 };
 

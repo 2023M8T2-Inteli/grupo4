@@ -52,6 +52,8 @@ export class HandlerService {
       }
     }
 
+    console.log("-> sender:",message.from, " -- role:", userData?.role)
+
     const UserRole = (userData?.role as 'USER' | 'ADMIN' | 'LEAD') || 'LEAD';
 
     const chat: Chat = await message.getChat();
