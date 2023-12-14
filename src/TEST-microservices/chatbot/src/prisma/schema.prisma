@@ -25,6 +25,9 @@ model Tool {
   name        String
   price       Float
   tag         String
+  pointX    Float
+  pointY    Float
+  pointZ    Float
   minQuantity Int
   maxQuantity Int
   createdAt   DateTime @default(now())

@@ -1,10 +1,25 @@
-import {Inject, Injectable} from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Order as PrismaOrder } from '@prisma/client';
-import {PrismaService} from "./prisma.service";
+import { PrismaService } from './prisma.service';
+import { UserService } from './user.service';
+
+class NotPossibleToCreateOrder extends Error {
+  constructor(message: string = 'Not possible to create order') {
+    super(message);
+    this.name = 'NotPossibleToCreateOrder';
+    // Mantém o stack trace em V8
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, NotPossibleToCreateOrder);
+    }
+  }
+}
 
 @Injectable()
 export class OrderService {
-  constructor(@Inject(PrismaService) private prisma: PrismaService) {}
+  constructor(
+    @Inject(PrismaService) private prisma: PrismaService,
+    @Inject(UserService) private userService: UserService,
+  ) {}
 
   async getOrderByCode(
     userPhone: string,
@@ -37,31 +52,21 @@ export class OrderService {
   async createOrder(
     cellPhone: string,
     toolId: string,
-  ): Promise<PrismaOrder | null> {
-    try {
-      const user = await this.prisma.user.findFirst({
-        where: { cellPhone: cellPhone },
-      });
-      if (user != null) {
-        const orders = await this.prisma.order.create({
-          data: {
-            type: 'In Progress',
-            toolId: toolId,
-            userId: user.id,
-            pointId: '123e4567-e89b-12d3-a456-426614174013',
-          },
-        });
-        if (orders == null) {
-          return null;
-        }
-        return orders;
-      } else {
-        return null;
-      }
-    } catch (error) {
-      console.error('An error occurred while fetching the user:', error);
-      throw error;
+    pointId: string,
+  ): Promise<PrismaOrder> {
+    const user = await this.userService.getUser(cellPhone);
+    const orders = await this.prisma.order.create({
+      data: {
+        type: 'In Progress',
+        toolId: toolId,
+        userId: user.id,
+        pointId: pointId,
+      },
+    });
+    if (orders == null) {
+      throw new NotPossibleToCreateOrder();
     }
+    return orders;
   }
 
   async updateOrder(

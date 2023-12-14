@@ -4,8 +4,11 @@ import { UserService } from 'src/prisma/user.service';
 import { AIService } from '../AI/AI.service';
 import transformConversation from './utils/transformConversation';
 import { UserDoesntExists } from 'src/prisma/user.service';
-import { PointService } from 'src/prisma/coordinates.service';
-import parseCoordinates from './utils/parseCoordinates';
+import { io, Socket } from 'socket.io-client';
+import { ToolService } from '../prisma/tool.service';
+import { LocationService } from '../prisma/location.service';
+import { Role } from '@prisma/client';
+import { OrderService } from '../prisma/order.service';
 
 interface CreateUserArgs {
   firstName: string;
@@ -13,13 +16,23 @@ interface CreateUserArgs {
   document: string;
 }
 
+interface CreateNewOrderArgs {
+  from: number[];
+  to: number[];
+}
+
 @Injectable()
 export class HandlerService {
+  private readonly sioClient: Socket;
   constructor(
     @Inject(UserService) private userService: UserService,
     @Inject(AIService) private aiService: AIService,
-    @Inject(PointService) private pointService: PointService,
-  ) {}
+    @Inject(ToolService) private toolService: ToolService,
+    @Inject(LocationService) private locationService: LocationService,
+    @Inject(OrderService) private orderService: OrderService,
+  ) {
+    this.sioClient = io(process.env.SOCKET_URL || '');
+  }
 
   async handleIncomingMessage(message: Message): Promise<any> {
     const userData = await this.userService.getUser(message.from);
@@ -64,8 +77,6 @@ export class HandlerService {
           return `${e}`;
         }
     }
-
-    // return res.type == 'message' ? res.message : null;
   }
 
   async handleCreateUser(userPhone: string, args: CreateUserArgs) {
@@ -100,6 +111,62 @@ export class HandlerService {
         console.log(`Error: ${e}`);
         return 'Não foi possível consultar a sua situação, por favor consulte um administrador.';
       }
+    }
+  }
+
+  async handleNewOrder(userPhone: string, args: CreateNewOrderArgs) {
+    const from = args?.from;
+    const to = args?.to;
+
+    if (from?.length === 2 && to?.length === 2) {
+      return await this.generateNewOrder(userPhone, from, to);
+    }
+
+    return `Não foi possível processar o seu pedido. As seguintes informações estão faltando: ${
+      from?.length !== 2 && '\n - origem do pedido'
+    } ${to?.length !== 2 && '\n - destino do pedido'}. \n  😀`;
+  }
+
+  private async generateNewOrder(
+    userPhone: string,
+    from: number[],
+    to: number[],
+  ) {
+    if ((await this.userService.getUserRole(userPhone)) === Role.LEAD)
+      return 'Ainda não é possível realizar pedidos, por favor aguarde um administrador liberar seu acesso.';
+
+    if (!(await this.toolService.coordsExists(from)))
+      return 'Infelizmente não temos esse produto em nosso estoque. Gostaria de fazer outro pedido?';
+
+    if (!(await this.locationService.locationExists(to)))
+      return 'Infelizmente não conseguimos entregar nesse endereço. Gostaria de fazer outro pedido?';
+
+    const toolId = await this.toolService.getToolIdByCoords(from);
+    const locationId = await this.locationService.getLocationIdByCoords(to);
+
+    try {
+      const order = await this.orderService.createOrder(
+        userPhone,
+        toolId,
+        locationId,
+      );
+
+      this.sioClient.emit('enqueue', {
+        x: from[0],
+        y: from[1],
+        z: 0.0,
+      });
+
+      this.sioClient.emit('enqueue', {
+        x: to[0],
+        y: to[1],
+        z: 0.0,
+      });
+
+      return `Pedido realizado com sucesso! O número do seu pedido é: \n - ${order.code} \n Assim que chegarmos na sua localização você será informado! 😀`;
+    } catch (e) {
+      console.log(e);
+      return 'Não foi possível realizar o seu pedido, por favor contate um administrador.';
     }
   }
 }
