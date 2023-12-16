@@ -140,5 +140,4 @@ const start = async () => {
 };
 
 start();
-
 export { botReadyTimestamp };
