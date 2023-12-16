@@ -95,6 +95,7 @@ const start = async () => {
 
     // WhatsApp authenticated
     client.on(Events.AUTHENTICATED, () => {
+      qrCodeUrl = null;
       terminal.printAuthenticated();
     });
 
