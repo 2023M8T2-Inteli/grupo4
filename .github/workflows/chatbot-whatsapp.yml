@@ -128,9 +128,9 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
           AWS_REGION: us-east-1
+
       - name: Runnig EC2
         working-directory: ./src/chatbot
-
         run: |
           chmod 400 ./ec2_key_par.pem &&
           ssh -o StrictHostKeyChecking=no -i "./ec2_key_par.pem" ubuntu@52.5.70.100 &&
