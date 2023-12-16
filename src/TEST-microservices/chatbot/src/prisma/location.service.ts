@@ -28,6 +28,22 @@ export class TablePointsIsEmpty extends Error {
 export class LocationService {
   constructor(@Inject(PrismaService) private prisma: PrismaService) {}
 
+  async createLocation(
+    name: string,
+    pointX: number,
+    pointY: number,
+  ): Promise<PrismaPoint> {
+    const location = await this.prisma.point.create({
+      data: {
+        name,
+        pointX,
+        pointY,
+        pointZ: 0.0,
+      },
+    });
+    return location;
+  }
+
   async getAllLocations(): Promise<PrismaPoint[]> {
     const locations = await this.prisma.point.findMany();
 

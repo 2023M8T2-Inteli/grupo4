@@ -8,7 +8,7 @@ import {
 import { OrderService } from '../prisma/order.service';
 import { LocationService } from '../prisma/location.service';
 import { ToolService } from '../prisma/tool.service';
-import { Role } from '@prisma/client';
+import { Role, Prisma } from '@prisma/client';
 
 interface AuthorizeUserArgs {
   targetPhone?: string;
@@ -45,6 +45,38 @@ export class HandleAdminService extends HandleUserService {
       (await this.checkPermission(userPhone, Role.ADMIN)) ||
       (await this.authorizeByPhone(targetPhone, targetRole))
     );
+  }
+
+  async handleCreateNewLocation(userPhone: string, args: any) {
+    try {
+      const { locationName, pointX, pointY } = args;
+
+      if (!locationName || !pointX || !pointY)
+        return `Ops, parece que há uma inconsistência no seu pedido, está faltando as seguintes informações:
+      ${!locationName && '\n - Nome da localização'}
+      ${!pointX && '\n - Ponto X'}
+      ${!pointY && '\n - Ponto Y'}
+      \n Gostaria de tentar novamente?
+      `;
+
+      return (
+        (await this.checkPermission(userPhone, Role.ADMIN)) ||
+        (await this.locationService.createLocation(
+          locationName,
+          pointX,
+          pointY,
+        ))
+      );
+    } catch (e) {
+      if (e instanceof UserDoesntExists)
+        return 'Ops, parece que você ainda não tem um cadastro conosco. Você gostaria de se cadastrar?';
+
+      if (e instanceof Prisma.PrismaClientKnownRequestError)
+        return 'Ops, parece que já existe uma localização com esse nome, gostaria de tentar com outro nome?';
+
+      console.log(`Error: ${e}`);
+      return 'Parece que houve um erro no sistema, contate um administrador';
+    }
   }
 
   private async checkPermission(userPhone: string, permissionLevel: Role) {
