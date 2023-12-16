@@ -36,4 +36,3 @@ fetchQRCode();
 if (callFunction) {
   interval = setInterval(fetchQRCode, 20000); // 20000 milissegundos = 20 segundos
 }
-// Configurar o intervalo para chamar fetchQRCode a cada 20 segundos.
