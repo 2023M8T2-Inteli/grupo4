@@ -17,3 +17,13 @@ resource "aws_ecr_repository" "chatbot" {
     scan_on_push = false
   }
 }
+
+resource "aws_ecr_repository" "interface" {
+  name = "interface"
+
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = false
+  }
+}
