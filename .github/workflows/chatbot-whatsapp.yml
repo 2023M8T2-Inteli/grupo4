@@ -5,7 +5,7 @@ on:
     branches: ["feat/ci-cd-chatbot"]
     paths:
       - "src/chatbot/**"
-  
+
   workflow_dispatch:
 
 jobs:
@@ -85,12 +85,6 @@ jobs:
   #         echo "TTS_ENABLED=$TTS_ENABLED" >> .env
   #         echo "SOCKET_URL=$SOCKET_URL" >> .env
   #         echo "DATABASE_URL=$DATABASE_URL" >> .env
-  #         echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> .env
-  #         echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> .env
-  #         echo "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" >> .env
-  #         echo "AWS_REGION=$AWS_REGION" >> .env
-
-  #         scp -i ./kp-back-grupo6.pem -o StrictHostKeyChecking=no ./.env ubuntu@52.5.70.100
 
   #       env:
   #         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -104,10 +98,6 @@ jobs:
   #         TTS_ENABLED: ${{ secrets.TTS_ENABLED }}
   #         SOCKET_URL: ${{ secrets.SOCKET_URL }}
   #         DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-  #         AWS_REGION: ${{ secrets.AWS_REGION }}
 
   #     - name: Build, tag, and push image to Amazon ECR
   #       working-directory: ./src/chatbot
@@ -124,17 +114,29 @@ jobs:
     #needs: [CI_CHATBOT]
     steps:
       - uses: actions/checkout@v2
-      - name: Configure AWS Credentials and Runnig EC2
+      - name: Configure AWS Credentials
+        working-directory: ./src/chatbot
+        run: |
+          echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> .env
+          echo "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" >> .env
+          echo "AWS_REGION=$AWS_REGION" >> .env
+          chmod 400 ./ec2_key_par.pem &&
+          scp -i ./ec2_key_par.pem -o StrictHostKeyChecking=no ./.env ubuntu@52.5.70.100:.env
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          AWS_REGION: us-east-1
+      - name: Runnig EC2
         working-directory: ./src/chatbot
 
         run: |
-              ssh -o StrictHostKeyChecking=no -i "./ec2_key_par.pem" ubuntu@52.5.70.100 &&
-              set -a &&
-              source ./.env &&
-              set +a &&
-              aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 456316330505.dkr.ecr.us-east-1.amazonaws.com &&
-              docker pull 456316330505.dkr.ecr.us-east-1.amazonaws.com/chatbot:latest &&
-              docker run -d -p 3000:3000 456316330505.dkr.ecr.us-east-1.amazonaws.com/chatbot:latest
-
-
-              
+          chmod 400 ./ec2_key_par.pem &&
+          ssh -o StrictHostKeyChecking=no -i "./ec2_key_par.pem" ubuntu@52.5.70.100 &&
+          set -a &&
+          source .env &&
+          set +a &&
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 456316330505.dkr.ecr.us-east-1.amazonaws.com &&
+          docker pull 456316330505.dkr.ecr.us-east-1.amazonaws.com/chatbot:latest &&
+          docker run -d -p 3000:3000 456316330505.dkr.ecr.us-east-1.amazonaws.com/chatbot:latest
