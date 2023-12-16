@@ -28,6 +28,30 @@ export class TableToolIsEmpty extends Error {
 export class ToolService {
   constructor(@Inject(PrismaService) private prisma: PrismaService) {}
 
+  async createTool(
+    name: string,
+    price: number,
+    tag: string,
+    pointX: number,
+    pointY: number,
+    minQuantity: number,
+    maxQuantity: number,
+  ): Promise<PrismaTool> {
+    const tool = await this.prisma.tool.create({
+      data: {
+        name,
+        price,
+        tag,
+        pointX,
+        pointY,
+        pointZ: 0.0,
+        minQuantity,
+        maxQuantity,
+      },
+    });
+    return tool;
+  }
+
   async getAllTools(): Promise<PrismaTool[]> {
     const tools = await this.prisma.tool.findMany();
 
