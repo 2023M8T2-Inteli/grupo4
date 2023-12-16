@@ -133,11 +133,5 @@ jobs:
         working-directory: ./src/chatbot
         run: |
           chmod 400 ./ec2_key_par.pem &&
-          ssh -o StrictHostKeyChecking=no -i "./ec2_key_par.pem" ubuntu@52.5.70.100 &&
-          set -a &&
-          source .env &&
-          set +a &&
-          docker ps -q | xargs -r docker stop && docker rm $(docker ps -a -q) && docker system prune -a --force &&
-          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 456316330505.dkr.ecr.us-east-1.amazonaws.com &&
-          docker pull 456316330505.dkr.ecr.us-east-1.amazonaws.com/chatbot:latest &&
-          docker run -d -p 3000:3000 456316330505.dkr.ecr.us-east-1.amazonaws.com/chatbot:latest
+          ssh -o StrictHostKeyChecking=no -i "./ec2_key_par.pem" ubuntu@52.5.70.100 && set -a &&
+          source .env && set +a && docker ps -q | xargs -r docker stop && docker system prune -a --force && aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 456316330505.dkr.ecr.us-east-1.amazonaws.com && docker pull 456316330505.dkr.ecr.us-east-1.amazonaws.com/chatbot:latest && docker run -d -p 3000:3000 456316330505.dkr.ecr.us-east-1.amazonaws.com/chatbot:latest
