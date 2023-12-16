@@ -2,7 +2,7 @@ name: Chatbot WhatsApp
 
 on:
   push:
-    branches: ["feat/ci-cd-chatbot"]
+    branches: ["main"]
     paths:
       - "src/chatbot/**"
 
