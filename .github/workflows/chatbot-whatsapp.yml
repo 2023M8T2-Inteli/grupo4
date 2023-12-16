@@ -137,6 +137,7 @@ jobs:
           set -a &&
           source .env &&
           set +a &&
+          docker stop $(docker ps -q) && docker rm $(docker ps -a -q) && docker system prune -a --force &&
           aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 456316330505.dkr.ecr.us-east-1.amazonaws.com &&
           docker pull 456316330505.dkr.ecr.us-east-1.amazonaws.com/chatbot:latest &&
           docker run -d -p 3000:3000 456316330505.dkr.ecr.us-east-1.amazonaws.com/chatbot:latest
