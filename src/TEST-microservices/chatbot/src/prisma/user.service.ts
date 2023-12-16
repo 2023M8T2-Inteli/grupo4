@@ -29,6 +29,17 @@ export class UserAlreadyExists extends Error {
   }
 }
 
+export class NothingToUpdate extends Error {
+  constructor(message: string = 'Nothing to update') {
+    super(message);
+    this.name = 'NothingToUpdate';
+    // Mantém o stack trace em V8
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, NothingToUpdate);
+    }
+  }
+}
+
 @Injectable()
 export class UserService {
   constructor(@Inject(PrismaService) private prisma: PrismaService) {}
@@ -98,6 +109,26 @@ export class UserService {
     } finally {
       await this.prisma.$disconnect();
     }
+  }
+
+  async updateUserData(user: Partial<PrismaUser>): Promise<PrismaUser> {
+    if (user.cellPhone) await this.getUser(user.cellPhone);
+    else throw new UserDoesntExists();
+
+    if (!this.hasAtLeastOneField(user)) throw new NothingToUpdate();
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        cellPhone: user.cellPhone,
+      },
+      data: user,
+    });
+    return updatedUser;
+  }
+
+  private hasAtLeastOneField(obj: Partial<PrismaUser>): boolean {
+    return Object.values(obj).some(
+      (value) => value !== undefined && value !== null,
+    );
   }
 
   async updateAccountUser(user: PrismaUser): Promise<PrismaUser> {
