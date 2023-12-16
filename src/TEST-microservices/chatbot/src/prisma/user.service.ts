@@ -115,6 +115,8 @@ export class UserService {
     if (user.cellPhone) await this.getUser(user.cellPhone);
     else throw new UserDoesntExists();
 
+    if (user.id) delete user.id;
+
     if (!this.hasAtLeastOneField(user)) throw new NothingToUpdate();
     const updatedUser = await this.prisma.user.update({
       where: {

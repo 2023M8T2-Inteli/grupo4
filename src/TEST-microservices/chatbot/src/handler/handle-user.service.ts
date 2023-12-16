@@ -1,7 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { io, Socket } from 'socket.io-client';
-import { Order, Point, Role, Tool } from '@prisma/client';
-import { UserDoesntExists, UserService } from '../prisma/user.service';
+import { Order, Point, Role, Tool, User } from '@prisma/client';
+import {
+  NothingToUpdate,
+  UserDoesntExists,
+  UserService,
+} from '../prisma/user.service';
 import {
   OpenOrdersDoestExist,
   OrderDoesntExists,
@@ -104,6 +108,20 @@ export class HandleUserService {
         return 'Ops, parece que houve um erro aqui no sistema e você ainda não tem um cadastro conosco. Gostaria de fazer um agora? 😀';
       if (e instanceof OrderDoesntExists)
         return 'Não consegui encontrar nenhuma ordem com esse código. Você gostaria de ver todos os seus pedidos?';
+      return 'Um erro aconteceu, contate um administrador.';
+    }
+  }
+
+  async handleChangeUserInfo(userPhone: string, args: Partial<User>) {
+    try {
+      await this.userService.updateUserData({ ...args, cellPhone: userPhone });
+    } catch (e) {
+      if (e instanceof UserDoesntExists)
+        return 'Ops, parece que houve um erro aqui no sistema e você ainda não tem um cadastro conosco. Gostaria de fazer um agora? 😀';
+
+      if (e instanceof NothingToUpdate)
+        return 'Ops, parece que houve um problema ao atualizar seus dados. 😢. \n Você consegue refazer a solicitação?';
+
       return 'Um erro aconteceu, contate um administrador.';
     }
   }
