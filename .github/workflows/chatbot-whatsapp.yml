@@ -4,101 +4,134 @@ on:
   push:
     branches: ["main"]
     paths:
-      - 'src/chatbot/**'
+      - "src/chatbot/**"
+
+  workflow_dispatch:
 
 jobs:
-  CI_Dashboard:
+  TEST_CHATBOT:
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out the code
         uses: actions/checkout@v2
 
-      - name: Create .env file
+      - name: Create .env file (ETL)
         working-directory: ./src/chatbot
         run: |
-          echo "JWT_SECRET=$JWT_SECRET" > .env
+          echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
+          echo "OPENAI_GPT_MODEL=$OPENAI_GPT_MODEL" >> .env
+          echo "TRANSCRIPTION_ENABLED=$TRANSCRIPTION_ENABLED" >> .env
+          echo "PROMPT_OPENAI_POINTS=$PROMPT_OPENAI_POINTS" >> .env
+          echo "PROMPT_OPENAI_TOOLS=$PROMPT_OPENAI_TOOLS" >> .env
+          echo "TRANSCRIPTION_LANGUAGE=$TRANSCRIPTION_LANGUAGE" >> .env
+          echo "TRANSCRIPTION_URL=$TRANSCRIPTION_URL" >> .env
+          echo "TTS_URL=$TTS_URL" >> .env
+          echo "TTS_ENABLED=$TTS_ENABLED" >> .env
+          echo "SOCKET_URL=$SOCKET_URL" >> .env
           echo "DATABASE_URL=$DATABASE_URL" >> .env
-          echo "BUCKET_FILE=$BUCKET_FILE" >> .env
-          echo "ACCESS_KEY_ID=$ACCESS_KEY_ID" >> .env
-          echo "SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY" >> .env
-          echo "SESSION_TOKEN=$SESSION_TOKEN" >> .env
+
         env:
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_GPT_MODEL: ${{ secrets.OPENAI_GPT_MODEL }}
+          TRANSCRIPTION_ENABLED: ${{ secrets.TRANSCRIPTION_ENABLED }}
+          PROMPT_OPENAI_POINTS: ${{ secrets.PROMPT_OPENAI_POINTS }}
+          PROMPT_OPENAI_TOOLS: ${{ secrets.PROMPT_OPENAI_TOOLS }}
+          TRANSCRIPTION_LANGUAGE: ${{ secrets.TRANSCRIPTION_LANGUAGE }}
+          TRANSCRIPTION_URL: ${{ secrets.TRANSCRIPTION_URL }}
+          TTS_URL: ${{ secrets.TTS_URL }}
+          TTS_ENABLED: ${{ secrets.TTS_ENABLED }}
+          SOCKET_URL: ${{ secrets.SOCKET_URL }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          BUCKET_FILE: ${{ secrets.BUCKET_FILE }}
-          ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
-          SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
-          SESSION_TOKEN: ${{ secrets.SESSION_TOKEN }}
 
-      - name: Test the Chatbot Build
+      - name: Build Dockerfile
         working-directory: ./src/chatbot
-        run: docker build . --file Dockerfile --tag chatbot:latest
-
-      - name: Test the Backend Run
-        working-directory: ./src/chatbot
-        run: docker run -d -p 3000:3000 chatbot:latest
+        run: docker build -t chatbot:latest .
 
       - name: Clean up Docker Compose
-        working-directory: ./src/
-        run: docker-compose -f docker-compose.yml down -v
+        working-directory: ./src/chatbot
+        run: docker rmi chatbot:latest && docker system prune -a
 
-  CD_Dashboard:
+  CI_CHATBOT:
     runs-on: ubuntu-latest
-    needs: [CI_Dashboard]
+    needs: [TEST_CHATBOT]
     steps:
-      - name: Check out the code
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Check the files
-        run: |
-          ls -la
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
 
-      - name: Set the CHMOD
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Create .env file (ETL)
         working-directory: ./src/chatbot
         run: |
-          chmod 400 ./kp-back-grupo6.pem
-          ls -la
-
-      - name: Create .env file on EC2 
-        working-directory: ./src/backend
-        run: |
-          echo "JWT_SECRET=$JWT_SECRET" > .env
+          echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
+          echo "OPENAI_GPT_MODEL=$OPENAI_GPT_MODEL" >> .env
+          echo "TRANSCRIPTION_ENABLED=$TRANSCRIPTION_ENABLED" >> .env
+          echo "PROMPT_OPENAI_POINTS=$PROMPT_OPENAI_POINTS" >> .env
+          echo "PROMPT_OPENAI_TOOLS=$PROMPT_OPENAI_TOOLS" >> .env
+          echo "TRANSCRIPTION_LANGUAGE=$TRANSCRIPTION_LANGUAGE" >> .env
+          echo "TRANSCRIPTION_URL=$TRANSCRIPTION_URL" >> .env
+          echo "TTS_URL=$TTS_URL" >> .env
+          echo "TTS_ENABLED=$TTS_ENABLED" >> .env
+          echo "SOCKET_URL=$SOCKET_URL" >> .env
           echo "DATABASE_URL=$DATABASE_URL" >> .env
-          echo "BUCKET_FILE=$BUCKET_FILE" >> .env
-          echo "ACCESS_KEY_ID=$ACCESS_KEY_ID" >> .env
-          echo "SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY" >> .env
-          echo "SESSION_TOKEN=$SESSION_TOKEN" >> .env
-          ls -la
 
-          scp -i ./../../kp-back-grupo6.pem -o StrictHostKeyChecking=no ./.env ubuntu@18.205.12.200:grupo6/src/backend/
-          
         env:
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_GPT_MODEL: ${{ secrets.OPENAI_GPT_MODEL }}
+          TRANSCRIPTION_ENABLED: ${{ secrets.TRANSCRIPTION_ENABLED }}
+          PROMPT_OPENAI_POINTS: ${{ secrets.PROMPT_OPENAI_POINTS }}
+          PROMPT_OPENAI_TOOLS: ${{ secrets.PROMPT_OPENAI_TOOLS }}
+          TRANSCRIPTION_LANGUAGE: ${{ secrets.TRANSCRIPTION_LANGUAGE }}
+          TRANSCRIPTION_URL: ${{ secrets.TRANSCRIPTION_URL }}
+          TTS_URL: ${{ secrets.TTS_URL }}
+          TTS_ENABLED: ${{ secrets.TTS_ENABLED }}
+          SOCKET_URL: ${{ secrets.SOCKET_URL }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          BUCKET_FILE: ${{ secrets.BUCKET_FILE }}
-          ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
-          SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
-          SESSION_TOKEN: ${{ secrets.SESSION_TOKEN }}
 
-      - name: Down Docker Compose on EC2
+      - name: Build, tag, and push image to Amazon ECR
+        working-directory: ./src/chatbot
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: chatbot
+          IMAGE_TAG: latest
         run: |
-          ls -la
-          ssh_command="${{ secrets.SSH_COMMAND_ACCESS_DASHBOARD }}"
-          $ssh_command 'ls -la && cd grupo6/src && docker-compose down -v && docker system prune -a --force'
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      - name: Update Docker Compose on EC2 (Backend)
+  CD_CHATBOT:
+    runs-on: ubuntu-latest
+    needs: [CI_CHATBOT]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure AWS Credentials
+        working-directory: ./src/chatbot
         run: |
-          ssh_command="${{ secrets.SSH_COMMAND_ACCESS_DASHBOARD }}"
-          $ssh_command 'ls -la && cd grupo6/src && git checkout main && git pull origin main'
+          echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> .env
+          echo "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" >> .env
+          echo "AWS_REGION=$AWS_REGION" >> .env
+          chmod 400 ./ec2_key_par.pem &&
+          scp -i ./ec2_key_par.pem -o StrictHostKeyChecking=no ./.env ubuntu@52.5.70.100:.env
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          AWS_REGION: us-east-1
 
-      - name: Run Container Frontend on EC2
+      - name: Runnig EC2
+        working-directory: ./src/chatbot
         run: |
-          ssh_command="${{ secrets.SSH_COMMAND_ACCESS_DASHBOARD }}"
-          $ssh_command 'ls -la && cd grupo6/src && docker-compose up -d frontend'
-
-      - name: Run Container Backend on EC2
-        run: |
-          ssh_command="${{ secrets.SSH_COMMAND_ACCESS_DASHBOARD }}"
-          $ssh_command 'ls -la && cd grupo6/src && docker-compose up -d backend'
-  
+          chmod 400 ./ec2_key_par.pem &&
+          ssh -o StrictHostKeyChecking=no -i "./ec2_key_par.pem" ubuntu@52.5.70.100 && set -a &&
+          source .env && set +a && docker ps -q | xargs -r docker stop && docker system prune -a --force && aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 456316330505.dkr.ecr.us-east-1.amazonaws.com && docker pull 456316330505.dkr.ecr.us-east-1.amazonaws.com/chatbot:latest && docker run -d -p 3000:3000 456316330505.dkr.ecr.us-east-1.amazonaws.com/chatbot:latest

@@ -1,257 +1,211 @@
 import { Inject, Injectable } from '@nestjs/common';
-import UserService from 'src/prisma/user.service';
-import { WhatsappService } from 'src/whatsapp/whatsapp.service';
-import { Client, Message } from 'whatsapp-web.js';
-import { HandlerBase } from './classes/base';
 import { io, Socket } from 'socket.io-client';
+import { Order, Point, Role, Tool, User } from '@prisma/client';
+import {
+  NothingToUpdate,
+  UserDoesntExists,
+  UserService,
+} from '../prisma/user.service';
+import {
+  OpenOrdersDoestExist,
+  OrderDoesntExists,
+  OrdersEmpty,
+  OrderService,
+} from '../prisma/order.service';
+import { LocationService } from '../prisma/location.service';
+import { ToolService } from '../prisma/tool.service';
 
-type ActionDict = { [key: string]: (message: Message, client: Client) => any };
+interface CreateNewOrderArgs {
+  from: number[];
+  to: number[];
+}
 
 @Injectable()
-export class handleUserService extends HandlerBase {
-  private readonly actionDict: ActionDict;
-  private readonly sioClient: Socket;
+export class HandleUserService {
+  protected readonly sioClient: Socket;
+
   constructor(
-    @Inject(UserService) private userService: UserService,
-    @Inject(WhatsappService) private whatsappService: WhatsappService,
-    @Inject(OrderService) private orderService: OrderService,
+    @Inject(UserService) protected userService: UserService,
+    @Inject(OrderService) protected orderService: OrderService,
+    @Inject(LocationService) protected locationService: LocationService,
+    @Inject(ToolService) protected toolService: ToolService,
   ) {
-    super(whatsappService);
     this.sioClient = io(process.env.SOCKET_URL || '');
-    this.actionDict = {
-      openOrders: this.sendOpenOrders,
-      cancelOrder: this.sendCancelOrder,
-      contact: this.sendContact,
-      changeName: this.sendChangeName,
-    };
   }
 
-  public handleNewOrder(toolCoords: number[], arriveCoords: number[]): string {
-    if (toolCoords.length != 3 || arriveCoords.length != 3) {
-      return 'Coords in the wrong format';
+  async handleNewOrder(userPhone: string, args: CreateNewOrderArgs) {
+    const from = args?.from;
+    const to = args?.to;
+
+    if (from?.length === 2 && to?.length === 2) {
+      return await this.generateNewOrder(userPhone, from, to);
     }
 
-    this.sioClient.emit('enqueue', {
-      x: toolCoords[0],
-      y: toolCoords[1],
-      z: toolCoords[2],
-    });
-
-    this.sioClient.emit('enqueue', {
-      x: arriveCoords[0],
-      y: arriveCoords[1],
-      z: arriveCoords[2],
-    });
-
-    return 'Coordenas enviadas para o robô';
+    return `Não foi possível processar o seu pedido. As seguintes informações estão faltando: ${
+      from?.length !== 2 && '\n - origem do pedido'
+    } ${to?.length !== 2 && '\n - destino do pedido'}. \n  😀`;
   }
 
-  public async handleStatusOrderById(
-    user: string,
-    _order: number,
-  ): Promise<string> {
-    const order = await this.orderService.getOrderById(user, _order);
-    if (order) {
-      return (
-        '*Pedido:* ' +
-        order.code +
-        '\n*Status:* ' +
-        order.type +
-        '\n*Data:* ' +
-        order.createdAt
-      );
-    }
-    return 'Ordem não encontrada';
-  }
-
-  public async handleStatusLastOrder(user: string): Promise<string> {
-    const order = await this.orderService.getLastOrder(user);
-    if (order) {
-      return (
-        '*Pedido:* ' +
-        order.code +
-        '\n*Status:* ' +
-        order.type +
-        '\n*Data:* ' +
-        order.createdAt
-      );
-    }
-    return 'Ordem não encontrada';
-  }
-
-  private sendNewOrder(message: Message) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async handleGetAllOrders(userPhone: string, _args: object) {
     try {
-      message.reply('Certo, você deseja solicitar uma nova peça.');
-      // this.userService.updateRequestUser(message.from, 3);
-      message.reply(
-        'Você pode me dizer qual peça deseja solicitar ou situação que está enfrentando?',
-      );
-      this.whatsappService.sendMessage(
-        message.from,
-        'Se preferir, você pode me enviar um áudio com a sua solicitação.',
-      );
-    } catch (error: any) {
-      console.error('An error occured', error);
-      message.reply(
-        'An error occured, please contact the administrator. (' +
-          error.message +
-          ')',
-      );
+      const orders = await this.orderService.getAllOrders(userPhone);
+
+      return await this.formatOrders(orders);
+    } catch (e) {
+      if (e instanceof UserDoesntExists)
+        return 'Ops, parece que houve um erro aqui no sistema e você ainda não tem um cadastro conosco. Gostaria de fazer um agora? 😀';
+      if (e instanceof OrdersEmpty)
+        return 'Você ainda não possui nenhum pedido. Gostaria de fazer um agora?';
+      return 'Um erro aconteceu, contate um administrador.';
     }
   }
 
-  private sendStatusOrder(message: Message) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async handleGetAllOpenOrders(userPhone: string, _args: object) {
     try {
-      message.reply('Certo, você deseja acompanhar o status de um pedido.');
-      // this.userService.updateRequestUser(message.from, 4);
-      message.reply(
-        'Por favor, digite o número do pedido que deseja acompanhar.',
-      );
-    } catch (error: any) {
-      console.error('An error occured', error);
-      message.reply(
-        'An error occured, please contact the administrator. (' +
-          error.message +
-          ')',
-      );
+      const orders = await this.orderService.getAllOpenOrders(userPhone);
+
+      return await this.formatOrders(orders);
+    } catch (e) {
+      if (e instanceof UserDoesntExists)
+        return 'Ops, parece que houve um erro aqui no sistema e você ainda não tem um cadastro conosco. Gostaria de fazer um agora? 😀';
+      if (e instanceof OrdersEmpty)
+        return 'Você ainda não possui nenhum pedido. Gostaria de fazer um agora?';
+      if (e instanceof OpenOrdersDoestExist)
+        return 'Não há pedidos abertos. Gostaria de ver todos os seus pedidos?';
+      return 'Um erro aconteceu, contate um administrador.';
     }
   }
 
-  private sendOpenOrders(message: Message) {
+  async handleGetOrderStatus(userPhone: string, args: { orderId: number }) {
     try {
-      message.reply('Certo, você deseja acompanhar seus pedidos em aberto.');
-      this.whatsappService.sendMessage(
-        message.from,
-        'Certo. Aguarde um momento por favor.',
+      const order = await this.orderService.getOrderByCode(
+        userPhone,
+        args.orderId,
       );
-      this.generateOrdersMessage(message);
-    } catch (error: any) {
-      console.error('An error occured', error);
-      message.reply(
-        'An error occured, please contact the administrator. (' +
-          error.message +
-          ')',
-      );
+
+      return await this.formatOrder(order);
+    } catch (e) {
+      if (e instanceof UserDoesntExists)
+        return 'Ops, parece que houve um erro aqui no sistema e você ainda não tem um cadastro conosco. Gostaria de fazer um agora? 😀';
+      if (e instanceof OrderDoesntExists)
+        return 'Não consegui encontrar nenhuma ordem com esse código. Você gostaria de ver todos os seus pedidos?';
+      return 'Um erro aconteceu, contate um administrador.';
     }
   }
 
-  private async generateOrdersMessage(message: Message) {
+  async handleCancelOpenOrder(userPhone: string, args: { orderId: number }) {
     try {
-      const orders = await this.orderService.getOpenOrder(message);
-      if (orders && orders.length > 0) {
-        for (const order of orders) {
-          message.reply(
-            '*Pedido:* ' +
-              order.code +
-              '\n*Status:* ' +
-              order.type +
-              '\n*Data:* ' +
-              order.createdAt,
-          );
-          await this.delay(1000);
-        }
-        // userService.updateRequestUser(message.from, 1);
-      } else {
-        message.reply('No momento você não possui pedidos em aberto.');
-      }
-    } catch (error: any) {
-      console.error('An error occured', error);
-      message.reply(
-        'An error occured, please contact the administrator. (' +
-          error.message +
-          ')',
+      const order = await this.orderService.cancelOrder(
+        userPhone,
+        args.orderId,
       );
+
+      return `Pedido ${order.code} cancelado com sucesso! \n Ficamos tristes em saber que você não quer mais o produto. 😢, gostaria de solicitar outro?`;
+    } catch (e) {
+      if (e instanceof UserDoesntExists)
+        return 'Ops, parece que houve um erro aqui no sistema e você ainda não tem um cadastro conosco. Gostaria de fazer um agora? 😀';
+      if (e instanceof OrderDoesntExists)
+        return 'Não consegui encontrar nenhuma ordem com esse código. Você gostaria de ver todos os seus pedidos?';
+      return 'Um erro aconteceu, contate um administrador.';
     }
   }
 
-  private sendCancelOrder(message: Message) {
+  async handleChangeUserInfo(userPhone: string, args: Partial<User>) {
     try {
-      message.reply('Certo, você deseja cancelar um pedido.');
-      // userService.updateRequestUser(message.from, 5);
-      message.reply(
-        'Por favor, digite o número do pedido que deseja cancelar.',
-      );
-    } catch (error: any) {
-      console.error('An error occured', error);
-      message.reply(
-        'An error occured, please contact the administrator. (' +
-          error.message +
-          ')',
-      );
+      await this.userService.updateUserData({ ...args, cellPhone: userPhone });
+    } catch (e) {
+      if (e instanceof UserDoesntExists)
+        return 'Ops, parece que houve um erro aqui no sistema e você ainda não tem um cadastro conosco. Gostaria de fazer um agora? 😀';
+
+      if (e instanceof NothingToUpdate)
+        return 'Ops, parece que houve um problema ao atualizar seus dados. 😢. \n Você consegue refazer a solicitação?';
+
+      return 'Um erro aconteceu, contate um administrador.';
     }
   }
 
-  private async sendContact(message: Message) {
+  protected async generateNewOrder(
+    userPhone: string,
+    from: number[],
+    to: number[],
+  ) {
+    if ((await this.userService.getUserRole(userPhone)) === Role.LEAD)
+      return 'Ainda não é possível realizar pedidos, por favor aguarde um administrador liberar seu acesso.';
+
+    if (!(await this.toolService.coordsExists(from)))
+      return 'Infelizmente não temos esse produto em nosso estoque. Gostaria de fazer outro pedido?';
+
+    if (!(await this.locationService.locationExists(to)))
+      return 'Infelizmente não conseguimos entregar nesse endereço. Gostaria de fazer outro pedido?';
+
+    const toolId = await this.toolService.getToolIdByCoords(from);
+    const locationId = await this.locationService.getLocationIdByCoords(to);
+
     try {
-      message.reply('Certo, você deseja falar com um atendente.');
-      const contact = await this.getAdminContact(message);
-      if (contact) {
-        this.whatsappService.sendMessage(message.from, contact);
-      }
-    } catch (error: any) {
-      console.error('An error occured', error);
-      message.reply(
-        'An error occured, please contact the administrator. (' +
-          error.message +
-          ')',
+      const order = await this.orderService.createOrder(
+        userPhone,
+        toolId,
+        locationId,
       );
+
+      this.sioClient.emit('enqueue', {
+        x: from[0],
+        y: from[1],
+        z: 0.0,
+      });
+
+      this.sioClient.emit('enqueue', {
+        x: to[0],
+        y: to[1],
+        z: 0.0,
+      });
+
+      return `Pedido realizado com sucesso! O número do seu pedido é: \n - ${order.code} \n Assim que chegarmos na sua localização você será informado! 😀`;
+    } catch (e) {
+      console.log(e);
+      return 'Não foi possível realizar o seu pedido, por favor contate um administrador.';
     }
   }
 
-  private async getAdminContact(message: Message) {
-    try {
-      const user = await this.userService.getAdmin();
-      if (user) {
-        return await this.whatsappService.getContactById(user?.cellPhone);
-      } else {
-        message.reply(
-          'No momento não temos atendentes disponíveis, por favor, tente novamente mais tarde.',
+  protected async formatOrders(orders: Order[]) {
+    let message = 'Encontrei aqui no meu sistema os seguintes pedidos:';
+
+    for (const order of orders) {
+      try {
+        const tool: Tool = await this.toolService.getToolById(order.toolId);
+        const location: Point = await this.locationService.getLocationById(
+          order.pointId,
         );
+        message += `
+      \n 📦 *Código do pedido*: ${order.code}
+      \n - Ferramenta pedida: ${tool.name}
+      \n - Destino de entrega: ${location.name}
+      \n - Status: ${order.type}
+      `;
+      } catch (e) {
+        console.log(e);
       }
-    } catch (error: any) {
-      console.error('An error occured', error);
-      message.reply(
-        'An error occured, please contact the administrator. (' +
-          error.message +
-          ')',
-      );
     }
+
+    return message;
   }
 
-  private sendChangeName(message: Message) {
+  protected async formatOrder(order: Order) {
     try {
-      message.reply('Certo, você deseja alterar seu nome cadastrado.');
-      // userService.updateRequestUser(message.from, 6);
-      this.whatsappService.sendMessage(
-        message.from,
-        'Por favor, digite seu nome completo, por favor.',
+      const tool: Tool = await this.toolService.getToolById(order.toolId);
+      const location: Point = await this.locationService.getLocationById(
+        order.pointId,
       );
-    } catch (error: any) {
-      console.error('An error occured', error);
-      message.reply(
-        'An error occured, please contact the administrator. (' +
-          error.message +
-          ')',
-      );
-    }
-  }
-
-  async handle(requestState: number, message: Message): Promise<void> {
-    switch (requestState) {
-      case 3:
-        this.handleNewOrder(message, this.whatsappClient);
-        break;
-      case 4:
-        this.handleStatusOrder(message, this.whatsappClient);
-        break;
-      case 5:
-        this.handleCancelOrder(message, this.whatsappClient);
-        break;
-      case 6:
-        this.handleUpdateName(message, this.whatsappClient);
-        break;
-      default:
-        break;
+      return `
+      \n 📦 *Código do pedido*: ${order.code}
+      \n - Ferramenta pedida: ${tool.name}
+      \n - Destino de entrega: ${location.name}
+      \n - Status: ${order.type}
+      `;
+    } catch (e) {
+      console.log(e);
     }
   }
 }

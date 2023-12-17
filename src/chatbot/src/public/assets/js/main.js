@@ -14,7 +14,7 @@ function fetchQRCode() {
 
       if (data.message !== 'User is authenticated') {
         // Mostrar o QR Code se estiver presente no JSON.
-        document.getElementById('qrcodeElementId').src = data.message;
+        document.getElementById('qrcode').src = data.qrCodeUrl;
       } else {
         // Parar de chamar a função se o status for 202 e exibir a mensagem.
         clearInterval(interval);
@@ -36,4 +36,3 @@ fetchQRCode();
 if (callFunction) {
   interval = setInterval(fetchQRCode, 20000); // 20000 milissegundos = 20 segundos
 }
-// Configurar o intervalo para chamar fetchQRCode a cada 20 segundos.

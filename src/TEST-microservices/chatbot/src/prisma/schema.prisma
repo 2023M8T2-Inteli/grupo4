@@ -8,13 +8,13 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name         String
   cellPhone    String   @unique
   voice        String
   speedVoice   Float
   requestState Int      @default(0)
-  role         Role   @default(LEAD)
+  role         Role     @default(LEAD)
   Order        Order[]
   createdAt    DateTime @default(now())
 }
@@ -25,6 +25,9 @@ model Tool {
   name        String
   price       Float
   tag         String
+  pointX    Float
+  pointY    Float
+  pointZ    Float
   minQuantity Int
   maxQuantity Int
   createdAt   DateTime @default(now())
@@ -36,7 +39,7 @@ model Order {
   code      Int      @unique @default(autoincrement())
   type      String   @default("In Progress")
   toolId    String
-  userId    String
+  userId    String   @db.Uuid
   pointId   String
   createdAt DateTime @default(now())
   tool      Tool     @relation(fields: [toolId], references: [id])

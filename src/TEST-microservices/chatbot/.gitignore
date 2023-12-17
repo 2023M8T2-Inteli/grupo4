@@ -1,6 +1,9 @@
 # compiled output
 /dist
 /node_modules
+/session
+
+/.wwebjs_cache
 
 # Logs
 logs

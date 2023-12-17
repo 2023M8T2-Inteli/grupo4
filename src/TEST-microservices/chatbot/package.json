@@ -36,6 +36,7 @@
     "picocolors": "^1.0.0",
     "prisma": "^5.7.0",
     "qrcode": "^1.5.3",
+    "qrcode-terminal": "^0.12.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "socket.io-client": "^4.7.2",
