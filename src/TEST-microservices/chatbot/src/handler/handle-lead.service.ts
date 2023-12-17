@@ -4,6 +4,7 @@ import {
   UserDoesntExists,
   UserService,
 } from '../prisma/user.service';
+import { WhatsappService } from 'src/whatsapp/whatsapp.service';
 
 interface CreateUserArgs {
   firstName: string;
@@ -12,7 +13,7 @@ interface CreateUserArgs {
 
 @Injectable()
 export class HandleLeadService {
-  constructor(@Inject(UserService) private userService: UserService) {}
+  constructor(@Inject(UserService) private userService: UserService, @Inject(WhatsappService) private readonly whatsappService: WhatsappService) {}
   async handleCreateUser(userPhone: string, args: CreateUserArgs) {
     const firstName = args?.firstName || '';
     const lastName = args?.lastName || '';
@@ -46,7 +47,10 @@ export class HandleLeadService {
       if (user.role != 'LEAD') {
         return 'Parece que você acabou de ganhar um up no nosso sistema! Em que posso lhe ajudar?';
       } else {
-        return 'Opa! Encontrei o seu cadastro aqui, mas você ainda não está com permissões de acessar nosso serviço, em breve um administrador irá lhe contatar.';
+        this.whatsappService.sendMessage(userPhone, 'Opa! Encontrei o seu cadastro aqui, mas você ainda não está com permissões de acessar nosso serviço!');
+        const adminContact = await this.whatsappService.getAdminContact()
+        this.whatsappService.sendMessage(userPhone, adminContact);
+        return "Você pode entrar com a pessoa acima ou aguardar que um administrador libere seu acesso 😀"
       }
     } catch (e) {
       if (e instanceof UserDoesntExists) {

@@ -90,7 +90,11 @@ export class WhatsappService {
     return this.qrCodeUrl;
   }
 
-  sendMessage(to: string, message: string): void {
+  sendMessage(to: string, message: any): void {
     this.client.sendMessage(to, message);
+  }
+
+  async getAdminContact() {
+    return await this.client.getContactById(process.env.ADMIN_ID);
   }
 }
