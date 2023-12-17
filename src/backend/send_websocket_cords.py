@@ -13,15 +13,21 @@ sio.connect(SERVER_URL)
 # Variável de controle para interromper a execução
 running = True
 
+cords = {
+    "beats": {'x': 1.44, 'y': -0.1},
+    "brahma": {'x': 1.42, 'y': -1.53},
+    "skol": {'x': 0.17, 'y': -1.47},
+    "almoxarifado": {'x': 0.0, 'y': 0.0},
+    "ze": {'x': 0.75, 'y': -0.82},
+}
+
 # Função para enviar pontos a cada dois segundos
 def send_points():
     while running:
         time.sleep(2)
-        sio.emit('enqueue', {'x': 1.4, 'y': -1.4})
-        print("Enviado: ", {'x': 2.5, 'y': 2.5})
-        time.sleep(2)
-        sio.emit('enqueue', {'x': 0.0, 'y': 0.0})
-        print("Enviado: ", {'x': 0.0, 'y': 0.0})
+        for cord in cords.values():
+            sio.emit('enqueue', cord)
+            print("Enviado: ", cord)
 
 # Conecta ao servidor
 @sio.event

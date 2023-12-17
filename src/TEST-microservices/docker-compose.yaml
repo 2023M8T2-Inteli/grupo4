@@ -1,0 +1,22 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: "VALLET"
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+    expose:
+      - "5432"
+    ports:
+      - "3002:5432"
+    volumes:
+      # So that our database's state is persisted locally
+      #- ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+      # Where our data will be persisted
+      - my-db:/var/lib/posgresql
+
+# Names our volume
+volumes:
+  my-db:

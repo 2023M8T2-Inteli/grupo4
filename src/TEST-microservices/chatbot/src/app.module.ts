@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
-import { OpenaiModule } from './openai/openai.module';
+import { AIModule } from './AI/AI.module';
 import { WhatsappModule } from './whatsapp/whatsapp.module';
 import { HandlerModule } from './handler/handler.module';
 import { ConfigModule } from '@nestjs/config';
@@ -10,9 +10,10 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     PrismaModule,
-    OpenaiModule,
-    WhatsappModule,
+    AIModule,
     HandlerModule,
+    WhatsappModule,
+      
     ConfigModule.forRoot({
       isGlobal: true,
     }),
