@@ -1,13 +1,17 @@
 import rclpy
+from enum import Enum
 from rclpy.node import Node
 from .publisher import Publisher
 from .subscriber import Subscriber
-from std_msgs.msg import String, Header
 from geometry_msgs.msg import PoseStamped
+from std_msgs.msg import String, Header, Int8
 from tf_transformations import quaternion_from_euler
 from geometry_msgs.msg import Pose, Point, Quaternion
 from nav2_simple_commander.robot_navigator import BasicNavigator
 
+class EmergencyStopState(Enum):
+    DISABLED = 0
+    ACTIONABLE = 1
 
 class NavigatorController(Node):
     def __init__(self, nav2_simple_commander: BasicNavigator):
@@ -44,21 +48,46 @@ class NavigatorController(Node):
 class Vallet(Node):
     def __init__(self, nav2_simple_commander: BasicNavigator):
         super().__init__("navigation")
+        self.current_pose: Pose = None
         self.pose = Subscriber(self, 
                                "dequeue", 
                                "/dequeue", 
                                Pose)
-        self.pose.create_timer(1.0, self.timer_callback)
+        self.emergency_stop = Subscriber(self,
+                                         "emergency_stop", 
+                                         "/emergency_stop", 
+                                         Int8)
+        self.pose.create_timer(2.0, self.status_controller)
         self.pose.create_sub(self.listener_callback)
+        self.emergency_stop_state = EmergencyStopState.DISABLED
+        self.emergency_stop.create_sub(self.emergency_stop_callback)
         self.nav2_simple_commander = nav2_simple_commander
         self.navigator_controller = NavigatorController(
             self.nav2_simple_commander)
 
     def listener_callback(self, msg: Pose):
-        pos_x, pos_y, pos_z = msg.position.x, msg.position.y, msg.position.z
-        self.navigator_controller.go_to_pose(pos_x, pos_y, pos_z)
-
-    def timer_callback(self):
+        if isinstance(msg, Pose):
+            pos_x, pos_y, pos_z = msg.position.x, msg.position.y, msg.position.z
+            self.navigator_controller.go_to_pose(pos_x, pos_y, pos_z)
+            self.current_pose: Pose = msg
+        else:
+            self.get_logger().error(f"Invalid message type: {type(msg)}")
+    
+    def emergency_stop_callback(self, msg: Int8):
+        if msg.data == 1 and self.emergency_stop_state == EmergencyStopState.DISABLED:
+            self.nav2_simple_commander.cancelTask()
+            self.emergency_stop_state = EmergencyStopState.ACTIONABLE
+        elif msg.data == 0 and self.emergency_stop_state == EmergencyStopState.ACTIONABLE:
+            if self.current_pose is not None:
+                self.emergency_stop_state = EmergencyStopState.DISABLED
+                self.get_logger().info(f"Current pose: {self.current_pose.position.x}, {self.current_pose.position.y}, {self.current_pose.position.z}")
+                self.navigator_controller.go_to_pose(self.current_pose.position.x, self.current_pose.position.y, self.current_pose.position.z)
+            else:
+                self.get_logger().info("Current pose is None.")
+        else:
+            self.get_logger().info(f"Invalid emergency stop state: {msg}")
+    
+    def status_controller(self):
         if not self.navigator_controller.is_task_complete():
             self.navigator_controller.publish_status("BUSY")
         else:
