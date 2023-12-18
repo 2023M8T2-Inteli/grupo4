@@ -21,7 +21,8 @@ class EmergencyStop(Node):
         self.navigator_controller = NavigatorController(self.nav2_simple_commander)
 
     def emergency_listener(self, msg):
-        self.get_logger().info(f"Received: {msg.content}")
+        self.get_logger().info(f"Received: {msg.content} to stop.")
+        # Precisa ver ainda como chega a mensagem do socket, mas olhando os outros presumo que seja nessa estrutura
         if msg.content == True:
             NavigatorController.cancel_task()
 
