@@ -15,6 +15,7 @@ def generate_launch_description():
         launch_arguments={
             "map": f'{map_file_path}',
             "use_sim_time": 'true',
+            # "launch-prefix": "xterm -e",
             "log_level": "INFO"
         }.items()
     )

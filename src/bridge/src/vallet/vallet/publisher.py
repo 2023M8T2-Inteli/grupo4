@@ -2,7 +2,7 @@ from typing import Any
 from rclpy.node import Node
 
 
-class Publisher():
+class Publisher:
     def __init__(self, node: Node, name: str,topic_name: str, topic_type: any):
         self.node = node
         self.name = name

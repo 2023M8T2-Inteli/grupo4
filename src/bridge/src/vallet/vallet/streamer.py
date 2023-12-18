@@ -2,7 +2,6 @@ import json
 from typing import Any
 from socketio import Client
 from rclpy.node import Node
-from .publisher import Publisher
 from .subscriber import Subscriber
 
 
