@@ -224,7 +224,7 @@ export class MessageEventHandler {
     if (userData?.role?.includes('ADMIN')) {
       if (message.body.toLowerCase() == '!parar') {
         const socket = io(process.env.SOCKET_URL || '');
-        socket.emit('enqueue', { x, y, z });
+        socket.emit('emergency_stop', { 0.0, 0.0, 0.0});
       }
       let requestState = userData?.requestState;
       const requestAdminHandler = new RequestAdminHandler(
