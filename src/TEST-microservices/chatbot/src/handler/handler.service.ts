@@ -57,6 +57,9 @@ export class HandlerService {
     const UserRole = (userData?.role as 'USER' | 'ADMIN' | 'LEAD') || 'LEAD';
 
     const chat: Chat = await message.getChat();
+    
+    chat.sendStateTyping()
+
     const messages: Message[] = await chat.fetchMessages({ limit: 20 });
     const parsedMessages = transformConversation(messages, this.readyTimestamp);
 
@@ -74,6 +77,8 @@ export class HandlerService {
       parsedLocations,
       parsedMessages,
     );
+
+    chat.clearState()
 
     switch (res.type) {
       case 'message':

@@ -1,9 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import {
   UserAlreadyExists,
   UserDoesntExists,
   UserService,
 } from '../prisma/user.service';
+import { WhatsappService } from 'src/whatsapp/whatsapp.service';
 
 interface CreateUserArgs {
   firstName: string;
@@ -12,7 +13,11 @@ interface CreateUserArgs {
 
 @Injectable()
 export class HandleLeadService {
-  constructor(@Inject(UserService) private userService: UserService) {}
+  constructor(
+    @Inject(UserService) private userService: UserService,
+    @Inject(forwardRef(() => WhatsappService))
+    private whatsappService: WhatsappService,
+  ) {}
   async handleCreateUser(userPhone: string, args: CreateUserArgs) {
     const firstName = args?.firstName || '';
     const lastName = args?.lastName || '';
@@ -46,15 +51,14 @@ export class HandleLeadService {
       if (user.role != 'LEAD') {
         return 'Parece que você acabou de ganhar um up no nosso sistema! Em que posso lhe ajudar?';
       } else {
-        // TODO: Mandar o contato de um administrador
-        // this.whatsappService.sendMessage(
-        //   userPhone,
-        //   'Opa! Encontrei o seu cadastro aqui, mas você ainda não está com permissões de acessar nosso serviço!',
-        // );
-        // const adminContact = await this.whatsappService.getAdminContact();
-        // this.whatsappService.sendMessage(userPhone, adminContact);
-        // return 'Você pode entrar com a pessoa acima ou aguardar que um administrador libere seu acesso 😀';
-        return 'Encontrei o seu cadastro conosco 😁! Porém você ainda não tem a permissão para acessar nossos serviços, aguarde que um administrador entrará em contato para proceder com o seu cadastro.';
+        this.whatsappService.sendMessage(
+          userPhone,
+          'Opa! Encontrei o seu cadastro aqui, mas você ainda não está com permissões de acessar nosso serviço!',
+        );
+        const admin = await this.userService.getAdmin();
+        const adminContact = await this.whatsappService.getContactFromID(admin.cellPhone);
+        this.whatsappService.sendMessage(userPhone, adminContact);
+        return 'Você pode entrar em contato com a pessoa acima ou aguardar que um administrador libere seu acesso 😀';
       }
     } catch (e) {
       if (e instanceof UserDoesntExists) {
