@@ -13,21 +13,29 @@ sio.connect(SERVER_URL)
 # Variável de controle para interromper a execução
 running = True
 
-cords = {
-    "beats": {'x': 1.44, 'y': -0.1},
-    "brahma": {'x': 1.42, 'y': -1.53},
-    "skol": {'x': 0.17, 'y': -1.47},
-    "almoxarifado": {'x': 0.0, 'y': 0.0},
-    "ze": {'x': 0.75, 'y': -0.82},
-}
+emergency = {
+    "beats": {"stop": 0}
+    }
 
 # Função para enviar pontos a cada dois segundos
 def send_points():
     while running:
         time.sleep(2)
-        for cord in cords.values():
-            sio.emit('enqueue', cord)
-            print("Enviado: ", cord)
+        for label in emergency.values():
+            sio.emit('enqueue', label)
+            print("Enviado: ", label)
+            
+# cords = {
+#     "beats": {"x": 2.5, "y": 2.5},
+#     "brama": {"x": 0.0, "y": 0.0},
+#     }
+
+# def send_points():
+#     while running:
+#         time.sleep(2)
+#         for cord in cords.values():
+#             sio.emit('enqueue', cord)
+#             print("Enviado: ", cord)
 
 # Conecta ao servidor
 @sio.event

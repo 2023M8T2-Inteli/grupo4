@@ -10,21 +10,25 @@ sio = socketio.Server(cors_allowed_origins='*')
 def connect(sid, environ):
     print('Cliente conectado:', sid)
 
-# Evento para lidar com mensagens recebidas
 @sio.on('enqueue')
 def message(sid, data):
     print(f'Mensagem recebida de {sid}: {data}')
     
-    # Verificar se o tipo do dado recebido é suportado
     if isinstance(data, (str, dict)):
         try:
-            if isinstance(data, str):
-                try:
-                    dada = json.loads(data)
-                except json.JSONDecodeError:
-                    pass
             json_data = json.dumps(data)
             sio.emit("/enqueue", json_data)
+        except TypeError as e:
+            print(f"Error ao serializar: {e}")
+
+@sio.on('emergency_stop')
+def message(sid, data):
+    print(f'Mensagem recebida de {sid}: {data}')
+    
+    if isinstance(data, (str, dict)):
+        try:
+            json_data = json.dumps(data)
+            sio.emit("/emergency_stop", json_data)
         except TypeError as e:
             print(f"Error ao serializar: {e}")
 
