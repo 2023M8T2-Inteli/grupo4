@@ -9,6 +9,7 @@ import express, { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import UserService from './models/user';
 import dotenv from 'dotenv';
+import { initGoogle } from './providers/google';
 
 const app = express();
 const port = 3000;
@@ -108,6 +109,7 @@ const start = async () => {
     client.on(Events.READY, () => {
       // Set bot ready timestamp
       botReadyTimestamp = new Date();
+      initGoogle();
       initOpenAI();
     });
 

@@ -14,6 +14,7 @@ import UserService from '../models/user';
 import ToolService from '../models/tool';
 import PointService from '../models/point';
 import OrderService from '../models/order';
+import { speechGoogle } from './google';
 const prisma = new PrismaClient();
 const userService = new UserService(prisma);
 const toolService = new ToolService(prisma);
@@ -78,7 +79,7 @@ async function extractPoints(
       socket.emit('enqueue', { x, y, z });
       const point = await pointService.getPoint(x, y, z);
       if (point) await orderService.updateOrder(message.from, point.id);
-      await speechOpenAI(message, client, pointResponse);
+      await speechGoogle(message, client, pointResponse);
       await userService.updateRequestUser(message.from, 1);
       client.sendMessage(message.from, 'Pedido finalizado com sucesso!');
     });
@@ -95,7 +96,7 @@ async function extractToolId(message: Message, client: Client, response: any) {
     match.forEach(async (idString) => {
       // Splitting the matched string into individual numbers
       orderService.createOrder(message.from, idString);
-      await speechOpenAI(message, client, response);
+      await speechGoogle(message, client, response);
     });
   } else {
     message.reply('Não consegui encontrar o ponto. Tente novamente.');
@@ -203,42 +204,4 @@ async function convertOggToWav(
       .on('error', (err) => reject(err))
       .run();
   });
-}
-
-export async function speechOpenAI(
-  message: Message,
-  client: Client,
-  text: string | undefined
-): Promise<String> {
-  const user = await userService.getUser(message.from);
-  const url = process.env.TTS_URL || 'https://api.openai.com/v1/audio/speech';
-  let response;
-  try {
-    response = await axios.post(
-      url,
-      {
-        model: 'tts-1',
-        voice: user?.voice || 'alloy',
-        velocity: user?.speedVoice || 0.87,
-        input: text,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        responseType: 'arraybuffer',
-      }
-    );
-  } catch (e) {
-    console.error(e);
-    return '';
-  } finally {
-    const audioBase64 = Buffer.from(response.data, 'binary').toString('base64');
-    const messageMedia = new MessageMedia('audio/ogg', audioBase64);
-    await client.sendMessage(message.from, messageMedia, {
-      sendAudioAsVoice: true,
-    });
-    return audioBase64;
-  }
 }

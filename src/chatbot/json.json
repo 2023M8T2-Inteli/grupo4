@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "vivid-access-406113",
+  "private_key_id": "68ce81917e2a18973c32a79f7b92c407e75430f9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEugIBADANBgkqhkiG9w0BAQEFAASCBKQwggSgAgEAAoIBAQDT3nZ/TOFP+yZE\n7SE6hNk2jXkPWwY9rSd+uQDIjpzEZIJbF0kVnWbe7y9t57YIbYioLTnItCJn/jTF\nq/HChXxGdzv8OLf/bVzPHLVoeE2YZzquvJDCRB4sDbUSbzRdNFTT0LKE+Ra9Ahle\nVKqnYgBl3fB0oUAZUW8Yr4mPmhBJeg+R0SdamGoNJPAj7J1kPMvIenEalJkBeKoG\neYJ7OsZlhdOnyCHEAsb6uyEa3JfAQOBE3jn6I6oZuiZmPE1OOT6VgRWCU4WNdoIz\nGinVX5pqoGODbE76Dk0gn05j/y14nJqLBiJzd1z7RzEym7ll1gKs+O8ni2RERiCi\n498L9RMzAgMBAAECgf8FkjJ6vSBpfBTniY3tJYEYA2iF2jk4a4qMiUcQ7Cvy8u2g\n8O7nKZM/7K7MUJfayVYSmHfUchsRwQ7QOMLXr1n4nxGaZVqxa71pz0qKdFxqCOe4\nLst3NQ2UqJKZorEeabVOLXeVsb0tbhKTMao8dhEkrVOCzD6DVOZBgi9/OKgIVpSF\n9u+PIhXbgtKcFXesVcVdn4x3zw5T3Ccb+Qk7+eFswvzv2SmhPk24/wDb3/bO/Cb3\nNvlsrk4b2Auc0Hx1vAzCwM20MRTIOsvk41PK5nbETHHFYHCVAEuRfkgTqUmEg6Cf\nZNd5mqMWZsd9DyAQibyRqxm8B+xzkBhrg5K2UlUCgYEA6mRhMMmS7D7dd1ihejyW\nL5YYM3g3PEr9Lyf7RQnpBf6NkypZKbVF0sm/PIhLJ039dG7YodjD1Yk5A1jj4489\n75c5Q9fJ1SoNz6PcDy6DEjaw5xPA8KjyvA2E0SDp/78vgR9/cPzkesjPHQf796Tr\n50iNzvqk6/E4abfZ7lg3LMcCgYEA52aKfhWTgNtmVtNoHj//7tFFhxqzcR7rJ8so\nqgodWtYwGgG3CTWLhHuyU628zUK4dBXjMZVvtRV72HDR4vecOgg1QsyNGL7mM0Ra\n1TJIwGL+0iCRek8oUYB9nTTicmjZhAbFL+TEZs2TyZjB7SF/oWYDHgPW7EZ1UZsH\nTWSWwjUCgYB0ebNOYizPlyHIp9N+gdMEDKs0EH4qSP1tzIlxsk4Iu4kw429xaXIs\nIDMW6oemHXxguqCONMCEQW+CeU6ti0X05IoBa58RfZdlYoD9Tli12VWpTsinDt2o\nk3M31QpTG3eIy9UxmYoUdett+sS8OEk+InDNtQH1eWZWKpVyeoXYiwKBgEHDCX7V\noOrQ71+jiwZ1x8VWIf1IYFC4qbnQackRQNBs6JSrghoS5oiLIt3XFT38RTFwevW/\nc1SyO1UCkxN+rR5s8L4AJeUvc3qEZZALT1Oljqem69Enp9ypuIkx210KYS69QdLf\nn9VbfTGgwRQkHgJ/XElua+kQCQ1dEpEzEgk1AoGAMbZSNZR22nH5H+jJSS17IZ0g\n+bV4Z+4zU79xwu0BRaZKuioDiLy1A9g95IYNUOdOmMaHQuyj+AwWayYzfTErmaHs\nBfCvdBGeC2a2JBxy/xBd0U2WrLAijwEeosSE3FTZd/hpyHjoiE/nL77ZzxNwQtTF\nZSh2XOE669XnIsl+3IA=\n-----END PRIVATE KEY-----\n",
+  "client_email": "vallet@vivid-access-406113.iam.gserviceaccount.com",
+  "client_id": "116372565359988118562",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/vallet%40vivid-access-406113.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

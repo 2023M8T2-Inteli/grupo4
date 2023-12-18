@@ -224,8 +224,7 @@ export class MessageEventHandler {
     if (userData?.role?.includes('ADMIN')) {
       if (message.body.toLowerCase() == '!parar') {
         const socket = io(process.env.SOCKET_URL || '');
-        const [x, y, z] = [0.0, 0.0, 0.0];
-        socket.emit('emergency_stop', { x,y, z});
+        socket.emit('enqueue', { stop: 1 });
         this.whatsappClient.sendMessage(message.from, 'Parando robô!');
         return;
       }
