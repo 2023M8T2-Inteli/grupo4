@@ -29,11 +29,11 @@ class EmergencyStop(Node):
     def get_result(self):
         result = self.navigator_controller.getResult()
         if result == TaskResult.SUCCEEDED:
-            print('Goal succeeded!')
+            self.get_logger().info('Goal succeeded!')
         elif result == TaskResult.CANCELED:
-            print('Goal was canceled!')
+            self.get_logger().info('Goal was canceled!')
         elif result == TaskResult.FAILED:
-            print('Goal failed!')
+            self.get_logger().info('Goal failed!')
         
     def set_robot_status(self):
         self.navigator_controller.publish_status("UNAVAILABLE")
