@@ -13,8 +13,6 @@ import PointService from '../../models/point';
 const prisma = new PrismaClient();
 const userService = new UserService(prisma);
 const orderService = new OrderService(prisma);
-const toolService = new ToolService(prisma);
-const pointService = new PointService(prisma);
 const { v4: uuidv4 } = require('uuid');
 
 export const delay = async (seconds: number): Promise<void> => {
@@ -23,6 +21,53 @@ export const delay = async (seconds: number): Promise<void> => {
       resolve();
     }, seconds);
   });
+};
+
+const intentDict = new Map([
+  [/\b([Nn]ova)|([Pp]eça)\b/gi, 'newOrder'],
+  [/\b([Ss]tatus)|([Pp]edido)\b/gi, 'statusOrder'],
+  [/\b([Pp]edidos)|([Aa]berto)|([Aa]bertos)\b/gi, 'openOrders'],
+  [/\b([Cc]ancelar)|([Pp]edido)\b/gi, 'cancelOrder'],
+  [/\b([Ff]alar)|([Aa]tendente)|([Cc]om)\b/gi, 'contact'],
+  [/\b([Aa]lterar)|([Nn]ome)|([Cc]adastrado)\b/gi, 'changeName'],
+]);
+
+// Define the action dictionaryconst
+const actionDict: { [key: string]: (message: Message, client: Client) => any } =
+  {
+    "newOrder": sendNewOrder,
+    "statusOrder": sendStatusOrder,
+    "openOrders": sendOpenOrders,
+    "cancelOrder": sendCancelOrder,
+    "contact": sendContact,
+    "changeName": sendChangeName,
+  };
+
+const handleProcessRequest = async (message: Message, client: Client) => {
+  try {
+    let maxMatches = 0;
+    let actionToExecute;
+    for (const [pattern, action] of intentDict) {
+      const matches = pattern.exec(message.body);
+      if (matches && matches.length > maxMatches) {
+        maxMatches = matches.length;
+        actionToExecute = action;
+      }
+    }
+    if (actionToExecute) {
+      await actionDict[actionToExecute](message, client);
+    } else {
+      message.reply('Desculpa, não consegui entender o que você disse.');
+      client.sendMessage(message.from, 'Por favor, tente novamente.');
+    }
+  } catch (error: any) {
+    console.error('An error occured', error);
+    message.reply(
+      'An error occured, please contact the administrator. (' +
+        error.message +
+        ')'
+    );
+  }
 };
 
 const sendMenu = async (message: Message, client: Client) => {
@@ -253,26 +298,6 @@ const handleRequestMenu = async (message: Message, client: Client) => {
   }
 };
 
-const intentDict = new Map([
-  [/\b([Nn]ova)|([Pp]eça)\b/gi, 'newOrder'],
-  [/\b([Ss]tatus)|([Pp]edido)\b/gi, 'statusOrder'],
-  [/\b([Pp]edidos)|([Aa]berto)|([Aa]bertos)\b/gi, 'openOrders'],
-  [/\b([Cc]ancelar)|([Pp]edido)\b/gi, 'cancelOrder'],
-  [/\b([Ff]alar)|([Aa]tendente)|([Cc]om)\b/gi, 'contact'],
-  [/\b([Aa]lterar)|([Nn]ome)|([Cc]adastrado)\b/gi, 'changeName'],
-]);
-
-// Define the action dictionaryconst
-const actionDict: { [key: string]: (message: Message, client: Client) => any } =
-  {
-    "newOrder": sendNewOrder,
-    "statusOrder": sendStatusOrder,
-    "openOrders": sendOpenOrders,
-    "cancelOrder": sendCancelOrder,
-    "contact": sendContact,
-    "changeName": sendChangeName,
-  };
-
 async function sendNewOrder(message: Message, client: Client) {
   try {
     message.reply('Certo, você deseja solicitar uma nova peça.');
@@ -371,33 +396,6 @@ async function sendChangeName(message: Message, client: Client) {
     );
   }
 }
-
-const handleProcessRequest = async (message: Message, client: Client) => {
-  try {
-    let maxMatches = 0;
-    let actionToExecute;
-    for (const [pattern, action] of intentDict) {
-      const matches = pattern.exec(message.body);
-      if (matches && matches.length > maxMatches) {
-        maxMatches = matches.length;
-        actionToExecute = action;
-      }
-    }
-    if (actionToExecute) {
-      await actionDict[actionToExecute](message, client);
-    } else {
-      message.reply('Desculpa, não consegui entender o que você disse.');
-      client.sendMessage(message.from, 'Por favor, tente novamente.');
-    }
-  } catch (error: any) {
-    console.error('An error occured', error);
-    message.reply(
-      'An error occured, please contact the administrator. (' +
-        error.message +
-        ')'
-    );
-  }
-};
 
 const handleSendContact = async (message: Message, client: Client) => {
   try {
@@ -522,7 +520,7 @@ const handleNewOrder = async (message: Message, client: Client) => {
     const order = await orderService.verifyOpenOrder(message);
     if (message.body) {
       if (order == null) await getToolOpenAI(message, client);
-      if (order != null) await getPoin11111111111111111111111111111tOpenAI(message, client);
+      if (order != null) await getPointOpenAI(message, client);
     }
 
     if (message.hasMedia) {
@@ -533,7 +531,7 @@ const handleNewOrder = async (message: Message, client: Client) => {
         const mediaBuffer = Buffer.from(media.data, 'base64');
         const response = await transcribeOpenAI(mediaBuffer);
         message.body = response.text;
-        console.log(order)
+        console.log(order);
         if (order == null) await getToolOpenAI(message, client);
         if (order != null) await getPointOpenAI(message, client);
       }

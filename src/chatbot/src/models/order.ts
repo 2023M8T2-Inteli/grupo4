@@ -33,6 +33,19 @@ export default class OrderService {
     }
   }
 
+  async getOrders(): Promise<PrismaOrder[] | null> {
+    try {
+      const order = await this.prisma.order.findMany();
+      if (order == null) return null;
+      return order;
+    } catch (error) {
+      console.error('An error occurred while fetching the user:', error);
+      throw error;
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
+
   async createOrder(
     cellPhone: string,
     toolId: string
@@ -51,9 +64,8 @@ export default class OrderService {
             pointId: '123e4567-e89b-12d3-a456-426614174013',
           },
         });
-        if (orders == null) {
-          return null;
-        }
+        if (orders == null) return null;
+
         return orders;
       } else {
         return null;
@@ -75,7 +87,14 @@ export default class OrderService {
         where: { cellPhone: cellPhone },
       });
       if (user != null) {
-        const order = await this.prisma.order.updateMany({ where: { userId: user.id, type: "In Progress", pointId: "123e4567-e89b-12d3-a456-426614174013" }, data: { pointId: pointId } });
+        const order = await this.prisma.order.updateMany({
+          where: {
+            userId: user.id,
+            type: 'In Progress',
+            pointId: '123e4567-e89b-12d3-a456-426614174013',
+          },
+          data: { pointId: pointId },
+        });
         if (order == null) {
           return null;
         }
