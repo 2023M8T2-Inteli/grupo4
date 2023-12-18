@@ -7,7 +7,7 @@ connection = psycopg2.connect("postgresql://admin123:admin123@db-chatbot.cvttljz
 cursor = connection.cursor()
 
 # Execute SQL query
-query = "SELECT * FROM User"
+query = "SELECT * FROM Order"
 cursor.execute(query)
 
 # Fetch data
@@ -17,7 +17,7 @@ data = cursor.fetchall()
 df = pd.DataFrame(data, columns=['Column1'])
 
 # Create Excel file
-excel_file_path = '/home/felipe/Documents/GitHub/grupo4/src/excel_export/output_file.xlsx'
+excel_file_path = './output_file.xlsx'
 df.to_excel(excel_file_path, index=False)
 
 # Close the database connection

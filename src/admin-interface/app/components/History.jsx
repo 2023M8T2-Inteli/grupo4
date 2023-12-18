@@ -15,6 +15,31 @@ const History = () => {
       console.error("Error fetching history data:", error);
     }
   };
+  const downloadCSV = () => {
+    const convertToCSV = (data) => {
+      const rows = data.map((row) => Object.values(row).join(','));
+      return ['sep=,', Object.keys(data[0]).join(','), ...rows].join('\n');
+    };
+    // TODO: Consertar o erro em que o data vem vazio, verificar se é um erro no endpoint ou na conexão com o banco
+    
+    // Convert the data to CSV format
+    const csvData = convertToCSV(data);
+  
+    // Create a Blob containing the CSV data
+    const blob = new Blob([csvData], { type: 'text/csv' });
+  
+    // Create a download link
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'data.csv';
+  
+    // Append the link to the DOM and trigger the download
+    document.body.appendChild(link);
+    link.click();
+  
+    // Remove the link from the DOM
+    document.body.removeChild(link);
+  };
 
   useEffect(() => {
     // Fetch history data when the component mounts
@@ -31,7 +56,7 @@ const History = () => {
     <div className="border-lg shadow-md w-full border-gray-100 border-[2px] rounded-md p-4 text-sm">
       <span className="flex justify-between m-2">
         <h1 className="text-2xl font-semibold mb-4">Histórico</h1>
-        <button className="border-green-400 border-[1px] text-green-400 rounded-md py-0 px-2">
+        <button onClick={downloadCSV} className="border-green-400 border-[1px] text-green-400 rounded-md py-0 px-2">
           BAIXAR
         </button>
       </span>
