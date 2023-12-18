@@ -17,6 +17,7 @@ from geometry_msgs.msg import Pose, Point, Quaternion
 class RobotStatus(Enum):
     FREE = 0
     BUSY = 1
+    UNAVAILABLE = 2
 
 
 class PoseQueue(Node):
@@ -83,9 +84,10 @@ class PoseQueue(Node):
                 self.get_logger().info("Invalid pose.")
                 
     def status_callback(self, msg: String) -> None:
-        self.robot_status = RobotStatus.FREE if msg.data == "FREE" else RobotStatus.BUSY
-
-        if self.robot_status == RobotStatus.BUSY:
+        self.robot_status = RobotStatus.FREE if msg.data == "FREE" or msg.data == "UNAVAILABLE" else RobotStatus.BUSY
+        if self.robot_status == RobotStatus.UNAVAILABLE:
+            self.get_logger().info("Emergency stop was pressed. Robot is unavailable at the moment, wait until is free or busy to send requests.")
+        elif self.robot_status == RobotStatus.BUSY:
             self.get_logger().info(f"Robot is busy, waiting for it to be free.")
         elif self.robot_status == RobotStatus.FREE and not self.queue.empty():
             next_pose = self.queue.get()
@@ -101,6 +103,7 @@ class PoseQueue(Node):
                 f"Publishing {next_pose} on {self.dequeue.topic_name}")
         elif self.robot_status == RobotStatus.FREE and self.queue.empty():
             self.get_logger().info("Queue is empty, waiting for new poses.")
+        
         else:
             self.get_logger().info("Something went wrong.")
 

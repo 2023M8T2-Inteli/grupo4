@@ -29,6 +29,9 @@ class NavigatorController(Node):
 
     def is_task_complete(self):
         return self.nav2_simple_commander.isTaskComplete()
+    
+    def cancel_task(self):
+        self.nav2_simple_commander.cancelTask()
 
     def _create_pose_stamped(self, pos_x, pos_y, pos_z):
         q_x, q_y, q_z, q_w = quaternion_from_euler(pos_x, pos_y, pos_z)
@@ -57,6 +60,8 @@ class Vallet(Node):
     def listener_callback(self, msg: Pose):
         pos_x, pos_y, pos_z = msg.position.x, msg.position.y, msg.position.z
         self.navigator_controller.go_to_pose(pos_x, pos_y, pos_z)
+    
+    
 
     def timer_callback(self):
         if not self.navigator_controller.is_task_complete():
