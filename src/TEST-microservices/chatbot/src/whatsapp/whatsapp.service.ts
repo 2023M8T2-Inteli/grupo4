@@ -94,7 +94,7 @@ export class WhatsappService {
     this.client.sendMessage(to, message);
   }
 
-  async getAdminContact() {
-    return await this.client.getContactById(process.env.ADMIN_ID);
+  async getContactFromID(id: string) {
+    return await this.client.getContactById(id);
   }
 }

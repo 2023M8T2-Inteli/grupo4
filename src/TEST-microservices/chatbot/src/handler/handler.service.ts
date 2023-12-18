@@ -52,17 +52,20 @@ export class HandlerService {
       }
     }
 
-    console.log("-> sender:",message.from, " -- role:", userData?.role)
+    console.log('-> sender:', message.from, ' -- role:', userData?.role);
 
     const UserRole = (userData?.role as 'USER' | 'ADMIN' | 'LEAD') || 'LEAD';
 
     const chat: Chat = await message.getChat();
+    
+    chat.sendStateTyping()
+
     const messages: Message[] = await chat.fetchMessages({ limit: 20 });
     const parsedMessages = transformConversation(messages, this.readyTimestamp);
 
     const toolCoordinates = await this.toolService.getAllTools();
     const locationCoordinates = await this.locationService.getAllLocations();
-    
+
     const { parsedLocations, parsedTools } = parseCoordinates(
       toolCoordinates,
       locationCoordinates,
@@ -74,6 +77,8 @@ export class HandlerService {
       parsedLocations,
       parsedMessages,
     );
+
+    chat.clearState()
 
     switch (res.type) {
       case 'message':
