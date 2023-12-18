@@ -32,7 +32,6 @@
 - <a href="https://www.linkedin.com/in/henriquemarlon/">Henrique Marlon Conceição Santos </a>
 - <a href="https://www.linkedin.com/in/henriquelfmatias/">Henrique Matias </a>
 - <a href="https://www.linkedin.com/in/paulo-evangelista/">Paulo Presa Evangelista </a>
-- 
 
 ## :teacher: Professores:
 
