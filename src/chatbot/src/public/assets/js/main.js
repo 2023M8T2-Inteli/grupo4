@@ -14,7 +14,7 @@ function fetchQRCode() {
 
       if (data.message !== 'User is authenticated') {
         // Mostrar o QR Code se estiver presente no JSON.
-        document.getElementById('qrcode').src = data.qrCodeUrl;
+        document.getElementById('qrcode').innerHTML = data.qrcodeUrl;
       } else {
         // Parar de chamar a função se o status for 202 e exibir a mensagem.
         clearInterval(interval);

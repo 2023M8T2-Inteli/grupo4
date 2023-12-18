@@ -226,6 +226,8 @@ export class MessageEventHandler {
         const socket = io(process.env.SOCKET_URL || '');
         const [x, y, z] = [0.0, 0.0, 0.0];
         socket.emit('emergency_stop', { x,y, z});
+        this.whatsappClient.sendMessage(message.from, 'Parando robô!');
+        return;
       }
       let requestState = userData?.requestState;
       const requestAdminHandler = new RequestAdminHandler(
