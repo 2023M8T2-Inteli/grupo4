@@ -52,7 +52,7 @@ export class HandlerService {
       }
     }
 
-    console.log("-> sender:",message.from, " -- role:", userData?.role)
+    console.log('-> sender:', message.from, ' -- role:', userData?.role);
 
     const UserRole = (userData?.role as 'USER' | 'ADMIN' | 'LEAD') || 'LEAD';
 
@@ -62,7 +62,7 @@ export class HandlerService {
 
     const toolCoordinates = await this.toolService.getAllTools();
     const locationCoordinates = await this.locationService.getAllLocations();
-    
+
     const { parsedLocations, parsedTools } = parseCoordinates(
       toolCoordinates,
       locationCoordinates,

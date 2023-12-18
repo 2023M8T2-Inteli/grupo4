@@ -37,13 +37,15 @@ export class HandleAdminService extends HandleUserService {
       \n Gostaria de tentar novamente?
       `;
 
+    const formattedPhone = this.formatPhone(targetPhone);
+
     const permissionResult = await this.checkPermission(userPhone, Role.ADMIN);
 
     if (permissionResult) return permissionResult;
 
     return (
       (await this.checkPermission(userPhone, Role.ADMIN)) ||
-      (await this.authorizeByPhone(targetPhone, targetRole))
+      (await this.authorizeByPhone(formattedPhone, targetRole))
     );
   }
 
@@ -178,17 +180,6 @@ export class HandleAdminService extends HandleUserService {
     `;
   }
 
-  private async checkPermission(userPhone: string, permissionLevel: Role) {
-    try {
-      if ((await this.userService.getUserRole(userPhone)) !== permissionLevel)
-        return 'Ops, parece que houve um erro no sistema e você não tem permissão para essa ação 🥲. Gostaria de fazer outra solicitação?';
-    } catch (e) {
-      if (e instanceof UserDoesntExists)
-        return 'Ops, parece que você ainda não tem um cadastro conosco. Você gostaria de se cadastrar?';
-    }
-    return null;
-  }
-
   private async authorizeByPhone(
     targetPhone: string,
     targetRole: 'ADMIN' | 'USER' | 'LEAD',
@@ -197,10 +188,13 @@ export class HandleAdminService extends HandleUserService {
       if ((await this.userService.getUserRole(targetPhone)) === targetRole)
         return 'Ops, parece que esse usuário já tem a permissão que você quer dar.';
 
-      await this.userService.updateUserData({
+      const user = await this.userService.updateUserData({
         cellPhone: targetPhone,
         role: targetRole,
       });
+
+      if (user)
+        return `Permissão do ${user.name} alterada para ${targetRole} com sucesso!`;
     } catch (e) {
       if (e instanceof UserDoesntExists)
         return 'Ops, parece que um usuário com esses dados não existe no nosso sistema. Gostaria de fazer um novo pedido?';
@@ -212,29 +206,26 @@ export class HandleAdminService extends HandleUserService {
       return 'Ops, parece que houve um problema no sistema, por favor contate um administrador.';
     }
   }
-}
 
-// @Injectable()
-// export class handleAdminService {
-//   constructor(
-//     @Inject(UserService) private userService: UserService,
-//     @Inject(WhatsappService) private whatsappService: WhatsappService,
-//   ) {}
-//
-//   async handle(requestState: number, message: Message): Promise<void> {
-//     switch (requestState) {
-//       case 1:
-//         handleAdminRequestMenu(message, this.whatsappClient);
-//         break;
-//       case 2:
-//         handleAdminProcessRequest(message, this.whatsappClient);
-//         break;
-//       case 3:
-//         handleNewPoint(message, this.whatsappClient);
-//       case 4:
-//         handleUpdateUserAccess(message, this.whatsappClient);
-//       default:
-//         break;
-//     }
-//   }
-// }
+  private formatPhone(phone: string) {
+    phone = phone.replace(/^[^\d]+/, '');
+
+    if (!phone.startsWith('55')) {
+      phone = '55' + phone;
+    }
+
+    if (phone.endsWith('@c.us')) {
+      phone = phone.slice(0, -5);
+    }
+
+    if (phone.length === 13) {
+      phone = phone.slice(0, 4) + phone.slice(5);
+    }
+
+    phone += '@c.us';
+
+    console.log(`Formatted phone: ${phone}`);
+
+    return phone;
+  }
+}

@@ -47,7 +47,7 @@ export class AIService {
     chatHistory: ChatHistory[],
   ): Promise<GPTResponseFunctionCall | GPTResponseMessage> => {
     const { system_message, gpt_tools } = generateLLMSystemMessages(
-      (userRole),
+      userRole,
       toolsCordinates,
       locationCoordinates,
     );
@@ -58,7 +58,7 @@ export class AIService {
       model: 'gpt-4',
       temperature: 0.8,
     });
-    console.log(res.data.choices[0])
+    console.log(res.data.choices[0]);
     if (res.data.choices[0].message?.function_call?.name) {
       return {
         type: 'function_call',

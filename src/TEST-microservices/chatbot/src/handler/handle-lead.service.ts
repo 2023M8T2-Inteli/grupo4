@@ -4,7 +4,6 @@ import {
   UserDoesntExists,
   UserService,
 } from '../prisma/user.service';
-import { WhatsappService } from 'src/whatsapp/whatsapp.service';
 
 interface CreateUserArgs {
   firstName: string;
@@ -13,12 +12,12 @@ interface CreateUserArgs {
 
 @Injectable()
 export class HandleLeadService {
-  constructor(@Inject(UserService) private userService: UserService, @Inject(WhatsappService) private readonly whatsappService: WhatsappService) {}
+  constructor(@Inject(UserService) private userService: UserService) {}
   async handleCreateUser(userPhone: string, args: CreateUserArgs) {
     const firstName = args?.firstName || '';
     const lastName = args?.lastName || '';
 
-    if ( firstName && lastName)
+    if (firstName && lastName)
       try {
         await this.userService.createAccountUser({
           name: firstName + ' ' + lastName,
@@ -47,10 +46,15 @@ export class HandleLeadService {
       if (user.role != 'LEAD') {
         return 'Parece que você acabou de ganhar um up no nosso sistema! Em que posso lhe ajudar?';
       } else {
-        this.whatsappService.sendMessage(userPhone, 'Opa! Encontrei o seu cadastro aqui, mas você ainda não está com permissões de acessar nosso serviço!');
-        const adminContact = await this.whatsappService.getAdminContact()
-        this.whatsappService.sendMessage(userPhone, adminContact);
-        return "Você pode entrar com a pessoa acima ou aguardar que um administrador libere seu acesso 😀"
+        // TODO: Mandar o contato de um administrador
+        // this.whatsappService.sendMessage(
+        //   userPhone,
+        //   'Opa! Encontrei o seu cadastro aqui, mas você ainda não está com permissões de acessar nosso serviço!',
+        // );
+        // const adminContact = await this.whatsappService.getAdminContact();
+        // this.whatsappService.sendMessage(userPhone, adminContact);
+        // return 'Você pode entrar com a pessoa acima ou aguardar que um administrador libere seu acesso 😀';
+        return 'Encontrei o seu cadastro conosco 😁! Porém você ainda não tem a permissão para acessar nossos serviços, aguarde que um administrador entrará em contato para proceder com o seu cadastro.';
       }
     } catch (e) {
       if (e instanceof UserDoesntExists) {
@@ -62,44 +66,3 @@ export class HandleLeadService {
     }
   }
 }
-
-// @Injectable()
-// export class handleLeadService {
-//   constructor(
-//     @Inject(UserService) private userService: UserService,
-//     @Inject(WhatsappService) private whatsappService: WhatsappService,
-//   ) {}
-//
-//   async handle(message: Message, user: PrismaUser | null): Promise<void> {
-//     if (user == null) {
-//       handleCreateUser(message, this.whatsappClient);
-//     }
-//     if (user?.name == '' && user != null) {
-//       handleUpdateUser(message, this.whatsappClient);
-//     }
-//     if (
-//       user?.name != '' &&
-//       user != null &&
-//       user?.voice != '' &&
-//       user?.speedVoice != 0.0
-//     ) {
-//       handleLeadAcess(message, this.whatsappClient);
-//     }
-//     if (
-//       user?.name != '' &&
-//       user != null &&
-//       user?.voice == '' &&
-//       user?.speedVoice == 0.0
-//     ) {
-//       handleUpdateUserVoice(message, this.whatsappClient);
-//     }
-//     if (
-//       user?.name != '' &&
-//       user != null &&
-//       user?.voice != '' &&
-//       user?.speedVoice == 0.0
-//     ) {
-//       handleUpdateUserSpeedVoice(message, this.whatsappClient);
-//     }
-//   }
-// }

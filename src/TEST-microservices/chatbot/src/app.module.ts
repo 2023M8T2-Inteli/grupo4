@@ -13,7 +13,7 @@ import { ConfigModule } from '@nestjs/config';
     AIModule,
     HandlerModule,
     WhatsappModule,
-      
+
     ConfigModule.forRoot({
       isGlobal: true,
     }),

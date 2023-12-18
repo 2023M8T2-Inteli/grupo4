@@ -23,6 +23,7 @@ interface CreateNewOrderArgs {
 @Injectable()
 export class HandleUserService {
   protected readonly sioClient: Socket;
+  protected readonly permissionMapping;
 
   constructor(
     @Inject(UserService) protected userService: UserService,
@@ -31,9 +32,18 @@ export class HandleUserService {
     @Inject(ToolService) protected toolService: ToolService,
   ) {
     this.sioClient = io(process.env.SOCKET_URL || '');
+    this.permissionMapping = {
+      USER: [Role.USER, Role.ADMIN],
+      ADMIN: [Role.ADMIN],
+      LEAD: [Role.LEAD, Role.USER, Role.ADMIN],
+    };
   }
 
   async handleNewOrder(userPhone: string, args: CreateNewOrderArgs) {
+    const permissionMessage = await this.checkPermission(userPhone, Role.USER);
+
+    if (permissionMessage) return permissionMessage;
+
     const from = args?.from;
     const to = args?.to;
 
@@ -48,6 +58,8 @@ export class HandleUserService {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async handleGetAllOrders(userPhone: string, _args: object) {
+    const permissionMessage = await this.checkPermission(userPhone, Role.USER);
+    if (permissionMessage) return permissionMessage;
     try {
       const orders = await this.orderService.getAllOrders(userPhone);
 
@@ -63,6 +75,8 @@ export class HandleUserService {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async handleGetAllOpenOrders(userPhone: string, _args: object) {
+    const permissionMessage = await this.checkPermission(userPhone, Role.USER);
+    if (permissionMessage) return permissionMessage;
     try {
       const orders = await this.orderService.getAllOpenOrders(userPhone);
 
@@ -79,6 +93,8 @@ export class HandleUserService {
   }
 
   async handleGetOrderStatus(userPhone: string, args: { orderId: number }) {
+    const permissionMessage = await this.checkPermission(userPhone, Role.USER);
+    if (permissionMessage) return permissionMessage;
     try {
       const order = await this.orderService.getOrderByCode(
         userPhone,
@@ -96,6 +112,8 @@ export class HandleUserService {
   }
 
   async handleCancelOpenOrder(userPhone: string, args: { orderId: number }) {
+    const permissionMessage = await this.checkPermission(userPhone, Role.USER);
+    if (permissionMessage) return permissionMessage;
     try {
       const order = await this.orderService.cancelOrder(
         userPhone,
@@ -113,6 +131,8 @@ export class HandleUserService {
   }
 
   async handleChangeUserInfo(userPhone: string, args: Partial<User>) {
+    const permissionMessage = await this.checkPermission(userPhone, Role.USER);
+    if (permissionMessage) return permissionMessage;
     try {
       await this.userService.updateUserData({ ...args, cellPhone: userPhone });
     } catch (e) {
@@ -207,5 +227,17 @@ export class HandleUserService {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  protected async checkPermission(userPhone: string, permissionLevel: Role) {
+    try {
+      const userRole = await this.userService.getUserRole(userPhone);
+      if (!(userRole in this.permissionMapping[permissionLevel]))
+        return 'Ops, parece que houve um erro no sistema e você não tem permissão para essa ação 🥲. Gostaria de fazer outra solicitação?';
+    } catch (e) {
+      if (e instanceof UserDoesntExists)
+        return 'Ops, parece que você ainda não tem um cadastro conosco. Você gostaria de se cadastrar?';
+    }
+    return null;
   }
 }
