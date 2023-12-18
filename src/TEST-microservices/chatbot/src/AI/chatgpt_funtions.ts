@@ -51,16 +51,50 @@ export const generateLLMSystemMessages = (
       },
     },
     {
-      name: 'handleStatusOrder',
-      description: '[USER] Informa o usuário sobre sua solicitação atual.',
+      name: 'handleGetOrderStatus',
+      description: '[USER] Informa o usuário sobre uma solicitação específica.',
+      parameters: {
+        type: 'object',
+        properties: {
+          orderId: {
+            type: 'string',
+            description: 'O código do pedido. Deve ser fornecido pelo usuário.',
+          },
+        },
+        required: ['orderId'],
+      },
+    },
+    {
+      name: 'handleCancelOpenOrder',
+      description:
+        '[USER] Cancela um pedido do usuário com base no código de um pedido.',
+      parameters: {
+        type: 'object',
+        properties: {
+          orderId: {
+            type: 'string',
+            description:
+              'O código do pedido / ordem. Deve ser fornecido pelo usuário.',
+          },
+        },
+        required: ['orderId'],
+      },
+    },
+    {
+      name: 'handleGetAllOpenOrders',
+      description:
+        '[USER] Chamada quando o usuário quer pegar apenas todas as suas ordens / pedidos que estão abertas.',
+
       parameters: {
         type: 'object',
         properties: {},
       },
     },
     {
-      name: 'handleCancelOrder',
-      description: '[USER] Cancela o pedido atual do usuário.',
+      name: 'handleGetAllOrders',
+      description:
+        '[USER] Chamada quando o usuário quer pegar todas as suas ordens / pedidos.',
+
       parameters: {
         type: 'object',
         properties: {},
