@@ -1,4 +1,5 @@
 import { PrismaClient, User as PrismaUser } from '@prisma/client';
+import { io } from 'socket.io-client';
 import UserService from '../models/user';
 import { Client, Message, List } from 'whatsapp-web.js';
 import {
@@ -205,7 +206,7 @@ export class MessageEventHandler {
     if (!(await this.messageValidator.validate(message))) {
       return;
     }
-    if (message.body == '!sair' || message.body == '!Sair') {
+    if (message.body.toLowerCase() == '!sair') {
       await this.whatsappClient.sendMessage(message.from, 'Até mais!');
       this.userService.updateRequestUser(message.from, 1);
       return;
@@ -221,6 +222,10 @@ export class MessageEventHandler {
       requestUserHandler.handle(requestState, message);
     }
     if (userData?.role?.includes('ADMIN')) {
+      if (message.body.toLowerCase() == '!parar') {
+        const socket = io(process.env.SOCKET_URL || '');
+        socket.emit('enqueue', { x, y, z });
+      }
       let requestState = userData?.requestState;
       const requestAdminHandler = new RequestAdminHandler(
         this.whatsappClient,
