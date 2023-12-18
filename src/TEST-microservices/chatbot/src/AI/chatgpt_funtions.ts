@@ -122,6 +122,100 @@ export const generateLLMSystemMessages = (
       },
     },
     {
+      name: 'handleChangeUserInfo',
+      description:
+        '[USER] Altera as informações do usuário. Requer que o usuário forneça apenas as informações que o usuário quer alterar para.',
+      parameters: {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+            description:
+              'Nome completo para qual o usuário quer mudar. Deve ser fornecido pelo usuário.',
+          },
+        },
+        required: ['name'],
+      },
+    },
+    {
+      name: 'handleCreateNewTool',
+      description:
+        '[ADMIN] Cria uma nova ferramente no sistema. Deve ser fornecido pelo usuário.',
+      parameters: {
+        type: 'object',
+        properties: {
+          toolName: {
+            type: 'string',
+            description: 'Nome da ferramenta. Deve ser fornecido pelo usuário.',
+          },
+          toolPrice: {
+            type: 'string',
+            description:
+              'Preço da ferramenta. Deve ser fornecido pelo usuário.',
+          },
+          toolTag: {
+            type: 'string',
+            description: 'Tag da ferramenta. Deve ser fornecido pelo usuário.',
+          },
+          toolPointX: {
+            type: 'number',
+            description:
+              'Coordenada X da ferramenta (é obrigatoriamente um ponto flutuante). Deve ser fornecido pelo usuário.',
+          },
+          toolPointY: {
+            type: 'number',
+            description:
+              'Coordenada Y da ferramenta (é obrigatoriamente um ponto flutuante). Deve ser fornecido pelo usuário.',
+          },
+          toolMinQuantity: {
+            type: 'number',
+            description:
+              'Quantidade mínima da ferramenta. Deve ser fornecido pelo usuário.',
+          },
+          toolMaxQuantity: {
+            type: 'number',
+            description:
+              'Quantidade máxima da ferramenta. Deve ser fornecido pelo usuário.',
+          },
+        },
+        required: [
+          'toolName',
+          'toolPrice',
+          'toolTag',
+          'toolPointX',
+          'toolPointY',
+          'toolMinQuantity',
+          'toolMaxQuantity',
+        ],
+      },
+    },
+    {
+      name: 'handleCreateNewLocation',
+      description:
+        '[ADMIN] Cria uma nova localização no sistema. Deve ser fornecido pelo usuário.',
+      parameters: {
+        type: 'object',
+        properties: {
+          locationName: {
+            type: 'string',
+            description:
+              'Nome da localização. Deve ser fornecido pelo usuário.',
+          },
+          pointX: {
+            type: 'number',
+            description:
+              'Coordenada X da localização (é obrigatoriamente um ponto flutuante). Deve ser fornecido pelo usuário.',
+          },
+          pointY: {
+            type: 'number',
+            description:
+              'Coordenada Y da localização (é obrigatoriamente um ponto flutuante). Deve ser fornecido pelo usuário.',
+          },
+        },
+        required: ['locationName', 'pointX', 'pointY'],
+      },
+    },
+    {
       name: 'handleLeadAccess',
       description:
         '[USER] Chamada quando o usuário tenta fazer uma ação para a qual não tem permissão.',
