@@ -134,7 +134,12 @@ export class HandleUserService {
     const permissionMessage = await this.checkPermission(userPhone, Role.USER);
     if (permissionMessage) return permissionMessage;
     try {
-      await this.userService.updateUserData({ ...args, cellPhone: userPhone });
+      const updatedUser = await this.userService.updateUserData({
+        ...args,
+        cellPhone: userPhone,
+      });
+
+      if (updatedUser) return 'Dados atualizados com sucesso! 😀';
     } catch (e) {
       if (e instanceof UserDoesntExists)
         return 'Ops, parece que houve um erro aqui no sistema e você ainda não tem um cadastro conosco. Gostaria de fazer um agora? 😀';
@@ -232,7 +237,10 @@ export class HandleUserService {
   protected async checkPermission(userPhone: string, permissionLevel: Role) {
     try {
       const userRole = await this.userService.getUserRole(userPhone);
-      if (!(userRole in this.permissionMapping[permissionLevel]))
+      console.log(
+        `User role: ${userRole} e permissions: ${this.permissionMapping[permissionLevel]}`,
+      );
+      if (!this.permissionMapping[permissionLevel].includes(userRole))
         return 'Ops, parece que houve um erro no sistema e você não tem permissão para essa ação 🥲. Gostaria de fazer outra solicitação?';
     } catch (e) {
       if (e instanceof UserDoesntExists)

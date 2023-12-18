@@ -22,6 +22,9 @@ CREATE TABLE "Tool" (
     "name" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
     "tag" TEXT NOT NULL,
+    "pointX" DOUBLE PRECISION NOT NULL,
+    "pointY" DOUBLE PRECISION NOT NULL,
+    "pointZ" DOUBLE PRECISION NOT NULL,
     "minQuantity" INTEGER NOT NULL,
     "maxQuantity" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -52,6 +55,17 @@ CREATE TABLE "Point" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Point_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Transcription" (
+    "id" TEXT NOT NULL,
+    "transcription" TEXT NOT NULL,
+    "messageId" TEXT NOT NULL,
+    "mediaId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Transcription_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex

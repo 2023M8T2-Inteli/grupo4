@@ -149,9 +149,9 @@ export const generateLLMSystemMessages = (
             description: 'Nome da ferramenta. Deve ser fornecido pelo usuário.',
           },
           toolPrice: {
-            type: 'string',
+            type: 'number',
             description:
-              'Preço da ferramenta. Deve ser fornecido pelo usuário.',
+              'Preço da ferramenta (tem que ser obrigatoriamente um ponto flutuante). Deve ser fornecido pelo usuário.',
           },
           toolTag: {
             type: 'string',

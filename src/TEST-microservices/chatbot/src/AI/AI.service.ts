@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
+import { Readable } from 'stream';
 import { Configuration, OpenAIApi } from 'openai';
-import path from 'path';
+import * as path from 'path';
 import FormData from 'form-data';
 import { Client, Message, MessageMedia } from 'whatsapp-web.js';
 import * as fs from 'fs';
 import axios from 'axios';
 import ffmpeg from 'fluent-ffmpeg';
 import { generateLLMSystemMessages } from './chatgpt_funtions';
+import * as os from 'os';
+import * as crypto from 'crypto';
 
 interface ChatHistory {
   role: 'user' | 'system' | 'assistant' | 'function';
@@ -130,6 +133,33 @@ export class AIService {
         text: transcription.text,
         language,
       };
+    }
+  }
+
+  async speech2Text(audio: any): Promise<void | string> {
+    const tempFilePath = path.join(
+      os.tmpdir(),
+      `${crypto.randomBytes(10).toString('hex')}.ogg`,
+    );
+
+    fs.writeFileSync(tempFilePath, Buffer.from(audio, 'base64'));
+
+    const audioStream = fs.createReadStream(tempFilePath);
+
+    try {
+      const res = await this.openai.createTranscription(
+        audioStream as any,
+        'whisper-1',
+      );
+
+      return res.data.text;
+    } catch (e) {
+      console.log(`-> Error: ${e}`);
+      return;
+    } finally {
+      fs.unlink(tempFilePath, (err) => {
+        if (err) console.error('Error deleting temporary file:', err);
+      });
     }
   }
 
