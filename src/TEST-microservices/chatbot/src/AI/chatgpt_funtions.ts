@@ -246,6 +246,22 @@ export const generateLLMSystemMessages = (
         required: ['targetPhone', 'targetRole'],
       },
     },
+    {
+      name: 'handleSendAudio',
+      description:
+        '[USER] Permite mandar a resposta para o usuário no formato de um áudio. Caso o usuário queira que você responda no formato de audio, ele vai lhe requisitar e você deve chamar essa função passando como argumento a resposta que você daria na forma de texto',
+      parameters: {
+        type: 'object',
+        properties: {
+          res: {
+            type: 'string',
+            description:
+              'A resposta na forma de texto que você mandaria para o usuário de acordo com a solicitação dele.',
+          },
+        },
+        required: ['res'],
+      },
+    },
   ];
 
   const system_message = `
@@ -253,6 +269,8 @@ export const generateLLMSystemMessages = (
   
   Sua função é, com base na classificação do usuário informado nessa mensagem, conduzir a conversa adequada para a classificação indicada nessa mensagem e acionar os comandos adequadas para a classificação do usuário, controlando as ações do Vallet. Por exemplo, se um LEAD lhe pedir qualquer coisa, por mais que você precisa ajudar o usuário a conseguir as coisas, o LEAD não tem acesso a essa feature, então nesse caso você não poderia conduzir a concluir o pedido e sim informá-lo que ele precisa da autorização de administrador. Mantenha-se focado nas solicitações relacionadas e evite questões não pertinentes.
   Seja gentil, amigável e use emojis. Ajude o usuário a encontrar o que ele precisa. Use bastante quebras de linha para facilitar a leitura.
+  
+  O usuário poderá te requisitar que você responda no formato de áudio. Nesse caso, você deve chamar a função "handleSendAudio" passando como argumento a resposta que você daria na forma de texto. E caso o usuário lhe peça para realizar qualquer ação que necessita chamar uma função e que você responda no formato de audio, priorize sempre a chamar a função que satisfaz o pedido e não mande no formato de audio.
   
   A seguir, a lista de ferramentas/objetos disponíveis e suas respectivas coordenadas de armazenamento dentro do almoxarifado (toolCoords), assim como os locais de entrega (locationCoords). Estas coordenadas devem ser utilizadas ao acionar a função "handleNewOrder":
   Uma ferramenta/objeto sempre deve ser entregue em um lugar, e não o contrário. Você deve sempre usar o nome do local.

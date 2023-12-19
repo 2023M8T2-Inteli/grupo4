@@ -1,58 +1,54 @@
 const express = require("express");
 const multer = require("multer");
 const dotenv = require("dotenv");
-const { convertTextToSpeech } = require("../services/speechHelper");
-const { recognizeSpeech } = require("../services/speechRecognition");
-const { getOpenAIChatCompletion } = require("../services/openAiHelper");
 const axios = require("axios");
+const {
+  convertTextToSpeech,
+  recognizeSpeech,
+  getOpenAIChatCompletion,
+} = require("../services");
 
 dotenv.config();
 
 const router = express.Router();
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
-async function updateStatus() {
+async function fetchData(url) {
   try {
-    const response = await axios.get("http://localhost:5000/orders/queue");
+    const response = await axios.get(url);
     const data = {
       now: response.data[0],
       queue: response.data.slice(1),
+      history: await axios.get("http://localhost:5000/orders/history").data,
     };
-    const history = await axios.get("http://localhost:5000/orders/history");
-    data["history"] = history.data;
     return data;
   } catch (error) {
     console.error("Error:", error);
-    throw error; // Throw the error to propagate it
+    throw error;
   }
 }
 
 function filterJson(inputJson, properties) {
-  const result = {};
+  const filteredData = {};
 
-  function getFilteredData(data, props) {
-    const filteredData = {};
-    for (const prop of props) {
-      if (typeof prop === "object") {
-        // Nested property
-        const [key, nestedProps] = Object.entries(prop)[0];
-        if (data[key] && typeof data[key] === "object") {
-          filteredData[key] = getFilteredData(data[key], nestedProps);
-        }
-      } else if (data[prop] !== undefined) {
-        // Simple property
-        filteredData[prop] = data[prop];
+  for (const prop of properties) {
+    if (typeof prop === "string" && inputJson[prop] !== undefined) {
+      filteredData[prop] = inputJson[prop];
+    } else if (typeof prop === "object") {
+      const [key, nestedProps] = Object.entries(prop)[0];
+      if (inputJson[key] && typeof inputJson[key] === "object") {
+        filteredData[key] = filterJson(inputJson[key], nestedProps);
       }
     }
-    return filteredData;
   }
 
-  return getFilteredData(inputJson, properties);
+  return filteredData;
 }
 
+
 async function buildContext() {
-  let data = await updateStatus(); // Declare data using let or const
+  const data = await fetchData("http://localhost:5000/orders/queue");
   const selectedProperties = [
     { tool: ["name"] },
     { user: ["name"] },
@@ -60,7 +56,6 @@ async function buildContext() {
     "createdAt",
   ];
 
-  // Use Array.map to apply filterJson to each item in the array
   const filteredArray = data?.queue.map((item) =>
     filterJson(item, selectedProperties)
   );
@@ -75,11 +70,7 @@ async function buildContext() {
     Você é um assistente para delivery de peças do almoxarifado na Ambev. Seu nome é Vallet. Responda as perguntas de forma simpática e divertida. Na primeira resposta, se apresente e diga o que pode fazer. Seja conciso. O "point" nos dados é o lugar para onde o itens será entregue, onde se encontra a pessoa que fez pedido. Presta atenção para não confundir fila com histórico. Se a pessoa perguntar o que falta, é a fila, se ela perguntar o que já foi entregue, é o histórico.
     
     PEDIDO SENDO EXECUTADO AGORA: ${JSON.stringify(
-      filterJson(data?.now, [
-        { tool: ["name"] },
-        { user: ["name"] },
-        { point: ["name"] },
-      ])
+      filterJson(data?.now, selectedProperties)
     )}
     Nº DE ITENS NA FILA (PEDIDOS QUE FALTAM SER ENTREGUES): ${
       data?.queue.length
@@ -101,7 +92,7 @@ router.post("/speak", upload.single("audioFile"), async (req, res) => {
 
     conversationHistory.push({ role: "user", content: transcription });
 
-    console.log("Conversation history:", conversationHistory)
+    console.log("Conversation history:", conversationHistory);
     const chatCompletion = await getOpenAIChatCompletion(conversationHistory);
     const modelResponse = chatCompletion.choices[0].message.content;
 

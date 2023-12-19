@@ -70,4 +70,39 @@ router.delete('/', async (req, res) => {
     }
 });
 
+router.put('/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, price, tag, minQuantity, maxQuantity } = req.body;
+
+    try {
+        const existingTool = await prisma.tool.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        if (!existingTool) {
+            return res.status(404).json({ error: 'Tool not found' });
+        }
+
+        const updatedTool = await prisma.tool.update({
+            where: {
+                id,
+            },
+            data: {
+                name: name || existingTool.name,
+                price: parseFloat(price) || existingTool.price,
+                tag: tag || existingTool.tag,
+                minQuantity: parseFloat(minQuantity) || existingTool.minQuantity,
+                maxQuantity: parseFloat(maxQuantity) || existingTool.maxQuantity,
+            },
+        });
+
+        res.json(updatedTool);
+    } catch (error) {
+        console.error('Error updating tool:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 module.exports = router;

@@ -1,5 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { Client, Events, LocalAuth } from 'whatsapp-web.js';
+import { Client, Events, LocalAuth, Message } from 'whatsapp-web.js';
 import constants from './constants';
 import qrcode from 'qrcode-terminal';
 import { HandlerService } from '../handler/handler.service';
@@ -18,19 +18,19 @@ export class WhatsappService {
   ) {
     if (btoa(process.env.AUTH_TOKEN) != btoa(process.env.TOKEN_SECRET))
       throw new Error('Token inválido para o chatbot');
-    console.log('starting chatbot...');
+    console.log('[whatsappService] iniciando chatbot...');
 
     this.client = new Client({
       authStrategy: new LocalAuth({
         dataPath: './',
       }),
     });
-    console.log('wpp client created');
+    console.log('[whatsappService] wpp client criado');
     this.initializeClient();
   }
 
   initializeClient() {
-    console.log('client initializing');
+    console.log('[whatsappService] inicializando...');
 
     this.client.on('qr', (qr: string) => {
       console.log('NEW QR -- ' + qr);
@@ -38,12 +38,12 @@ export class WhatsappService {
     });
 
     this.client.on(Events.LOADING_SCREEN, (percent) => {
-      console.log(`loading... ${percent}%`);
+      console.log(`[whatsappService] loading... ${percent}%`);
     });
 
     // WhatsApp authenticated
     this.client.on(Events.AUTHENTICATED, () => {
-      console.log('authenticated to whatsapp!');
+      console.log('[whatsappService] authenticated to whatsapp!');
     });
 
     // WhatsApp authentication failure
@@ -90,8 +90,8 @@ export class WhatsappService {
     return this.qrCodeUrl;
   }
 
-  sendMessage(to: string, message: any): void {
-    this.client.sendMessage(to, message);
+  async sendMessage(to: string, message: any, options = {}): Promise<Message> {
+    return await this.client.sendMessage(to, message, options);
   }
 
   async getContactFromID(id: string) {
