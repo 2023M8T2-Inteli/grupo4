@@ -174,6 +174,26 @@ export class OrderService {
     }
   }
 
+  async updateOrderStatusByCode(orderCode: number, status: string) {
+    await this.ensureOrderExists(orderCode);
+
+    const orderUpdated = await this.prisma.order.update({
+      where: { code: orderCode },
+      data: { type: status },
+    });
+
+    return orderUpdated;
+  }
+
+  private async ensureOrderExists(orderCode: number) {
+    const order = await this.prisma.order.findUnique({
+      where: { code: orderCode },
+    });
+    if (!order) {
+      throw new OrderDoesntExists();
+    }
+  }
+
   async verifyOpenOrder(userPhone: string): Promise<PrismaOrder | null> {
     try {
       const user = await this.prisma.user.findFirst({

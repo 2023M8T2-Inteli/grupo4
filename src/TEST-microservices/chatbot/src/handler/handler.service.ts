@@ -3,7 +3,6 @@ import { Chat, Message } from 'whatsapp-web.js';
 import { UserService } from 'src/prisma/user.service';
 import { AIService } from '../AI/AI.service';
 import { UserDoesntExists } from 'src/prisma/user.service';
-import { io, Socket } from 'socket.io-client';
 import { ToolService } from '../prisma/tool.service';
 import { LocationService } from '../prisma/location.service';
 import { OrderService } from '../prisma/order.service';
@@ -13,7 +12,6 @@ import { HandleLeadService } from './handle-lead.service';
 import { HandleAdminService } from './handle-admin.service';
 import { TranscriptionService } from '../prisma/transcription.service';
 import { Transcription } from '@prisma/client';
-
 interface ParsedMessage {
   role: 'user' | 'assistant';
   content: string;
@@ -32,7 +30,6 @@ export class MessageIsNotAudio extends Error {
 
 @Injectable()
 export class HandlerService {
-  private readonly sioClient: Socket;
   private readonly functionMapping;
   private readonly readyTimestamp: number;
 
@@ -48,7 +45,6 @@ export class HandlerService {
     @Inject(TranscriptionService)
     private transcriptionService: TranscriptionService,
   ) {
-    this.sioClient = io(process.env.SOCKET_URL || '');
 
     this.functionMapping = {
       USER: this.handleUserService,
@@ -126,19 +122,19 @@ export class HandlerService {
     switch (res.type) {
       case 'message':
         console.log(
-          '[handleNewMessage] GPT responded with a MESSAGE:\\033[96m \n -> ' +
+          '[handleNewMessage] GPT responded with a \x1b[31mMESSAGE\x1b[0m:\x1b[96m \n -> ' +
             res.message,
-          '\\033[0m',
+          '\x1b[0m',
         );
         return res.message;
       case 'function_call':
         try {
           console.log(
-            '[handleNewMessage] GPT responded with a function call! Calling:\\033[96m',
+            '[handleNewMessage] GPT responded with a \x1b[31mFUNCTION CALL\x1b[0m! Calling:\x1b[96m',
             res.function,
-            '\\033[0m',
+            '\x1b[0m',
           );
-          console.log('arguments: \\033[35m', res.arguments, '\\033[0m');
+          console.log('arguments: \x1b[35m', res.arguments, '\x1b[0m');
           return await this.functionMapping[UserRole][res.function](
             message.from,
             res.arguments && res.arguments,
@@ -196,8 +192,8 @@ export class HandlerService {
       `[transformConversation] added ${iterations} messages to Context.`,
     );
     console.log(
-      '[transformConversation] last message: ',
-      parsedMsgs[parsedMsgs.length - 1].content,
+      '[transformConversation] last message: \x1b[32m',
+      parsedMsgs[parsedMsgs.length - 1].content, "\x1b[0m"
     );
     return parsedMsgs;
   }

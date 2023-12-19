@@ -12,6 +12,7 @@ import { Role, Prisma } from '@prisma/client';
 import { AIService } from '../AI/AI.service';
 import { WhatsappService } from '../whatsapp/whatsapp.service';
 import { TranscriptionService } from '../prisma/transcription.service';
+import { WebsocketService } from 'src/websockets/websocket.service';
 
 interface AuthorizeUserArgs {
   targetPhone?: string;
@@ -31,6 +32,7 @@ export class HandleAdminService extends HandleUserService {
     protected whatsappService: WhatsappService,
     @Inject(TranscriptionService)
     protected transcriptionService: TranscriptionService,
+    @Inject(WebsocketService) protected websocketService: WebsocketService,
   ) {
     super(
       userService,
@@ -40,6 +42,7 @@ export class HandleAdminService extends HandleUserService {
       aiService,
       whatsappService,
       transcriptionService,
+      websocketService,
     );
   }
 
@@ -147,6 +150,23 @@ export class HandleAdminService extends HandleUserService {
       console.log(`Error: ${e}`);
       return 'Parece que houve um erro no sistema, contate um administrador';
     }
+  }
+
+  async handleEmergencyStop(userPhone: string, args: { stop: boolean }) {
+    const permissionMessage = await this.checkPermission(userPhone, Role.ADMIN);
+    if (permissionMessage) return permissionMessage;
+
+    const { stop } = args;
+
+    if (typeof stop !== 'boolean') {
+      return 'Ops, parece que houve um problema no sistema. Consegue confirmar o seu pedido?';
+    }
+
+    const data = { emergency_stop: stop ? 1 : 0 };
+
+    this.websocketService.emergencyStop(data);
+
+    return `O sistema foi ${stop ? 'parado' : 'reiniciado'} com sucesso!`;
   }
 
   private async messageToolCreation(

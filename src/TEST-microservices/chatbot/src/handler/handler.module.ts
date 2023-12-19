@@ -7,9 +7,10 @@ import { HandleUserService } from './handle-user.service';
 import { HandleLeadService } from './handle-lead.service';
 import { HandleAdminService } from './handle-admin.service';
 import { WhatsappModule } from 'src/whatsapp/whatsapp.module';
+import { WebsocketModule } from 'src/websockets/websocket.module';
 
 @Module({
-  imports: [AIModule, PrismaModule, forwardRef(() => WhatsappModule)],
+  imports: [AIModule, PrismaModule, forwardRef(() => WhatsappModule), WebsocketModule],
   controllers: [HandlerController],
   providers: [
     HandlerService,
