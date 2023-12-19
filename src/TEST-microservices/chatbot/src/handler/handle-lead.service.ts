@@ -56,7 +56,9 @@ export class HandleLeadService {
           'Opa! Encontrei o seu cadastro aqui, mas você ainda não está com permissões de acessar nosso serviço!',
         );
         const admin = await this.userService.getAdmin();
-        const adminContact = await this.whatsappService.getContactFromID(admin.cellPhone);
+        const adminContact = await this.whatsappService.getContactFromID(
+          admin.cellPhone,
+        );
         this.whatsappService.sendMessage(userPhone, adminContact);
         return 'Você pode entrar em contato com a pessoa acima ou aguardar que um administrador libere seu acesso 😀';
       }

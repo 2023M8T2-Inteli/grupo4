@@ -57,6 +57,14 @@ model Point {
   Order     Order[]
 }
 
+model Transcription {
+  id String @id @default(uuid())
+  transcription String
+  messageId String
+  mediaId String
+  createdAt DateTime @default(now())
+}
+
 enum Role {
   LEAD
   USER
