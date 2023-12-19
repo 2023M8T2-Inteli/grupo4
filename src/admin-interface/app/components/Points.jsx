@@ -49,8 +49,6 @@ const Points = () => {
       const response = await fetch("http://localhost:5000/points");
       const data = await response.json();
       setPoints(data);
-      console.log(data)
-      console.log(data)
     } catch (error) {
       console.error("Error fetching points data:", error);
     }
