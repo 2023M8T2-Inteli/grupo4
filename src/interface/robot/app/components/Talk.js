@@ -48,7 +48,7 @@ export default function Talk({ emotion, setEmotion }) {
     let chosen = exclamations[Math.floor(Math.random() * exclamations.length)];
     setAudioSrc(`/exclamations/${chosen}.mp3`);
     console.log(audioSrc);
-    const endpointUrl = "http://localhost:5000/speech/speak"; // Replace with your actual endpoint URL
+    const endpointUrl = process.env.NEXT_PUBLIC_HOST + "/speech/speak"; // Replace with your actual endpoint URL
 
     try {
       const formData = new FormData();
