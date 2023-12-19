@@ -16,7 +16,6 @@ const credentials = {
 };
 
 const talkClient = new textToSpeech.TextToSpeechClient({credentials});
-
 async function convertTextToSpeech(text) {
   const speechRequest = {
     input: { text },

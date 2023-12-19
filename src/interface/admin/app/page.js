@@ -20,7 +20,7 @@ const page = () => {
   })
 
   const fetchOrders = async () => {
-    const response = await fetch("http://localhost:5000/orders/queue");
+    const response = await fetch(process.env.NEXT_PUBLIC_HOST + "/orders/queue");
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
