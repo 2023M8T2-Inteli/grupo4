@@ -67,4 +67,40 @@ router.delete('/', async (req, res) => {
     }
 });
 
+// PUT route to update user data
+router.put("/:id",async (req, res) => {
+    const { id } = req.params;
+    let { name, cellPhone, role } = req.body;
+  
+    try {
+        const user = await prisma.user.findUnique({
+          where: { id: id },
+        });
+    
+        if (!user) {
+          return res.status(404).json({ message: "User not found" });
+        }
+
+        if (role) {
+            role = [role]
+        }
+    
+        // Update the user data
+        const updatedUser = await prisma.user.update({
+          where: { id: id },
+          data: {
+            name: name || user.name,
+            cellPhone: cellPhone || user.cellPhone,
+            role: role || user.role,
+          },
+        });
+    
+        res.json({ message: "User updated successfully", user: updatedUser });
+      } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ message: "Internal server error" });
+      }
+    });
+  
+
 module.exports = router;
