@@ -56,6 +56,13 @@ const sidebars = {
       ],
     },
     {
+      type: "category",
+      label: "Manual do Usuário",
+      items: [
+        "Manual do Usuário/4.1 Manual do Usuário",       
+      ],
+    },
+    {
       type: "doc",
       label: "Sprint Review",
       id: "Apresentações",
