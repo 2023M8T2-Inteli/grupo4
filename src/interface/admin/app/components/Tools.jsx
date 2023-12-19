@@ -134,6 +134,7 @@ const Tools = () => {
             <th className="py-2 px-4 border-b">Preço</th>
             <th className="py-2 px-4 border-b">Quantidade mínima</th>
             <th className="py-2 px-4 border-b">Quantidade máxima</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
