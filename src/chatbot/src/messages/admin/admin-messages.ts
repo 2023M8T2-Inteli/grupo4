@@ -4,6 +4,7 @@ import { unlink } from 'fs/promises';
 import UserService from '../../models/user';
 import OrderService from '../../models/order';
 import PointService from '../../models/point';
+import ToolService from '../../models/tool';
 import {
   PrismaClient,
   User as PrismaUser,
@@ -14,6 +15,7 @@ const prisma = new PrismaClient();
 const userService = new UserService(prisma);
 const pointService = new PointService(prisma);
 const orderService = new OrderService(prisma);
+const toolService = new ToolService(prisma);
 const { v4: uuidv4 } = require('uuid');
 
 export const delay = async (seconds: number): Promise<void> => {
@@ -51,9 +53,9 @@ const intentDict = new Map([
 
 const actionDict: { [key: string]: (message: Message, client: Client) => any } =
   {
-    "newPoint": sendNewPoint,
-    "newAccess": sendNewAccess,
-    "newReport": sendNewReport,
+    newPoint: sendNewPoint,
+    newAccess: sendNewAccess,
+    newReport: sendNewReport,
   };
 
 const handleAdminRequestMenu = async (message: Message, client: Client) => {
@@ -137,8 +139,20 @@ async function sendNewReport(message: Message, client: Client) {
     message.reply('Certo, você deseja exportar um relatório do dia.');
     client.sendMessage(message.from, 'Aguarde um momento, por favor.');
     const report = await orderService.getOrders();
+    if (report) {
+      for (let i = 0; i <= report?.length; i++) {
+        let user = await userService.getUserbyId(report[i].userId);
+        if (user) report[i].userId = user.name;
+        let point = await pointService.getPointById(report[i].pointId);
+        if (point) report[i].pointId = point.name;
+        let tool = await toolService.getToolById(report[i].toolId);
+        if (tool) report[i].toolId = tool.name;
+      }
+    }
+
+
     await handleGenerateReport(report, message, client);
-	await userService.updateRequestUser(message.from, 1);
+    await userService.updateRequestUser(message.from, 1);
   } catch (error: any) {
     console.error('An error occured', error);
     message.reply(
@@ -162,14 +176,23 @@ const handleGenerateReport = async (
 
     // Cabeçalhos das colunas (ajuste conforme a estrutura de PrismaOrder)
     sheet.columns = [
-      { header: 'ID', key: 'id', width: 100 },
-      { header: 'Nome do Cliente', key: 'customerName', width: 30 },
-      // ... outros cabeçalhos de coluna ...
+      { header: 'Id', key: 'id', width: 60 },
+      { header: 'Nome do Requerente', key: 'customerName', width: 50 },
+      { header: 'Código do Pedido', key: 'code', width: 30 },
+      { header: 'Status', key: 'type', width: 30 },
+      { header: 'Ferramenta', key: 'tool', width: 50 },
+      { header: 'Setor', key: 'point', width: 30 },
     ];
 
     orders.forEach((order) => {
       sheet.addRow({
         id: order.id,
+        code: order.code,
+        type: order.type,
+        tool: order.toolId,
+        customerName: order.userId,
+        point: order.pointId,
+
       });
     });
 

@@ -25,6 +25,24 @@ export default class ToolService {
     }
   }
 
+  async getToolById(id: string): Promise<PrismaTool | null> {
+    try {
+      const tool = await this.prisma.tool.findFirst({
+        where: {
+          id: id,
+        },
+      });
+      if (tool == null) return null;
+
+      return tool;
+    } catch (error) {
+      console.error('An error occurred while fetching the user:', error);
+      throw error;
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
+
   async getTools(): Promise<PrismaTool[] | null> {
     try {
       const tool = await this.prisma.tool.findMany();
