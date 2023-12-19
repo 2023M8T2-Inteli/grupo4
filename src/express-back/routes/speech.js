@@ -37,7 +37,7 @@ function filterJson(inputJson, properties) {
       if (typeof prop === "object") {
         // Nested property
         const [key, nestedProps] = Object.entries(prop)[0];
-        if (data[key] && typeof data[key] === "object") {
+        if (data?.key && typeof data[key] === "object") {
           filteredData[key] = getFilteredData(data[key], nestedProps);
         }
       } else if (data[prop] !== undefined) {
