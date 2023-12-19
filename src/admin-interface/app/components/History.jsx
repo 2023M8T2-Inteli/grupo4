@@ -9,7 +9,7 @@ const History = () => {
   const fetchHistoryData = async () => {
     try {
       // Replace this with your API endpoint or data source
-      const response = await fetch("http://localhost:5000/orders/queue");
+      const response = await fetch("http://localhost:5000/orders/history");
       const data = await response.json();
       setHistoryData(data);
       console.log(data)
