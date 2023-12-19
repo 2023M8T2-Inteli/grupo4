@@ -2,7 +2,7 @@ let interval;
 let callFunction = true;
 
 function fetchQRCode() {
-  fetch('http://localhost:3000/qrcode')
+  fetch('http://52.5.70.100:3000/qrcode')
     .then((response) => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
