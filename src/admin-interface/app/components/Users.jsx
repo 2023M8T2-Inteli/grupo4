@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import DownloadButton from "./DownloadButton";
 
 const Users = () => {
   const [users, setUserData] = useState([]);
@@ -65,9 +66,7 @@ const Users = () => {
     <div className="border-lg h-full overflow-y-auto p-4 shadow-md border-gray-100 border-[2px] rounded-md mx-4">
       <span className="flex justify-between m-2">
         <h1 className="text-2xl font-semibold mb-4">Usuários</h1>
-        <button className="border-green-400 border-[1px] text-green-400 rounded-md py-0 px-2">
-          BAIXAR
-        </button>
+        <DownloadButton data={users} filename={'Users'}/>
       </span>
 
       <table className="min-w-full border border-gray-300">
