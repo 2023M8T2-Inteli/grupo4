@@ -38,7 +38,10 @@ router.get('/:id', async (req, res) => {
 
 // Create - Add a new point
 router.post('/', async (req, res) => {
-    const { name, pointX, pointY, pointZ } = req.body;
+    let { name, pointX, pointY, pointZ } = req.body;
+    pointX = parseFloat(pointX);
+    pointY = parseFloat(pointY);
+    pointZ = parseFloat(pointZ);
 
     try {
         const point = await prisma.point.create({
@@ -65,6 +68,24 @@ router.delete('/', async (req, res) => {
         res.json(points);
     } catch (error) {
         console.error('Error deleting points:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// Delete - Delete a specific point by ID
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deletedPoint = await prisma.point.delete({
+            where: {
+                id,
+            },
+        });
+
+        res.json(deletedPoint);
+    } catch (error) {
+        console.error('Error deleting point:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
