@@ -9,7 +9,7 @@ const Users = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://localhost:5000/users");
+      const response = await fetch(process.env.NEXT_PUBLIC_HOST + "/users");
       const data = await response.json();
       setUserData(data);
     } catch (error) {
@@ -24,7 +24,7 @@ const Users = () => {
   const handleBlur = async (id, field, value) => {
     try {
       // Update the user data on the server using a PUT request
-      await fetch(`http://localhost:5000/users/${id}`, {
+      await fetch(`${process.env.NEXT_PUBLIC_HOST}/users/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +43,7 @@ const Users = () => {
   const handleRoleChange = async (id, value) => {
     try {
       // Update the role for the user on the server using a PUT request
-      await fetch(`http://localhost:5000/users/${id}`, {
+      await fetch(`${process.env.NEXT_PUBLIC_HOST}/users/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

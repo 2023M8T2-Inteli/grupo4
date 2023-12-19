@@ -27,6 +27,7 @@ const page = () => {
     }
 
     const data = await response.json();
+    console.log(data)
     setNow(data[0])
     setQueue(data.slice(1));
     
