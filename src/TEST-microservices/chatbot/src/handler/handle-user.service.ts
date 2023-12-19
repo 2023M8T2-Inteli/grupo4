@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { io, Socket } from 'socket.io-client';
 import { Order, Point, Role, Tool, User } from '@prisma/client';
 import {
@@ -14,6 +14,10 @@ import {
 } from '../prisma/order.service';
 import { LocationService } from '../prisma/location.service';
 import { ToolService } from '../prisma/tool.service';
+import { AIService } from '../AI/AI.service';
+import { WhatsappService } from '../whatsapp/whatsapp.service';
+import { MessageMedia } from 'whatsapp-web.js';
+import { TranscriptionService } from '../prisma/transcription.service';
 
 interface CreateNewOrderArgs {
   from: number[];
@@ -30,6 +34,11 @@ export class HandleUserService {
     @Inject(OrderService) protected orderService: OrderService,
     @Inject(LocationService) protected locationService: LocationService,
     @Inject(ToolService) protected toolService: ToolService,
+    @Inject(AIService) protected aiService: AIService,
+    @Inject(forwardRef(() => WhatsappService))
+    protected whatsappService: WhatsappService,
+    @Inject(TranscriptionService)
+    protected transcriptionService: TranscriptionService,
   ) {
     this.sioClient = io(process.env.SOCKET_URL || '');
     this.permissionMapping = {
@@ -151,6 +160,38 @@ export class HandleUserService {
     }
   }
 
+  async handleSendAudio(userPhone: string, args: { res: string }) {
+    const { res } = args;
+    if (!res)
+      return 'Não foi possível responder nesse momento. Gostaria de fazer um novo pedido?';
+
+    const permissionMessage = await this.checkPermission(userPhone, Role.USER);
+
+    if (permissionMessage) return permissionMessage;
+
+    const audioBase64 = await this.aiService.text2Speech(res);
+
+    const messageMedia = new MessageMedia('audio/mp3', audioBase64);
+
+    const sendedMessage = await this.whatsappService.sendMessage(
+      userPhone,
+      messageMedia,
+      {
+        sendAudioAsVoice: true,
+      },
+    );
+
+    if (sendedMessage) {
+      await this.transcriptionService.insertNewTranscription(
+        sendedMessage.id.id,
+        sendedMessage.mediaKey,
+        res,
+      );
+    }
+
+    return;
+  }
+
   protected async generateNewOrder(
     userPhone: string,
     from: number[],
@@ -175,17 +216,27 @@ export class HandleUserService {
         locationId,
       );
 
-      this.sioClient.emit('enqueue', {
-        x: from[0],
-        y: from[1],
-        z: 0.0,
-      });
+      this.sioClient.emit(
+        'enqueue',
+        JSON.stringify({
+          id: order.code,
+          type: 'GRAB',
+          x: from[0],
+          y: from[1],
+          z: 0.0,
+        }),
+      );
 
-      this.sioClient.emit('enqueue', {
-        x: to[0],
-        y: to[1],
-        z: 0.0,
-      });
+      this.sioClient.emit(
+        'enqueue',
+        JSON.stringify({
+          id: order.code,
+          type: 'DROP',
+          x: to[0],
+          y: to[1],
+          z: 0.0,
+        }),
+      );
 
       return `Pedido realizado com sucesso! O número do seu pedido é: \n - ${order.code} \n Assim que chegarmos na sua localização você será informado! 😀`;
     } catch (e) {

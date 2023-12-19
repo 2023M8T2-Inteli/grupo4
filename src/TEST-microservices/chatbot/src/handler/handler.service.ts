@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Chat, Message } from 'whatsapp-web.js';
 import { UserService } from 'src/prisma/user.service';
 import { AIService } from '../AI/AI.service';
-import transformConversation from './utils/transformConversation';
 import { UserDoesntExists } from 'src/prisma/user.service';
 import { io, Socket } from 'socket.io-client';
 import { ToolService } from '../prisma/tool.service';
@@ -18,6 +17,17 @@ import { Transcription } from '@prisma/client';
 interface ParsedMessage {
   role: 'user' | 'assistant';
   content: string;
+}
+
+export class MessageIsNotAudio extends Error {
+  constructor(message: string = 'Message is not audio') {
+    super(message);
+    this.name = 'MessageIsNotAudio';
+    // Mantém o stack trace em V8
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, MessageIsNotAudio);
+    }
+  }
 }
 
 @Injectable()
@@ -50,6 +60,7 @@ export class HandlerService {
   }
 
   async handleIncomingMessage(message: Message): Promise<any> {
+    console.log('\n\n[handleIncomingMessage] INCOMING NEW MESSAGE');
     let userData;
     try {
       userData = await this.userService.getUser(message.from);
@@ -61,14 +72,26 @@ export class HandlerService {
       }
     }
 
-    console.log('-> sender:', message.from, ' -- role:', userData?.role);
+    console.log(
+      '[handleIncomingMessage] sender:',
+      message.from,
+      ' -- role:',
+      userData?.role,
+    );
 
     const UserRole = (userData?.role as 'USER' | 'ADMIN' | 'LEAD') || 'LEAD';
 
-    const trans = await this.handleNewMedia(message);
+    try {
+      const trans = await this.handleNewMedia(message);
 
-    if (!trans)
-      return 'Parece que não entendi o que você disse, poderia repetir?';
+      if (trans) console.log(`[handleIncomingMessage] Transcription went fine`);
+    } catch (e) {
+      if (e instanceof MessageIsNotAudio)
+        return 'Parece que não entendi o que você disse, poderia repetir?';
+
+      console.log(`-> Erro ao tentar transcrever audio: ${e}`);
+      return 'Um erro aconteceu, contate um administrador.';
+    }
 
     const chat: Chat = await message.getChat();
 
@@ -102,10 +125,20 @@ export class HandlerService {
 
     switch (res.type) {
       case 'message':
+        console.log(
+          '[handleNewMessage] GPT responded with a MESSAGE:\\033[96m \n -> ' +
+            res.message,
+          '\\033[0m',
+        );
         return res.message;
       case 'function_call':
         try {
-          console.log(res.function);
+          console.log(
+            '[handleNewMessage] GPT responded with a function call! Calling:\\033[96m',
+            res.function,
+            '\\033[0m',
+          );
+          console.log('arguments: \\033[35m', res.arguments, '\\033[0m');
           return await this.functionMapping[UserRole][res.function](
             message.from,
             res.arguments && res.arguments,
@@ -140,15 +173,16 @@ export class HandlerService {
       let messageContent = '';
 
       if (wppMessage.hasMedia) {
+        console.log(
+          '[transformConversation] Arquivo de media encontrado. Tratando...',
+        );
         const transcription: string | null =
           await this.transcriptionService.getTranscriptionFromMsgId(
             String(wppMessage.id.id),
           );
 
         if (!transcription)
-          console.error(
-            '---- ATENÇÃO! Serviço de stt retornou uma mensagem vazia!',
-          );
+          console.error('[transformConversation] ATENÇÃO! Mensagem vazia!');
 
         messageContent = transcription || '';
       } else messageContent = wppMessage.body;
@@ -158,8 +192,13 @@ export class HandlerService {
       parsedMsgs.push({ role, content: messageContent });
       iterations++;
     }
-    console.log(`-> Added ${iterations} messages to Context.`);
-    console.log('-> last message: ', parsedMsgs[parsedMsgs.length - 1].content);
+    console.log(
+      `[transformConversation] added ${iterations} messages to Context.`,
+    );
+    console.log(
+      '[transformConversation] last message: ',
+      parsedMsgs[parsedMsgs.length - 1].content,
+    );
     return parsedMsgs;
   }
 
@@ -167,21 +206,21 @@ export class HandlerService {
     message: Message,
   ): Promise<void | Transcription> {
     if (!message.hasMedia) {
-      console.log('-> Message has no media');
+      console.log('[handleNewMedia] Message has no media');
       return;
     }
     const media = await message.downloadMedia();
 
-    console.log('-> Media type: ', media.mimetype);
+    console.log('[handleNewMedia] Media type: ', media.mimetype);
 
     if (!media.mimetype.includes('ogg')) {
-      console.log('-> Message is not an audio');
-      return;
+      console.log('[handleNewMedia] Message is not an audio');
+      throw new MessageIsNotAudio();
     }
 
     const transcription = await this.aiService.speech2Text(media.data);
 
-    console.log('-> Transcription: ', transcription);
+    console.log('[handleNewMedia] Transcription: ', transcription);
 
     if (transcription) {
       return await this.transcriptionService.insertNewTranscription(
