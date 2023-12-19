@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import PointModal from "./PointModal";
+import { FaTrash } from "react-icons/fa";
 const Points = () => {
   const [points, setPoints] = useState([]);
   const [editingPoint, setEditingPoint] = useState(null);
@@ -28,6 +29,7 @@ const Points = () => {
       if (response.ok) {
         // Optionally, you can handle the successful response
         console.log('Point added successfully:', formData);
+        fetchPoints();
       } else {
         // Handle the case where the server returned an error
         console.error('Failed to add point:', response.status, response.statusText);
@@ -90,6 +92,22 @@ const Points = () => {
     setEditedData({});
   };
 
+  const handleDelete = async (pointId) => {
+    try {
+      const response = await fetch(`http://localhost:5000/points/${pointId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setPoints((prevPoints) => prevPoints.filter((p) => p.id !== pointId));
+      } else {
+        console.error("Failed to delete point on the server");
+      }
+    } catch (error) {
+      console.error("Error deleting point:", error);
+    }
+  };
+
   useEffect(() => {
     fetchPoints();
     const intervalId = setInterval(fetchPoints, 10000);
@@ -100,6 +118,11 @@ const Points = () => {
     <div className="border-lg h-full overflow-y-auto p-4 shadow-md border-gray-100 border-[2px] rounded-md mx-4">
       <span className="flex justify-between m-2">
         <h1 className="text-2xl font-semibold mb-4">Destinos</h1>
+        <button
+        className="border-green-400 border-[1px] text-green-400 rounded-md py-0 px-2 mt-2"
+      >
+        BAIXAR
+      </button>
       </span>
 
       <table className="min-w-full border border-gray-300">
@@ -109,6 +132,7 @@ const Points = () => {
             <th className="py-2 px-4 border-b">Coordenada X</th>
             <th className="py-2 px-4 border-b">Coordenada Y</th>
             <th className="py-2 px-4 border-b">Coordenada Z</th>
+            <th className="py-2 px-4 border-b"></th>
           </tr>
         </thead>
         <tbody>
@@ -168,6 +192,11 @@ const Points = () => {
                 ) : (
                   point.pointZ
                 )}
+              </td>
+              <td className="py-2 px-4">
+                <button onClick={() => handleDelete(point.id)}>
+                  <FaTrash />
+                </button>
               </td>
             </tr>
           ))}
