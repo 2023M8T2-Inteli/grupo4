@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import DownloadButton from "./DownloadButton";
 import PointModal from "./PointModal";
+
 const Points = () => {
   const [points, setPoints] = useState([]);
   const [editingPoint, setEditingPoint] = useState(null);
@@ -100,6 +102,7 @@ const Points = () => {
     <div className="border-lg h-full overflow-y-auto p-4 shadow-md border-gray-100 border-[2px] rounded-md mx-4">
       <span className="flex justify-between m-2">
         <h1 className="text-2xl font-semibold mb-4">Destinos</h1>
+        <DownloadButton data={points} filename={'Points'}/>
       </span>
 
       <table className="min-w-full border border-gray-300">
