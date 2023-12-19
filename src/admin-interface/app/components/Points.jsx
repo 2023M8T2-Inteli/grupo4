@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import DownloadButton from "./DownloadButton";
+
 import PointModal from "./PointModal";
 import DownloadButton from "./DownloadButton";
 const Points = () => {
@@ -47,6 +49,7 @@ const Points = () => {
       const response = await fetch("http://localhost:5000/points");
       const data = await response.json();
       setPoints(data);
+      console.log(data)
       console.log(data)
     } catch (error) {
       console.error("Error fetching points data:", error);
@@ -102,6 +105,7 @@ const Points = () => {
     <div className="border-lg h-full overflow-y-auto p-4 shadow-md border-gray-100 border-[2px] rounded-md mx-4">
       <span className="flex justify-between m-2">
         <h1 className="text-2xl font-semibold mb-4">Destinos</h1>
+        <DownloadButton data={points} filename={'Points'}/>
         <DownloadButton data={points} filename={'Points'}/>
       </span>
 
