@@ -9,7 +9,7 @@ import { HandleAdminService } from './handle-admin.service';
 import { WhatsappModule } from 'src/whatsapp/whatsapp.module';
 
 @Module({
-  imports: [AIModule, PrismaModule, forwardRef(()=>WhatsappModule)],
+  imports: [AIModule, PrismaModule, forwardRef(() => WhatsappModule)],
   controllers: [HandlerController],
   providers: [
     HandlerService,

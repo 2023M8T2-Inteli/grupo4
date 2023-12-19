@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { HandleUserService } from './handle-user.service';
 import {
   NothingToUpdate,
@@ -9,6 +9,9 @@ import { OrderService } from '../prisma/order.service';
 import { LocationService } from '../prisma/location.service';
 import { ToolService } from '../prisma/tool.service';
 import { Role, Prisma } from '@prisma/client';
+import { AIService } from '../AI/AI.service';
+import { WhatsappService } from '../whatsapp/whatsapp.service';
+import { TranscriptionService } from '../prisma/transcription.service';
 
 interface AuthorizeUserArgs {
   targetPhone?: string;
@@ -23,8 +26,21 @@ export class HandleAdminService extends HandleUserService {
     @Inject(OrderService) protected orderService: OrderService,
     @Inject(LocationService) protected locationService: LocationService,
     @Inject(ToolService) protected toolService: ToolService,
+    @Inject(AIService) protected aiService: AIService,
+    @Inject(forwardRef(() => WhatsappService))
+    protected whatsappService: WhatsappService,
+    @Inject(TranscriptionService)
+    protected transcriptionService: TranscriptionService,
   ) {
-    super(userService, orderService, locationService, toolService);
+    super(
+      userService,
+      orderService,
+      locationService,
+      toolService,
+      aiService,
+      whatsappService,
+      transcriptionService,
+    );
   }
 
   async handleAuthorizeUser(userPhone: string, args: AuthorizeUserArgs) {

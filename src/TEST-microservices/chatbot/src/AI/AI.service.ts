@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { Readable } from 'stream';
+import { TextToSpeechClient } from '@google-cloud/text-to-speech';
 import { Configuration, OpenAIApi } from 'openai';
 import * as path from 'path';
 import FormData from 'form-data';
@@ -30,6 +30,7 @@ export interface GPTResponseMessage {
 @Injectable()
 export class AIService {
   private readonly openai: OpenAIApi;
+  private readonly ttsClient: TextToSpeechClient;
   public readonly vectorizedData: any;
 
   constructor() {
@@ -40,6 +41,14 @@ export class AIService {
         apiKey: process.env.OPENAI_API_KEY,
       }),
     );
+
+    const credentials = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'googlespeech.json'), 'utf-8'),
+    );
+
+    this.ttsClient = new TextToSpeechClient({
+      credentials,
+    });
   }
 
   // função principal para gerar uma resposta pelo GPT
@@ -61,7 +70,6 @@ export class AIService {
       model: 'gpt-4',
       temperature: 0.8,
     });
-    console.log(res.data.choices[0]);
     if (res.data.choices[0].message?.function_call?.name) {
       return {
         type: 'function_call',
@@ -160,6 +168,27 @@ export class AIService {
       fs.unlink(tempFilePath, (err) => {
         if (err) console.error('Error deleting temporary file:', err);
       });
+    }
+  }
+
+  async text2Speech(text: string) {
+    let response;
+    try {
+      response = await this.ttsClient.synthesizeSpeech({
+        input: { text: text },
+        voice: { languageCode: 'pt-BR', ssmlGender: 'FEMALE' },
+        audioConfig: { audioEncoding: 'MP3' },
+      });
+
+      const audioBase64 = Buffer.from(
+        response[0].audioContent,
+        'binary',
+      ).toString('base64');
+
+      return audioBase64;
+    } catch (e) {
+      console.log(`-> Error: ${e}`);
+      return;
     }
   }
 
