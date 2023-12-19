@@ -1,4 +1,5 @@
 const speech = require("@google-cloud/speech");
+require("dotenv").config();
 const credentials = {
   type: process.env.TYPE,
   project_id: process.env.PROJECT_ID,
@@ -12,8 +13,8 @@ const credentials = {
   client_x509_cert_url: process.env.CLIENT_X509_CERT_URL,
   universe_domain: process.env.UNIVERSE_DOMAIN
 };
-
-const speechClient = new speech.SpeechClient(credentials);
+console.log(credentials)
+const speechClient = new speech.SpeechClient({credentials});
 
 
 async function recognizeSpeech(audioBuffer) {

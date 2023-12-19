@@ -1,5 +1,6 @@
 const fs = require("fs");
 const textToSpeech = require("@google-cloud/text-to-speech");
+require("dotenv").config();
 const credentials = {
   type: process.env.TYPE,
   project_id: process.env.PROJECT_ID,
@@ -13,8 +14,9 @@ const credentials = {
   client_x509_cert_url: process.env.CLIENT_X509_CERT_URL,
   universe_domain: process.env.UNIVERSE_DOMAIN
 };
+console.log(credentials)
 
-const talkClient = new textToSpeech.TextToSpeechClient(credentials);
+const talkClient = new textToSpeech.TextToSpeechClient({credentials});
 
 async function convertTextToSpeech(text) {
   const speechRequest = {
