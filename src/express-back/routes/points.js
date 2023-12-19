@@ -69,4 +69,39 @@ router.delete('/', async (req, res) => {
     }
 });
 
+// Update - Update a specific point by ID
+router.put('/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, pointX, pointY, pointZ } = req.body;
+
+    try {
+        const existingPoint = await prisma.point.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        if (!existingPoint) {
+            return res.status(404).json({ error: 'Point not found' });
+        }
+
+        const updatedPoint = await prisma.point.update({
+            where: {
+                id,
+            },
+            data: {
+                name: name || existingPoint.name,
+                pointX: parseFloat(pointX) || existingPoint.pointX,
+                pointY: parseFloat(pointY) || existingPoint.pointY,
+                pointZ: parseFloat(pointZ) || existingPoint.pointZ,
+            },
+        });
+
+        res.json(updatedPoint);
+    } catch (error) {
+        console.error('Error updating point:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 module.exports = router;
