@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "cli-color": "^2.0.3",
+    "react-qr-code": "^2.0.12"
+  }
+}
