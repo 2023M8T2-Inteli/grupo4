@@ -56,6 +56,14 @@ export class UserService {
     return user;
   }
 
+  async getUserById(id: string): Promise<PrismaUser> {
+    return await this.prisma.user.findUniqueOrThrow({
+      where: {
+        id,
+      },
+    });
+  }
+
   async getUserRole(cellPhone: string): Promise<Role> {
     const user = await this.getUser(cellPhone);
     return user.role;

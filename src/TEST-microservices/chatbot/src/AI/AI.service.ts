@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { TextToSpeechClient } from '@google-cloud/text-to-speech';
 import { Configuration, OpenAIApi } from 'openai';
@@ -11,6 +11,7 @@ import ffmpeg from 'fluent-ffmpeg';
 import { generateLLMSystemMessages } from './chatgpt_funtions';
 import * as os from 'os';
 import * as crypto from 'crypto';
+import { GPTFunctionCallingService } from '../prisma/GPTFunctionCalling.service';
 
 interface ChatHistory {
   role: 'user' | 'system' | 'assistant' | 'function';
@@ -33,7 +34,10 @@ export class AIService {
   private readonly ttsClient: TextToSpeechClient;
   public readonly vectorizedData: any;
 
-  constructor() {
+  constructor(
+    @Inject(GPTFunctionCallingService)
+    private gptFunctionCallingService: GPTFunctionCallingService,
+  ) {
     if (!process.env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY not set');
 
     this.openai = new OpenAIApi(
@@ -57,6 +61,8 @@ export class AIService {
     toolsCordinates: string,
     locationCoordinates: string,
     chatHistory: ChatHistory[],
+    messageId: string,
+    userId: string,
   ): Promise<GPTResponseFunctionCall | GPTResponseMessage> => {
     const { system_message, gpt_tools } = generateLLMSystemMessages(
       userRole,
@@ -67,10 +73,19 @@ export class AIService {
     const res = await this.openai.createChatCompletion({
       functions: gpt_tools,
       messages: [{ role: 'system', content: system_message }, ...chatHistory],
-      model: 'gpt-4',
+      model: 'gpt-3.5-turbo-1106',
       temperature: 0.8,
     });
     if (res.data.choices[0].message?.function_call?.name) {
+      if (userId) {
+        await this.gptFunctionCallingService.insertNewFunctionCalling(
+          res.data.id,
+          JSON.stringify(res.data.choices[0].message),
+          res.data.choices[0].message.function_call.name,
+          messageId,
+          userId,
+        );
+      }
       return {
         type: 'function_call',
         function: res.data.choices[0].message.function_call.name,

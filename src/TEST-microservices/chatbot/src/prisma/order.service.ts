@@ -53,6 +53,10 @@ export class OrderService {
     @Inject(PrismaService) private prisma: PrismaService,
     @Inject(UserService) private userService: UserService,
   ) {}
+  constructor(
+    @Inject(PrismaService) private prisma: PrismaService,
+    @Inject(UserService) private userService: UserService,
+  ) {}
 
   async getOrderByCode(
     userPhone: string,
@@ -142,6 +146,21 @@ export class OrderService {
       throw new NotPossibleToCreateOrder();
     }
     return orders;
+    pointId: string,
+  ): Promise<PrismaOrder> {
+    const user = await this.userService.getUser(cellPhone);
+    const orders = await this.prisma.order.create({
+      data: {
+        type: 'In Progress',
+        toolId: toolId,
+        userId: user.id,
+        pointId: pointId,
+      },
+    });
+    if (orders == null) {
+      throw new NotPossibleToCreateOrder();
+    }
+    return orders;
   }
 
   async updateOrder(
@@ -171,6 +190,26 @@ export class OrderService {
     } catch (error) {
       console.error('An error occurred while fetching the user:', error);
       throw error;
+    }
+  }
+
+  async updateOrderStatusByCode(orderCode: number, status: string) {
+    await this.ensureOrderExists(orderCode);
+
+    const orderUpdated = await this.prisma.order.update({
+      where: { code: orderCode },
+      data: { type: status },
+    });
+
+    return orderUpdated;
+  }
+
+  private async ensureOrderExists(orderCode: number) {
+    const order = await this.prisma.order.findUnique({
+      where: { code: orderCode },
+    });
+    if (!order) {
+      throw new OrderDoesntExists();
     }
   }
 

@@ -18,6 +18,7 @@ import { AIService } from '../AI/AI.service';
 import { WhatsappService } from '../whatsapp/whatsapp.service';
 import { MessageMedia } from 'whatsapp-web.js';
 import { TranscriptionService } from '../prisma/transcription.service';
+import { WebsocketService } from 'src/websockets/websocket.service';
 
 interface CreateNewOrderArgs {
   from: number[];
@@ -39,6 +40,7 @@ export class HandleUserService {
     protected whatsappService: WhatsappService,
     @Inject(TranscriptionService)
     protected transcriptionService: TranscriptionService,
+    @Inject(WebsocketService) protected websocketService: WebsocketService,
   ) {
     this.sioClient = io(process.env.SOCKET_URL || '');
     this.permissionMapping = {
@@ -192,6 +194,56 @@ export class HandleUserService {
     return;
   }
 
+  async handleConfirmOrder(
+    userPhone: string,
+    args: { orderId: number; delivered: boolean },
+  ) {
+    try {
+      const permissionMessage = await this.checkPermission(
+        userPhone,
+        Role.USER,
+      );
+
+      if (permissionMessage) return permissionMessage;
+
+      const { orderId, delivered } = args;
+
+      if (
+        (!Number(orderId) && Number(orderId) !== 0) ||
+        typeof delivered !== 'boolean'
+      )
+        return 'Não foi possível confirmar o pedido. Precisa de mais alguma outra ajuda?';
+
+      if (delivered) {
+        const updatedOrder = await this.orderService.updateOrderStatusByCode(
+          orderId,
+          'Finished',
+        );
+
+        this.websocketService.emergencyStop({ emergency_stop: 0 });
+
+        return `Pedido ${updatedOrder.code} confirmado com sucesso! \n Obrigado por utilizar nossos serviços, esperamos que tenha gostado! 😁`;
+      }
+
+      const updatedOrder = await this.orderService.updateOrderStatusByCode(
+        orderId,
+        'Canceled',
+      );
+
+      this.whatsappService.sendAdminContact(userPhone);
+
+      this.websocketService.emergencyStop({ emergency_stop: 0 });
+
+      return `Ficamos muito tristes em saber que não conseguimos entregar o seu pedido. 😢. \n O pedido ${updatedOrder.code} foi cancelado com sucesso.\n Estou mandando aqui um contato de um administrador, caso queira reportar algum problema. \n Gostaria de fazer um novo pedido?`;
+    } catch (e) {
+      if (e instanceof UserDoesntExists)
+        return 'Ops, parece que houve um erro aqui no sistema e você ainda não tem um cadastro conosco. Gostaria de fazer um agora? 😀';
+      if (e instanceof OrderDoesntExists)
+        return 'Não consegui encontrar nenhuma ordem com esse código. Você gostaria de ver todos os seus pedidos?';
+      return 'Um erro aconteceu, contate um administrador.';
+    }
+  }
+
   protected async generateNewOrder(
     userPhone: string,
     from: number[],
@@ -216,33 +268,39 @@ export class HandleUserService {
         locationId,
       );
 
-      this.sioClient.emit(
-        'enqueue',
-        JSON.stringify({
-          id: order.code,
-          type: 'GRAB',
-          x: from[0],
-          y: from[1],
-          z: 0.0,
-        }),
+      console.log(
+        `[handleUserService] 📦 \x1b[35m Pedido \x1b[31m GRAB \x1b[35m enviado! \x1b[0m`,
       );
 
-      this.sioClient.emit(
-        'enqueue',
-        JSON.stringify({
-          id: order.code,
-          type: 'DROP',
-          x: to[0],
-          y: to[1],
-          z: 0.0,
-        }),
+      this.websocketService.addPointToQueue({
+        id: order.code.toString(),
+        type: 'GRAB',
+        x: from[0],
+        y: from[1],
+      });
+
+      await this.timeOut(500);
+
+      console.log(
+        `[handleUserService] 🔚 \x1b[35m Pedido \x1b[31m DROP \x1b[35m enviado! \x1b[0m`,
       );
+
+      this.websocketService.addPointToQueue({
+        id: order.code.toString(),
+        type: 'DROP',
+        x: to[0],
+        y: to[1],
+      });
 
       return `Pedido realizado com sucesso! O número do seu pedido é: \n - ${order.code} \n Assim que chegarmos na sua localização você será informado! 😀`;
     } catch (e) {
       console.log(e);
       return 'Não foi possível realizar o seu pedido, por favor contate um administrador.';
     }
+  }
+
+  protected timeOut(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   protected async formatOrders(orders: Order[]) {

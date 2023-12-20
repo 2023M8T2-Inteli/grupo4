@@ -1,9 +1,10 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Client, Events, LocalAuth, Message } from 'whatsapp-web.js';
 import constants from './constants';
-import qrcode from 'qrcode-terminal';
 import { HandlerService } from '../handler/handler.service';
 import { check_out, validate_message } from '../handler/utils/validate_msg';
+import { UserService } from 'src/prisma/user.service';
+import * as qrcode from 'qrcode';
 
 @Injectable()
 export class WhatsappService {
@@ -11,10 +12,12 @@ export class WhatsappService {
   private qrCodeUrl: string | null = null;
   public botReadyTimestamp: number | null = null;
   private messageQueue: any = [];
+  private isAuthenticated: boolean;
 
   constructor(
     @Inject(HandlerService)
     private handlerService: HandlerService,
+    @Inject(UserService) private userService: UserService,
   ) {
     if (btoa(process.env.AUTH_TOKEN) != btoa(process.env.TOKEN_SECRET))
       throw new Error('Token inválido para o chatbot');
@@ -27,6 +30,8 @@ export class WhatsappService {
     });
     console.log('[whatsappService] wpp client criado');
     this.initializeClient();
+
+    this.isAuthenticated = false;
   }
 
   initializeClient() {
@@ -34,7 +39,7 @@ export class WhatsappService {
 
     this.client.on('qr', (qr: string) => {
       console.log('NEW QR -- ' + qr);
-      qrcode.generate(qr, { small: true });
+      this.qrCodeUrl = qr;
     });
 
     this.client.on(Events.LOADING_SCREEN, (percent) => {
@@ -43,11 +48,15 @@ export class WhatsappService {
 
     // WhatsApp authenticated
     this.client.on(Events.AUTHENTICATED, () => {
-      console.log('[whatsappService] authenticated to whatsapp!');
+      this.isAuthenticated = true;
+      console.log(
+        '[whatsappService]\x1b[36m\x1b[1m Authenticated to whatsapp!\x1b[0m',
+      );
     });
 
     // WhatsApp authentication failure
     this.client.on(Events.AUTHENTICATION_FAILURE, () => {
+      this.isAuthenticated = false;
       console.log('authentication failure');
     });
 
@@ -86,8 +95,10 @@ export class WhatsappService {
     this.client.initialize();
   }
 
-  getQrCodeUrl(): string | null {
-    return this.qrCodeUrl;
+  getQrCodeUrl(): any {
+    if (this.isAuthenticated) return {qr: "", isAuthenticated: true}
+    if (!this.qrCodeUrl) return  {qr: "", isAuthenticated: false}
+    return {qr: this.qrCodeUrl, isAuthenticated: false};
   }
 
   async sendMessage(to: string, message: any, options = {}): Promise<Message> {
@@ -96,5 +107,10 @@ export class WhatsappService {
 
   async getContactFromID(id: string) {
     return await this.client.getContactById(id);
+  }
+  async sendAdminContact(userPhone: string) {
+    const admin = await this.userService.getAdmin();
+    const adminContact = await this.getContactFromID(admin.cellPhone);
+    this.sendMessage(userPhone, adminContact);
   }
 }
