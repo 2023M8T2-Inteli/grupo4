@@ -38,8 +38,10 @@ router.get('/:id', async (req, res) => {
 
 // Create - Add a new tool
 router.post('/', async (req, res) => {
-    const { name, price, tag, minQuantity, maxQuantity } = req.body;
-
+    let { name, price, tag, minQuantity, maxQuantity } = req.body;
+    price = parseFloat(price);
+    minQuantity = parseFloat(minQuantity);
+    maxQuantity = parseFloat(maxQuantity);
     try {
         const tool = await prisma.tool.create({
             data: {
@@ -69,6 +71,24 @@ router.delete('/', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+// Delete - Delete a specific tool by ID
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const deletedTool = await prisma.tool.delete({
+            where: {
+                id,
+            },
+        });
+
+        res.json(deletedTool);
+    } catch (error) {
+        console.error('Error deleting tool:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+    
 
 router.put('/:id', async (req, res) => {
     const { id } = req.params;

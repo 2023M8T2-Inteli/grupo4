@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "next dev -p 3001",
+    "build": "next build -p 3001",
+    "start": "next start -p 3001",
     "lint": "next lint"
   },
   "dependencies": {
     "@prisma/client": "^5.7.0",
-    "next": "14.0.3",
+    "next": "^14.0.3",
     "prisma": "^5.7.0",
     "react": "^18.2",
     "react-audio-voice-recorder": "^2.2.0",

@@ -1,6 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import DownloadButton from "./DownloadButton";
 import PointModal from "./PointModal";
+
+import { FaTrash } from "react-icons/fa";
 const Points = () => {
   const [points, setPoints] = useState([]);
   const [editingPoint, setEditingPoint] = useState(null);
@@ -17,7 +20,7 @@ const Points = () => {
 
   const handleAddPoint = async (formData) => {
     try {
-      const response = await fetch('http://localhost:5000/points', {
+      const response = await fetch(process.env.NEXT_PUBLIC_HOST + '/points', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -28,6 +31,7 @@ const Points = () => {
       if (response.ok) {
         // Optionally, you can handle the successful response
         console.log('Point added successfully:', formData);
+        fetchPoints();
       } else {
         // Handle the case where the server returned an error
         console.error('Failed to add point:', response.status, response.statusText);
@@ -43,7 +47,7 @@ const Points = () => {
 
   const fetchPoints = async () => {
     try {
-      const response = await fetch("http://localhost:5000/points");
+      const response = await fetch(process.env.NEXT_PUBLIC_HOST + "/points");
       const data = await response.json();
       setPoints(data);
     } catch (error) {
@@ -62,8 +66,8 @@ const Points = () => {
 
   const handleBlur = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:5000/points/${editingPoint.id}`,
+      const response = await fetch(process.env.NEXT_PUBLIC_HOST +
+        `/points/${editingPoint.id}`,
         {
           method: "PUT",
           headers: {
@@ -90,6 +94,22 @@ const Points = () => {
     setEditedData({});
   };
 
+  const handleDelete = async (pointId) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/points/${pointId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setPoints((prevPoints) => prevPoints.filter((p) => p.id !== pointId));
+      } else {
+        console.error("Failed to delete point on the server");
+      }
+    } catch (error) {
+      console.error("Error deleting point:", error);
+    }
+  };
+
   useEffect(() => {
     fetchPoints();
     const intervalId = setInterval(fetchPoints, 10000);
@@ -100,6 +120,7 @@ const Points = () => {
     <div className="border-lg h-full overflow-y-auto p-4 shadow-md border-gray-100 border-[2px] rounded-md mx-4">
       <span className="flex justify-between m-2">
         <h1 className="text-2xl font-semibold mb-4">Destinos</h1>
+        <DownloadButton data={points} filename={'Points'}/>
       </span>
 
       <table className="min-w-full border border-gray-300">
@@ -109,6 +130,7 @@ const Points = () => {
             <th className="py-2 px-4 border-b">Coordenada X</th>
             <th className="py-2 px-4 border-b">Coordenada Y</th>
             <th className="py-2 px-4 border-b">Coordenada Z</th>
+            <th className="py-2 px-4 border-b"></th>
           </tr>
         </thead>
         <tbody>
@@ -168,6 +190,11 @@ const Points = () => {
                 ) : (
                   point.pointZ
                 )}
+              </td>
+              <td className="py-2 px-4">
+                <button onClick={() => handleDelete(point.id)}>
+                  <FaTrash />
+                </button>
               </td>
             </tr>
           ))}

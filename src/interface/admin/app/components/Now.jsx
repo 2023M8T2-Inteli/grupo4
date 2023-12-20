@@ -9,7 +9,7 @@ const Now = ({now}) => {
   useEffect(() => {
     console.log('Connecting to server...')
     // Create a Socket.IO client and connect to the server
-    const socket = io('http://10.128.68.115:3000'); // Replace with your server URL
+    const socket = io(process.env.NEXT_PUBLIC_SOCKET); // Replace with your server URL
     console.log(socket)
     // Handle events from the server
     socket.on('battery', (data) => {

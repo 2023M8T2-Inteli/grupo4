@@ -55,6 +55,25 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Delete - Delete a user by ID
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const user = await prisma.user.delete({
+            where: {
+                id,
+            },
+        });
+
+        res.json(user);
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
 // Delete all
 router.delete('/', async (req, res) => {
     try {
