@@ -1,4 +1,3 @@
-
 // @ts-check
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
@@ -16,51 +15,73 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Contexto da Indústria",
+      label: "Sprint 1",
       items: [
-        "Contexto da Indústria/1.1 Análise de Impacto Ético",
-        "Contexto da Indústria/1.2 TAM-SAM-SOM",
-        "Contexto da Indústria/1.3 Análise Financeira",
-        "Contexto da Indústria/1.4 Matriz de Riscos",
-        "Contexto da Indústria/1.5 Matriz de Oceano Azul",
+        {
+          "Entendimento de negócio": [
+            "Sprint 1/Entendimento de negócio/Análise de Impacto Ético",
+            "Sprint 1/Entendimento de negócio/TAM-SAM-SOM",
+            "Sprint 1/Entendimento de negócio/Análise Financeira",
+            "Sprint 1/Entendimento de negócio/Matriz de Riscos",
+            "Sprint 1/Entendimento de negócio/Matriz de Oceano Azul",
+          ],
+        },
+        {
+          "Entendimento do usuário": [
+            "Sprint 1/Entendimento do usuário/Personas",
+            "Sprint 1/Entendimento do usuário/Histórias de Usuário",
+            "Sprint 1/Entendimento do usuário/Canvas Proposta de Valor",
+            "Sprint 1/Entendimento do usuário/Jornada do Usuário",
+          ],
+        },
+        {
+          "Arquitetura do sistema": [
+            "Sprint 1/Arquitetura do sistema/Arquitetura da Solução",
+            "Sprint 1/Arquitetura do sistema/Design Patterns",
+            "Sprint 1/Arquitetura do sistema/Levantamento de Requisitos",
+            "Sprint 1/Arquitetura do sistema/Data Structures",
+          ],
+        },
       ],
     },
     {
       type: "category",
-      label: "Proposta de Solução",
+      label: "Sprint 2",
       items: [
-        "Proposta de Solução/2.1 Arquitetura da Solução",
-        "Proposta de Solução/2.2 Personas",
-        "Proposta de Solução/2.3 Histórias de Usuário",
-        "Proposta de Solução/2.4 Levantamento de Requisitos",
-        "Proposta de Solução/2.5 Canvas Proposta de Valor",
-        "Proposta de Solução/2.6 Jornada do Usuário",
-      ],
+        "Sprint 2/Chatbot CLI",
+        "Sprint 2/Mapeamento e navegação",
+      ]
     },
     {
       type: "category",
-      label: "Desenvolvimento da Solução",
+      label: "Sprint 3",
       items: [
-        "Desenvolvimento da Solução/3.1 Design Patterns",
-        "Desenvolvimento da Solução/3.2 Mapeamento e navegação",
-        "Desenvolvimento da Solução/3.3 Chatbot",
-        "Desenvolvimento da Solução/3.4 Banco de Dados",
-        "Desenvolvimento da Solução/3.5 LLM",
-        "Desenvolvimento da Solução/3.6 Interface de admin",
-        "Desenvolvimento da Solução/3.7 Interface do robô",
-        "Desenvolvimento da Solução/3.8 Backend de interfaces",
-        "Desenvolvimento da Solução/3.9 Logs",
-        "Desenvolvimento da Solução/3.10 WebSocket",
-        "Desenvolvimento da Solução/3.12 Demonstração",
-        "Desenvolvimento da Solução/3.11 Terraform e AWS",        
-      ],
+        "Sprint 3/Banco de dados",
+        "Sprint 3/Chatbot no Whatsapp",
+        "Sprint 3/LLM",
+        "Sprint 3/WebSocket",
+      ]
+    },
+    {
+      type: "category",
+      label: "Sprint 4",
+      items: [
+        {"Interfaces": [
+          "Sprint 4/Interface de admin",
+          "Sprint 4/Interface do robô",
+          "Sprint 4/Backend de interfaces",
+        ]},
+        "Sprint 4/Logs",
+        "Sprint 4/Terraform e AWS",
+        "Sprint 4/Demonstração",
+        "Sprint 4/TTS e STT no Whatsapp",
+      
+      ]
     },
     {
       type: "category",
       label: "Manual do Usuário",
-      items: [
-        "Manual do Usuário/4.1 Manual do Usuário",       
-      ],
+      items: ["Manual do Usuário/Manual do Usuário"],
     },
     {
       type: "doc",
