@@ -28,7 +28,7 @@ const Sidebar = () => {
 
   return (
     <div className='w-64 h-screen bg-cover bg-center relative'
-    style={{ backgroundImage: `url('/bg.png')` }}>
+    style={{ backgroundImage: `url('https://d17sdup6iumur7.cloudfront.net/bg.png')` }}>
         <h1 className='text-5xl text-white text-bold text-center p-4'>VALLET</h1>
         <div className='flex flex-col text-white p-6 mb-2'>
             <button className='p-2' onClick={goHome}>Home</button>
@@ -37,7 +37,7 @@ const Sidebar = () => {
             <button className='p-2' onClick={goToTools} >Itens</button>
             <button className='p-2' onClick={goToPoints} >Destinos</button>
         </div>
-        <Image className='absolute bottom-0' src='/robot.png' width={500} height={500} />
+        <Image className='absolute bottom-0' src='https://d17sdup6iumur7.cloudfront.net/robot.png' width={500} height={500} />
 
     </div>
   )
