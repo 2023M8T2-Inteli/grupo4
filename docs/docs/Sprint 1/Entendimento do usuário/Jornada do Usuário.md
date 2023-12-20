@@ -4,7 +4,7 @@ A jornada do usuário é uma ferramenta que permite a visualização e a descri�
 
 ## Diagrama da Jornada do Usuário
 
-![Alt text](../../static/img/jornada-do-usuario.png)
+![Alt text](../../../static/img/jornada-do-usuario.png)
 
 Para vizualização completa, [acesse o link aqui.](https://www.figma.com/file/dTVw3jLRDLMIn8RtTlaSt5/Jornada-do-Usu%C3%A1rio?type=whiteboard&node-id=0%3A1&t=ey55v1KGUYvar2OP-1)
 

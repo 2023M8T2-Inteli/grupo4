@@ -2,7 +2,7 @@
 
 O Canvas Proposta de Valor é uma ferramenta que permite a visualização e a descrição da proposta de valor de um negócio. A proposta de valor é o conjunto de benefícios que uma empresa oferece aos seus clientes, com o objetivo de satisfazer suas necessidades e desejos. Abaixo, é possível visualizar o Canvas Proposta de Valor do projeto:
 
-![Canvas Proposta de Valor](../../static/img/value-proposition-canvas.png)
+![Canvas Proposta de Valor](../../../static/img/value-proposition-canvas.png)
 
 Para vizualização completa, [acesse o link aqui.](https://www.figma.com/file/cYqkZlK5GqI1buDjcrRsLt/Value-Proposition-Canvas?type=whiteboard&t=NEjaLRvpBSGyTeS5-1)
 

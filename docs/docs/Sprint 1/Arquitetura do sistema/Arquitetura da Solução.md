@@ -26,4 +26,4 @@ Uma interface de usuário está em desenvolvimento, permitindo que os clientes s
       <img src={require('@site/static/img/diagrama-de-blocos-v1.png').default} alt="Diagrama de blocos" />
 </p>
 
-Para vizualização completa, [acesse o link aqui.](https://www.figma.com/file/SgEvZR8sd8eom18jGBZDoI/Diagrama-de-blocos?type=whiteboard&node-id=0%3A1&t=TaLMiltzfbKt9zS3-1)
+Para visualização completa, [acesse o link aqui.](https://www.figma.com/file/SgEvZR8sd8eom18jGBZDoI/Diagrama-de-blocos?type=whiteboard&node-id=0%3A1&t=TaLMiltzfbKt9zS3-1)

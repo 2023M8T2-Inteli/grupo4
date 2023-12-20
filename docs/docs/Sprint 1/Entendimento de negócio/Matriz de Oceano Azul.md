@@ -18,7 +18,7 @@ Os atributos que foram selecionados para serem comparados são: Preço, Praticid
 - Velocidade: Quão rápido o robô consegue executar a tarefa;
 - Monitoramento: O quanto é possível acompanhar a operação como usuário;
 
-![Alt text](../../static/img/matriz-oceano-azul.jpeg)
+![Alt text](../../../static/img/matriz-oceano-azul.jpeg)
 
 |   Soluções   | Preço | Praticidade | Eficácia | Facilidade de Instalação | Escalabilidade | Velocidade | Velocidade | Monitoramento |
 | :------------: | :----: | :---------: | :-------: | :------------------------: | :------------: | :--------: | :--------: | :-----------: |

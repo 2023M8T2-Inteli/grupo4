@@ -1,40 +1,15 @@
-# Chatbot
-
-Durante a Sprint 2 do projeto, direcionamos nossos esforços para o desenvolvimento de um protótipo de chat integrado ao robô. Inicialmente implementado em Python, esse chatbot visa ser um ponto de contato entre o usuário e o sistema. Esse passo inicial permite que compreendamos as necessidades e desafios específicos da interação com o robô, proporcionando uma base sólida para a evolução do sistema.
-
-Além disso, planejamos uma transição estratégica para o WhatsApp em um futuro próximo. Essa escolha é motivada pela ampla acessibilidade e popularidade do WhatsApp, sendo um aplicativo já integrado aos dispositivos móveis da maioria dos usuários. Essa transição visa não apenas facilitar a adoção do sistema, mas também garantir que a interação ocorra em um ambiente familiar e confortável para os usuários, minimizando a curva de aprendizado e otimizando a eficácia da interface.
-
-## CLI
-
-O Chatbot em CLI representa a primeira iteração para a Sprint 2 do projeto, proporcionando uma interface de linha de comando para que usuários enviem comandos de movimentação a um robô na cervejaria do futuro de Guarulhos. Essa versão é um passo inicial, pois o objetivo futuro é integrar essa funcionalidade em um chat do WhatsApp, tornando a interação mais acessível e conveniente.
-
-O chatbot utiliza expressões regulares para identificar a intenção do usuário, classificando-as em categorias como cumprimento, despedida e solicitações relacionadas aos diferentes locais da cervejaria. Cada intenção está associada a um destino específico na cervejaria, representado por coordenadas (x, y, z) no espaço tridimensional.
-
-O código incorpora dois dicionários: self.intencoes mapeando expressões regulares para intenções e self.destinos mapeando intenções para as coordenadas correspondentes de destino. O chatbot publica as mensagens de posição no tópico 'chatbot_msgs' utilizando o ROS 2. O loop principal do programa solicita entradas do usuário, identifica a intenção por meio das expressões regulares e executa a ação correspondente, como o direcionamento do robô para um local específico na cervejaria.
-
-Além disso, o código fornece métodos para mover o robô para os destinos associados às intenções, encerrar o chat e imprimir mensagens apropriadas. A inicialização do ROS 2 é realizada no método main(), que cria uma instância do chatbot, inicia a conversa e, posteriormente, encerra o ROS 2. A execução do chatbot pode ser feita diretamente com o comando ros2 run navigator chatbot após a compilação do workspace, embora seja recomendado integrá-lo ao restante do sistema usando um script bash na raiz do workspace. Em conjunto, esse código oferece uma interface interativa para controlar o movimento do robô na cervejaria com base nas intenções expressas pelos usuários por meio de mensagens de texto.
-
-## Whatsapp
+# Chatbot no Whatsapp
 
 Como interface de interação com o usuário, optou-se pelo WhatsApp, devido à sua ampla acessibilidade e popularidade, uma vez que é um aplicativo já instalado nos celulares da maioria dos usuários. No Brasil, 99% da população utiliza o aplicativo. O WhatsApp também facilita a criação de chatbots, que são sistemas automatizados capazes de interagir com o usuário por meio de mensagens de texto, voz, imagens, vídeos, documentos, localização e outros tipos de mídia. Esta integração beneficia os funcionários da Ambev, que não precisam se adaptar a uma nova ferramenta, já que o WhatsApp faz parte do seu cotidiano.
 
 Por meio desta integração, os usuários podem interagir com o chatbot enviando perguntas e recebendo respostas via mensagens de texto. O chatbot é projetado para interpretar as mensagens enviadas, identificar a intenção por trás delas e fornecer a resposta mais adequada.
 
-### Protótipo de Baixa Fidelidade
 
-Para essa sprint 2, o grupo desenvolveu o protótipo de baxa fidelidade das interações e funções que o usuário irá ter com o chatbot. O protótipo foi desenvolvido no Figma, uma ferramenta de design que permite a criação de protótipos de baixa e alta fidelidade. O protótipo pode se acessado por meio do [link de acesso](https://www.figma.com/file/30UeP53WIJoLGIjlzd61if/Pr%C3%B3totipo-de-Baixa-Fidelidade?type=design&node-id=0%3A1&mode=design&t=G1gccUgdLWDn5Nad-1). Lá será possivel encontrar o prototipo de baixa fidelidade do chatbot, e também o prototipo de baixa fidelidade do display e página web de cadastro do chatbot.
-
-<p align="center" display="flex" width="300">
-
-![Alt text](../../static/img/wireframe-chatbot.png)
-
-</p>
-
-### Integração com o WhatsApp
+## Integração com o WhatsApp
 
 A integração com o WhatsApp é realizada por meio de uma árvore de interação e decisão, desenvolvida na linguagem de programação TypeScript. Esta abordagem permite uma programação mais robusta da aplicação. Todo o processo é construído com o auxílio da biblioteca whatsapp-web.js, que simula um cliente do WhatsApp Web. Isso possibilita a troca de mensagens entre o chatbot e o usuário.
 
-### Árvore de Interação
+## Árvore de Interação
 
 Atualemente a árvore de interação do chatbot é possuir 4 funcionalidades rodando, sendo eles:
 
@@ -44,7 +19,7 @@ Atualemente a árvore de interação do chatbot é possuir 4 funcionalidades rod
 4. Falar com um atendente: O chatbot verifica se o usuário deseja falar com um atendente, caso sim, o chatbot envia o contato de um atendente para o usuário entrar em contato.
 5. Alteração no nome do usuário: O chatbot verifica se o usuário deseja alterar o nome cadastrado no sistema, caso sim, o chatbot solicita o novo nome do usuário e altera o nome cadastrado no sistema.
 
-### Arquitetura do Chatbot
+## Arquitetura do Chatbot
 
 O diagrama apresentado ilustra a arquitetura e o fluxo de processos de um sistema de chatbot integrado com um TurtleBot 3. A arquitetura é dividida em quatro principais componentes: Turtle Bot 3, Bridge (Ponte), Cloud (Nuvem) e WhatsApp. Aqui está uma descrição detalhada de cada componente e seu funcionamento no sistema:
 
@@ -56,16 +31,16 @@ O diagrama apresentado ilustra a arquitetura e o fluxo de processos de um sistem
 
 Para visualizar o código completo, acesse o link [clicando aqui](https://www.figma.com/file/EyWTXX5oJpVthHioS1puEQ/Diagrama-Chatbot?type=whiteboard&node-id=1%3A2&t=kOvZbGWgMXaA92c9-1)
 
-#### Turtle Bot 3
+### Turtle Bot 3
 
 - **NAV2**: Representa o componente de navegação do TurtleBot 3. O NAV2 é responsável por orientar o robô em seu ambiente, utilizando mapas e sensores para navegar até destinos pré-determinados.
 - O TurtleBot 3 recebe instruções para enviar os robôs disponíveis para os destinos especificados.
 
-#### Bridge (Ponte)
+### Bridge (Ponte)
 
 - **Fila de locais de destino**: Armazena as coordenadas ou identificadores dos destinos que o TurtleBot 3 deve visitar. Essa fila é usada para gerenciar e direcionar o robô para vários pontos conforme necessário.
 
-#### Cloud (Nuvem)
+### Cloud (Nuvem)
 
 - **Backend**: Núcleo lógico do sistema onde ocorrem o processamento de dados e as decisões.
 - **API**: Interface de programação de aplicativos que facilita a comunicação entre o chatbot e o backend. Ela adiciona solicitações à fila de mensagens e executa funções assíncronas.
@@ -76,16 +51,16 @@ Para visualizar o código completo, acesse o link [clicando aqui](https://www.fi
 - **TTS & STT (Text-To-Speech & Speech-To-Text)**: Componentes responsáveis por converter texto em fala e vice-versa, permitindo uma interação mais natural com o usuário.
 - **LLM (Large Language Model)**: Modelo de linguagem avançado que processa e gera respostas para as mensagens dos usuários.
 
-#### Banco de Dados
+### Banco de Dados
 
 - **Tabela de usuários**: Armazena informações dos usuários, como identificação e permissões de acesso.
 
-#### WhatsApp
+### WhatsApp
 
 - **Usuário**: Pessoa que interage com o chatbot via WhatsApp.
 - **ChatBot**: Aplicação que recebe mensagens do usuário e responde automaticamente, utilizando as capacidades do LLM para gerar respostas relevantes.
 
-#### Fluxo Geral
+## Fluxo Geral
 
 1. O **usuário do WhatsApp** envia uma mensagem para o **ChatBot**.
 2. O **ChatBot**, através de sua integração com o **LLM**, processa a mensagem e determina a ação necessária.
@@ -93,7 +68,7 @@ Para visualizar o código completo, acesse o link [clicando aqui](https://www.fi
 4. O **backend** executa **funções assíncronas**, que podem envolver consultas à **tabela de usuários** no **banco de dados** e adicionar solicitações à **fila de mensagens**.
 5. Com base no processamento realizado na **nuvem**, os robôs são direcionados pela **ponte** para os locais de destino armazenados na **fila de locais de destino**.
 
-### Features da Sprint 3
+## Features da Sprint 3
 
 Durante a sprint 3, o grupo desenvolveu novas funcionalidades para o chatbot, que incluem:
 
@@ -104,9 +79,9 @@ Durante a sprint 3, o grupo desenvolveu novas funcionalidades para o chatbot, qu
 
 Essas funcionalidades foram desenvolvidas com o objetivo de melhorar a experiência do usuário com o chatbot, que visa ser a interface principal de interação entre o usuário e o robô, bem como entre o usuário e o sistema.
 
-#### Detalhamento dos Tipos de Usuários e Interações
+### Detalhamento dos Tipos de Usuários e Interações
 
-##### Módulo LEAD (Cadastro)
+#### Módulo LEAD (Cadastro)
 
 Este módulo descreve o processo pelo qual um novo usuário inicia a interação com o chatbot e se registra no sistema.
 
@@ -127,7 +102,7 @@ Este módulo descreve o processo pelo qual um novo usuário inicia a interação
 
 </p>
 
-##### Módulo User (Usuário Comum)
+#### Módulo User (Usuário Comum)
 
 Este módulo detalha as interações disponíveis para usuários já registrados no sistema.
 
@@ -148,7 +123,7 @@ Este módulo detalha as interações disponíveis para usuários já registrados
 
 </p>
 
-##### Módulo Admin (Administrador)
+#### Módulo Admin (Administrador)
 
 Este módulo é dedicado aos usuários com privilégios administrativos, permitindo-lhes gerenciar aspectos do chatbot e do sistema subjacente.
 
@@ -169,62 +144,7 @@ Este módulo é dedicado aos usuários com privilégios administrativos, permiti
 
 </p>
 
-### Acessibilidade no Chatbot
-
-Durante a Sprint 4, o grupo desenvolveu novas funcionalidades para o chatbot, visando torná-lo mais acessível a usuários com deficiências. Isso incluiu destacar os tópicos abordados ao longo de toda a construção do projeto.
-
-#### Material UI Design
-
-O grupo optou por usar o próprio WhatsApp como 'front-end' para interagir com os usuários do chatbot. Além disso, esse aplicativo é a ferramenta principal de comunicação entre os funcionários da AMBEV. A escolha do WhatsApp como plataforma se destaca por sua acessibilidade, já que diversos leitores de tela e ferramentas de assistência para pessoas com deficiência são compatíveis com ele. Além disso, o WhatsApp é um aplicativo amplamente utilizado, com mais de 2 bilhões de usuários em todo o mundo. Isso significa que a maioria dos usuários já está familiarizada com a interface do WhatsApp, o que facilita a adoção do chatbot.
-
-<p align="center" display="flex" width="300">
-
-![Alt text](../../static/img/chatbot-start.png)
-
-</p>
-
-
-#### Escolha de Voz no TTS
-
-Uma das funcionalidades desenvolvidas durante a Sprint 4 foi a escolha de voz no TTS. Durante o cadastro da conta no chatbot, o usuário pode escolher a voz que deseja ouvir nas mensagens de áudio enviadas pelo chatbot. Essa funcionalidade foi desenvolvida com o objetivo de tornar o chatbot mais acessível a usuários com deficiências visuais. O chatbot possui 6 vozes disponíveis, que podem ser escolhidas pelo usuário. São elas: `Alloy`, `Echo`, `Fable`, `Onyx`, `Nova` e `Shimmer`. Vale ressaltar que todos esses estilos de voz são fornecidos pelo próprio modelo de `tts` da OpenAI. A escolha da voz é realizada por meio de um mensagem enviada pelo usuário, que é processado pelo chatbot e armazenado no banco de dados.
-
-<p align="center" display="flex" width="300">
-
-![Alt text](../../static/img/chatbot-choise-voice.png)
-
-</p>
-
-#### Escolha de Velocidade de Voz no TTS
-
-Já a funcionalidade de escolha da velocidade da voz no TTS foi desenvolvida com o objetivo de tornar o chatbot mais acessível a usuários com deficiências auditivas. Durante o cadastro da conta no chatbot, o usuário pode escolher a velocidade da voz que deseja ouvir nas mensagens de áudio enviadas pelo chatbot. A escolha da velocidade da voz pode ser feita atribuindo uma nota de 0 a 10, sendo que a nota 8.7 é sempre recomendada, pois foi constatada como a velocidade ideal em testes. Essa escolha da velocidade é realizada por meio de uma mensagem enviada pelo usuário, que é processada pelo chatbot e armazenada no banco de dados.
-
-<p align="center" display="flex" width="300">
-
-![Alt text](../../static/img/chatbot-choise-speed.png)
-
-</p>
-
-### Teste do Chatbot - Sprint 4
-
-#### Testes Esteira de Produção
-
-Ao longo da Sprint 4, foram realizados testes de integração entre o chatbot e a esteira de produção. O objetivo desses testes foi verificar se o estava conseguido buildar, criar uma imagem docker enviando para o repositório do ECR e realizar o deploy no EC2. O teste foi realizado com sucesso, como pode ser visto na imagem abaixo e acessado no link [clicando aqui](https://github.com/2023M8T2-Inteli/grupo4/actions/runs/7253451488).
-
-<p align="center" display="flex" width="300">
-
-![Alt text](../../static/img/actions%20-%20chatbot.png)
-
-</p>
-
-#### Testes com o Parceiro
-
-Durante a apresentação do projeto para o parceiro, foi realizado um teste com o chatbot. O teste consistiu em realizar o cadastro de um novo usuário no chatbot, e em seguida realizar uma solicitação de peça. A ideia do teste foi mostrar para o parceiro como o chatbot funciona, e como ele pode ser utilizado para realizar solicitações de peças. Isso consolidou em informações importantes para o projeto, como a necessidade de melhorar o menu de cadastro do chatbot, e também a necessidade de melhorar a forma como o chatbot se comunica com o usuário em alguns momentos, como o de escolha de voz e velocidade de voz. Mas no geral, o teste foi bem sucedido, e o parceiro conseguiu entender como o chatbot funciona e como ele pode ser utilizado para realizar solicitações de peças.
-
-#### Testes de Usabilidade
-
-Por mais que utilizamos a interface do WhatsApp para interagir com o chatbot, o grupo realizou testes de usabilidade com o chatbot. O objetivo desses testes era verificar se o chatbot estava conseguindo realizar as funções que ele se propõe a fazer, e também verificar se o chatbot estava conseguindo se comunicar com o usuário de forma clara e objetiva. Isso foi feito por meio da validação de requisitos, com o professor de UX, deixando o utilizador livre para interagir com o chatbot. Os testes foram realizados com sucesso, e o chatbot conseguiu realizar todas as funções que ele se propõe a fazer, e também conseguiu se comunicar com o usuário de forma clara e objetiva.
-
-### Configuração e Execução do Chatbot
+## Configuração e Execução do Chatbot
 
 Para rodar o ChatBot, siga as instruções abaixo com atenção. Estes passos são essenciais para iniciar a aplicação de forma correta e garantir seu funcionamento adequado.
 
