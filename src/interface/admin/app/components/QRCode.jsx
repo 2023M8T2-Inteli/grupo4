@@ -23,7 +23,7 @@ const QRCodeComponent = () => {
     // Fetch history data when the component mounts
     fetchQRCode();
 
-    // Fetch data every 10 seconds
+    // Fetch data every 1 second
     const intervalId = setInterval(fetchQRCode, 1000);
 
     // Clear the interval when the component is unmounted
