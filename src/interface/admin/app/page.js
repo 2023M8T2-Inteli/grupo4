@@ -17,7 +17,7 @@ const page = () => {
 
     // Clear the interval when the component is unmounted
     return () => clearInterval(intervalId);
-  })
+  }, [])
 
   const fetchOrders = async () => {
     const response = await fetch(process.env.NEXT_PUBLIC_HOST + "/orders/queue");
