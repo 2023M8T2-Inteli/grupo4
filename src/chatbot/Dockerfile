@@ -28,4 +28,6 @@ RUN cd src/ && npx prisma generate
 
 EXPOSE 3000
 
+EXPOSE 3030
+
 CMD ["npm", "run", "start"]
