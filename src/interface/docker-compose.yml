@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - ./backend/.env
+    ports:
+      - "5000:5000"
+
+  admin:
+    build: 
+      context: ./admin
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - ./admin/.env
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+
+  robot:
+    build: 
+      context: ./robot
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - ./robot/.env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend

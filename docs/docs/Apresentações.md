@@ -37,3 +37,16 @@ Aqui você pode encontrar as apresentações das revisões de todas as sprints d
 4. Próximos passos
 
 <a target="\_blank" href={require('../static/files/Apresentação-Sprint3.pdf').default}> Acessar slides de apresentação </a>
+
+
+## Sprint 4
+
+1. Roadmap
+2. Terraform e Github Actions
+3. TTS e STT
+4. Acessibilidade
+5. Interface do LCD
+6. Interface de Administração
+7. Próximos passos
+
+<a target="\_blank" href={require('../static/files/Apresentação-Sprint4.pdf').default}> Acessar slides de apresentação </a>

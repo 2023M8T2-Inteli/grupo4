@@ -1,0 +1,29 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.7.0",
+    "next": "^14.0.3",
+    "prisma": "^5.7.0",
+    "react": "^18.2",
+    "react-audio-voice-recorder": "^2.2.0",
+    "react-dom": "^18",
+    "react-icons": "^4.12.0",
+    "react-media-recorder": "^1.6.6",
+    "react-modal": "^3.16.1",
+    "recorder-js": "^1.0.7",
+    "socket.io-client": "^4.7.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.0.1",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
+  }
+}

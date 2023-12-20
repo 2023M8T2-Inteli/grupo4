@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                String
+  cellPhone           String               @unique
+  voice               String
+  speedVoice          Float
+  requestState        Int                  @default(0)
+  role                Role                 @default(LEAD)
+  Order               Order[]
+  createdAt           DateTime             @default(now())
+  UserFunctionCalling GPTFunctionCalling[]
+}
+
+model Tool {
+  id          String   @id @default(uuid())
+  code        Int      @unique @default(autoincrement())
+  name        String
+  price       Float
+  tag         String
+  pointX      Float
+  pointY      Float
+  pointZ      Float
+  minQuantity Int
+  maxQuantity Int
+  createdAt   DateTime @default(now())
+  Order       Order[]
+}
+
+model Order {
+  id        String   @id @default(uuid())
+  code      Int      @unique @default(autoincrement())
+  type      String   @default("In Progress")
+  toolId    String
+  userId    String   @db.Uuid
+  pointId   String
+  createdAt DateTime @default(now())
+  tool      Tool     @relation(fields: [toolId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  point     Point    @relation(fields: [pointId], references: [id])
+}
+
+model Point {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  pointX    Float
+  pointY    Float
+  pointZ    Float
+  createdAt DateTime @default(now())
+  Order     Order[]
+}
+
+model GPTFunctionCalling {
+  id                 String   @id
+  functionCallObject String
+  functionName       String
+  functionResponse   String?
+  messageId          String
+  userId             String   @db.Uuid
+  createdAt          DateTime @default(now())
+  user               User     @relation(fields: [userId], references: [id])
+}
+
+model Transcription {
+  id            String   @id @default(uuid())
+  transcription String
+  messageId     String   @unique
+  mediaId       String
+  createdAt     DateTime @default(now())
+}
+
+enum Role {
+  LEAD
+  USER
+  ADMIN
+}

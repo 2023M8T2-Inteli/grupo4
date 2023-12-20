@@ -25,6 +25,25 @@ export default class UserService {
 		}
 	}
 
+	async getUserbyId(id: string): Promise<PrismaUser | null> {
+		try {
+			const user = await this.prisma.user.findFirst({
+				where: {
+					id: id
+				}
+			});
+			if (user == null) {
+				return null;
+			}
+			return user;
+		} catch (error) {
+			console.error("An error occurred while fetching the user:", error);
+			throw error;
+		} finally {
+			await this.prisma.$disconnect();
+		}
+	}
+
 	async getAdmin(): Promise<PrismaUser | null> {
 		try {
 			const user = await this.prisma.user.findFirst({
@@ -69,6 +88,44 @@ export default class UserService {
 				data: {
 					name: user.name,
 					requestState: user.requestState
+				}
+			});
+			return updatedUser;
+		} catch (error) {
+			console.error("An error occurred while updating the user:", error);
+			throw error;
+		} finally {
+			await this.prisma.$disconnect();
+		}
+	}
+
+	async updateVoice(user: PrismaUser): Promise<PrismaUser> {
+		try {
+			const updatedUser = await this.prisma.user.update({
+				where: {
+					cellPhone: user.cellPhone
+				},
+				data: {
+					voice: user.voice
+				}
+			});
+			return updatedUser;
+		} catch (error) {
+			console.error("An error occurred while updating the user:", error);
+			throw error;
+		} finally {
+			await this.prisma.$disconnect();
+		}
+	}
+
+	async updateSpeedVoice(user: PrismaUser): Promise<PrismaUser> {
+		try {
+			const updatedUser = await this.prisma.user.update({
+				where: {
+					cellPhone: user.cellPhone
+				},
+				data: {
+					speedVoice: user.speedVoice
 				}
 			});
 			return updatedUser;
