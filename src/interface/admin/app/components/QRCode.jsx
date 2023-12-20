@@ -30,7 +30,7 @@ const QRCode = () => {
   }, []);
 
   return (
-    <div className="border-lg shadow-md w-full border-gray-100 border-[2px] rounded-md p-4 text-sm  h-full">
+    <div className="border-lg shadow-md w-full border-gray-100 border-[2px] rounded-md p-4 text-sm h-full">
       <span className="flex justify-between m-2">
         <h1 className="text-2xl font-semibold mb-4">QR CODE</h1>
       </span>
