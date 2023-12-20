@@ -12,6 +12,9 @@ const Sidebar = () => {
   const goHome = () => {
     router.push('/');
   }
+  const goQRCode = () => {
+    router.push('/qrcode')
+  }
 
   const goToTools = () => {
     router.push('/tools');
@@ -29,7 +32,7 @@ const Sidebar = () => {
         <h1 className='text-5xl text-white text-bold text-center p-4'>VALLET</h1>
         <div className='flex flex-col text-white p-6 mb-2'>
             <button className='p-2' onClick={goHome}>Home</button>
-            <button className='p-2'>QR code</button>
+            <button className='p-2' onClick={goQRCode}>QR code</button>
             <button className='p-2' onClick={goToUsers} >Usuários</button>
             <button className='p-2' onClick={goToTools} >Itens</button>
             <button className='p-2' onClick={goToPoints} >Destinos</button>

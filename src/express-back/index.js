@@ -5,6 +5,7 @@ const users = require('./routes/users');
 const tools = require('./routes/tools');
 const points = require('./routes/points');
 const speech = require('./routes/speech');
+const qrcode = require('./routes/qrcode');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use('/users', users);
 app.use('/tools', tools);
 app.use('/points', points);
 app.use('/speech', speech);
+app.use('/qrcode', qrcode);
 
 // Start the server
 app.listen(PORT, () => {
