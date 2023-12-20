@@ -33,6 +33,11 @@ export class MessageIsNotAudio extends Error {
   }
 }
 
+interface CreateNewOrderArgs {
+  from: number[];
+  to: number[];
+}
+
 @Injectable()
 export class HandlerService {
   private readonly functionMapping;
@@ -218,7 +223,7 @@ export class HandlerService {
         );
         const functionMessage = {
           role: 'function',
-          content: FunctionCalling.functionResponse,
+          content: FunctionCalling.functionResponse || '',
           name: FunctionCalling.functionName,
         };
         console.log(functionMessage);

@@ -220,6 +220,8 @@ export class HandleUserService {
           'Finished',
         );
 
+        this.websocketService.emergencyStop({ emergency_stop: 0 });
+
         return `Pedido ${updatedOrder.code} confirmado com sucesso! \n Obrigado por utilizar nossos serviços, esperamos que tenha gostado! 😁`;
       }
 
@@ -229,6 +231,8 @@ export class HandleUserService {
       );
 
       this.whatsappService.sendAdminContact(userPhone);
+
+      this.websocketService.emergencyStop({ emergency_stop: 0 });
 
       return `Ficamos muito tristes em saber que não conseguimos entregar o seu pedido. 😢. \n O pedido ${updatedOrder.code} foi cancelado com sucesso.\n Estou mandando aqui um contato de um administrador, caso queira reportar algum problema. \n Gostaria de fazer um novo pedido?`;
     } catch (e) {
@@ -264,12 +268,22 @@ export class HandleUserService {
         locationId,
       );
 
+      console.log(
+        `[handleUserService] 📦 \x1b[35m Pedido \x1b[31m GRAB \x1b[35m enviado! \x1b[0m`,
+      );
+
       this.websocketService.addPointToQueue({
         id: order.code.toString(),
         type: 'GRAB',
         x: from[0],
         y: from[1],
       });
+
+      await this.timeOut(500);
+
+      console.log(
+        `[handleUserService] 🔚 \x1b[35m Pedido \x1b[31m DROP \x1b[35m enviado! \x1b[0m`,
+      );
 
       this.websocketService.addPointToQueue({
         id: order.code.toString(),
@@ -283,6 +297,10 @@ export class HandleUserService {
       console.log(e);
       return 'Não foi possível realizar o seu pedido, por favor contate um administrador.';
     }
+  }
+
+  protected timeOut(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   protected async formatOrders(orders: Order[]) {

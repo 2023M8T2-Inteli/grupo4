@@ -15,7 +15,6 @@ interface Itask {
 
 @Injectable()
 export class WebsocketService {
-
   private lastBatteryReading: number;
 
   constructor(
@@ -25,10 +24,10 @@ export class WebsocketService {
     @Inject(forwardRef(() => WhatsappService))
     private readonly whatsappService: WhatsappService,
     @Inject(UserService) private readonly userService: UserService,
-    ) {
-      this.lastBatteryReading = 99
-    }
-    
+  ) {
+    this.lastBatteryReading = 99;
+  }
+
   taskFeedback(id: string, type: 'GRAB' | 'DROP') {
     this.websocketGateway.server.emit('hello', { id, type });
   }
@@ -38,6 +37,11 @@ export class WebsocketService {
   }
 
   emergencyStop(data: { emergency_stop: number }) {
+    console.log(
+      `[WebsocketService] Emitting \x1b[31m${
+        data.emergency_stop ? 'STOP' : 'CONTINUE'
+      }\x1b[0m`,
+    );
     this.websocketGateway.server.emit('/emergency_stop', JSON.stringify(data));
   }
 
@@ -91,9 +95,7 @@ export class WebsocketService {
     this.lastBatteryReading = battery;
   }
 
-
-  getBattery(){
-    return this.lastBatteryReading
+  getBattery() {
+    return this.lastBatteryReading;
   }
-
 }
