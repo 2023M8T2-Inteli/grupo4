@@ -196,8 +196,9 @@ export class HandlerService {
           );
 
         if (!transcription)
-          console.error('[transformConversation] ATENÇÃO! Mensagem vazia!');
-
+          console.error(
+            '\x1b[31m[transformConversation] ATENÇÃO! Mensagem vazia!\x1b[0m',
+          );
         messageContent = transcription || '';
       } else messageContent = wppMessage.body;
 
@@ -212,7 +213,9 @@ export class HandlerService {
         null;
 
       if (FunctionCalling) {
-        console.log('encontramos uma função para a mensagem');
+        console.log(
+          '[transformConversation] \x1b[32mfound\x1b[0m function call, adding...',
+        );
         const functionMessage = {
           role: 'function',
           content: FunctionCalling.functionResponse,
