@@ -22,7 +22,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "pose_queue=vallet.pose_queue:main",
+            "task_queue=vallet.task_queue:main",
             "interface=vallet.interface:main",
             "initial_pose=vallet.initial_pose:main",
             "vallet=vallet.vallet:main",

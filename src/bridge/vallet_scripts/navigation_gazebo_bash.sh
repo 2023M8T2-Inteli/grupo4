@@ -7,6 +7,7 @@ echo "Installing xterm, tf-transformations and others auxiliar packages..."
 sudo apt-get install -y xterm > /dev/null 2>&1
 sudo apt install -y ros-humble-tf-transformations > /dev/null 2>&1
 sudo apt install -y python3-pip python3-virtualenv > /dev/null 2>&1
+pip install -r requirements.txt > /dev/null 2>&1
 
 echo "Creating virtual environment and installing pip requeriments..."
 virtualenv -p python3 ./venv > /dev/null 2>&1

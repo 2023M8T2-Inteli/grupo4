@@ -10,9 +10,9 @@ class Logger(Node):
     def __init__(self):
         super().__init__("logger")
         self.package_name = os.path.basename(os.path.dirname(__file__))
-        self.sub = Subscriber(self, 
-                              "log", 
-                              "/logs", 
+        self.sub = Subscriber(self,
+                              "log",
+                              "/logs",
                               Log)
         self.sub.create_sub(self.log_callback)
 
@@ -25,13 +25,11 @@ class Logger(Node):
             file.write(content_to_add)
 
     def _create_file(self, data_file_path: str) -> None:
-        """Create an empty file."""
         self.get_logger().info(f"Creating file: {data_file_path}")
         with open(data_file_path, 'w') as _:
             pass
 
     def _get_file_path(self) -> str:
-        """Get the full path of the data file."""
         self.get_logger().info("Getting file path")
         package_share_directory = get_package_share_directory(
             self.package_name)

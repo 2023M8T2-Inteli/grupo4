@@ -3,7 +3,7 @@ from rclpy.node import Node
 
 
 class Publisher:
-    def __init__(self, node: Node, name: str,topic_name: str, topic_type: any):
+    def __init__(self, node: Node, name: str, topic_name: str, topic_type: any):
         self.node = node
         self.name = name
         self.publisher = None
@@ -28,4 +28,5 @@ class Publisher:
 
     def publish(self, message: any) -> None:
         self.publisher.publish(message)
-        self.node.get_logger().info(f"Publishing {message} on {self.topic_name}")
+        self.node.get_logger().info(
+            f"Publishing {message} on {self.topic_name}")
