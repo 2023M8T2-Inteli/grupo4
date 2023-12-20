@@ -12,10 +12,12 @@ const QRCode = () => {
       const data = await response.json();
       console.log(data)
       setQRCode(data)
+      document.getElementById('qrcode').innerHTML = data.qrcodeUrl;
     } catch (error) {
       console.error("Error fetching history data:", error);
     }
   };
+
   useEffect(() => {
     // Fetch history data when the component mounts
     fetchQRCode();
@@ -28,11 +30,12 @@ const QRCode = () => {
   }, []);
 
   return (
-    <div className="border-lg shadow-md w-full border-gray-100 border-[2px] rounded-md p-4 text-sm">
+    <div className="border-lg shadow-md w-full border-gray-100 border-[2px] rounded-md p-4 text-sm  h-full">
       <span className="flex justify-between m-2">
         <h1 className="text-2xl font-semibold mb-4">QR CODE</h1>
       </span>
-      <div>
+      <div className="flex items-center justify-center">
+        <div dangerouslySetInnerHTML={{ __html: qrcode.qrcodeUrl }} className="w-1/2"/>
       </div>
     </div>
   );
