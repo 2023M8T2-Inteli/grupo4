@@ -9,153 +9,153 @@ on:
   workflow_dispatch:
 
 jobs:
-  TEST_CHATBOT:
-    runs-on: ubuntu-latest
+  # TEST_CHATBOT:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Check out the code
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Check out the code
+  #       uses: actions/checkout@v2
 
-      - name: Create .env file (ETL)
-        working-directory: ./src/chatbot
-        run: |
-          echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
-          echo "OPENAI_GPT_MODEL=$OPENAI_GPT_MODEL" >> .env
-          echo "TRANSCRIPTION_ENABLED=$TRANSCRIPTION_ENABLED" >> .env
-          echo "PROMPT_OPENAI_POINTS=$PROMPT_OPENAI_POINTS" >> .env
-          echo "PROMPT_OPENAI_TOOLS=$PROMPT_OPENAI_TOOLS" >> .env
-          echo "TRANSCRIPTION_LANGUAGE=$TRANSCRIPTION_LANGUAGE" >> .env
-          echo "TRANSCRIPTION_URL=$TRANSCRIPTION_URL" >> .env
-          echo "TTS_URL=$TTS_URL" >> .env
-          echo "TTS_ENABLED=$TTS_ENABLED" >> .env
-          echo "SOCKET_URL=$SOCKET_URL" >> .env
-          echo "DATABASE_URL=$DATABASE_URL" >> .env
-          echo PRIVATE_KEY=$PRIVATE_KEY >> .env
-          echo TYPE=$TYPE >> .env
-          echo PROJECT_ID=$PROJECT_ID >> .env
-          echo PRIVATE_KEY_ID=$PRIVATE_KEY_ID >> .env
-          echo CLIENT_EMAIL=$CLIENT_EMAIL >> .env
-          echo CLIENT_ID=$CLIENT_ID >> .env
-          echo AUTH_URI=$AUTH_URI >> .env
-          echo TOKEN_URI=$TOKEN_URI >> .env
-          echo AUTH_PROVIDER_X509_CERT_URL=$AUTH_PROVIDER_X509_CERT_URL >> .env
-          echo CLIENT_X509_CERT_URL=$CLIENT_X509_CERT_URL >> .env
-          echo UNIVERSE_DOMAIN=$UNIVERSE_DOMAIN >> .env
+  #     - name: Create .env file (ETL)
+  #       working-directory: ./src/chatbot
+  #       run: |
+  #         echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
+  #         echo "OPENAI_GPT_MODEL=$OPENAI_GPT_MODEL" >> .env
+  #         echo "TRANSCRIPTION_ENABLED=$TRANSCRIPTION_ENABLED" >> .env
+  #         echo "PROMPT_OPENAI_POINTS=$PROMPT_OPENAI_POINTS" >> .env
+  #         echo "PROMPT_OPENAI_TOOLS=$PROMPT_OPENAI_TOOLS" >> .env
+  #         echo "TRANSCRIPTION_LANGUAGE=$TRANSCRIPTION_LANGUAGE" >> .env
+  #         echo "TRANSCRIPTION_URL=$TRANSCRIPTION_URL" >> .env
+  #         echo "TTS_URL=$TTS_URL" >> .env
+  #         echo "TTS_ENABLED=$TTS_ENABLED" >> .env
+  #         echo "SOCKET_URL=$SOCKET_URL" >> .env
+  #         echo "DATABASE_URL=$DATABASE_URL" >> .env
+  #         echo PRIVATE_KEY=$PRIVATE_KEY >> .env
+  #         echo TYPE=$TYPE >> .env
+  #         echo PROJECT_ID=$PROJECT_ID >> .env
+  #         echo PRIVATE_KEY_ID=$PRIVATE_KEY_ID >> .env
+  #         echo CLIENT_EMAIL=$CLIENT_EMAIL >> .env
+  #         echo CLIENT_ID=$CLIENT_ID >> .env
+  #         echo AUTH_URI=$AUTH_URI >> .env
+  #         echo TOKEN_URI=$TOKEN_URI >> .env
+  #         echo AUTH_PROVIDER_X509_CERT_URL=$AUTH_PROVIDER_X509_CERT_URL >> .env
+  #         echo CLIENT_X509_CERT_URL=$CLIENT_X509_CERT_URL >> .env
+  #         echo UNIVERSE_DOMAIN=$UNIVERSE_DOMAIN >> .env
 
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_GPT_MODEL: ${{ secrets.OPENAI_GPT_MODEL }}
-          TRANSCRIPTION_ENABLED: ${{ secrets.TRANSCRIPTION_ENABLED }}
-          PROMPT_OPENAI_POINTS: ${{ secrets.PROMPT_OPENAI_POINTS }}
-          PROMPT_OPENAI_TOOLS: ${{ secrets.PROMPT_OPENAI_TOOLS }}
-          TRANSCRIPTION_LANGUAGE: ${{ secrets.TRANSCRIPTION_LANGUAGE }}
-          TRANSCRIPTION_URL: ${{ secrets.TRANSCRIPTION_URL }}
-          TTS_URL: ${{ secrets.TTS_URL }}
-          TTS_ENABLED: ${{ secrets.TTS_ENABLED }}
-          SOCKET_URL: ${{ secrets.SOCKET_URL }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          TYPE: ${{ secrets.TYPE }}
-          PROJECT_ID: ${{ secrets.PROJECT_ID }}
-          PRIVATE_KEY_ID: ${{ secrets.PRIVATE_KEY_ID }}
-          CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          AUTH_URI: ${{ secrets.AUTH_URI }}
-          TOKEN_URI: ${{ secrets.TOKEN_URI }}
-          AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.AUTH_PROVIDER_X509_CERT_URL }}
-          CLIENT_X509_CERT_URL: ${{ secrets.CLIENT_X509_CERT_URL }}
-          UNIVERSE_DOMAIN: ${{ secrets.UNIVERSE_DOMAIN }}
+  #       env:
+  #         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  #         OPENAI_GPT_MODEL: ${{ secrets.OPENAI_GPT_MODEL }}
+  #         TRANSCRIPTION_ENABLED: ${{ secrets.TRANSCRIPTION_ENABLED }}
+  #         PROMPT_OPENAI_POINTS: ${{ secrets.PROMPT_OPENAI_POINTS }}
+  #         PROMPT_OPENAI_TOOLS: ${{ secrets.PROMPT_OPENAI_TOOLS }}
+  #         TRANSCRIPTION_LANGUAGE: ${{ secrets.TRANSCRIPTION_LANGUAGE }}
+  #         TRANSCRIPTION_URL: ${{ secrets.TRANSCRIPTION_URL }}
+  #         TTS_URL: ${{ secrets.TTS_URL }}
+  #         TTS_ENABLED: ${{ secrets.TTS_ENABLED }}
+  #         SOCKET_URL: ${{ secrets.SOCKET_URL }}
+  #         DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  #         PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+  #         TYPE: ${{ secrets.TYPE }}
+  #         PROJECT_ID: ${{ secrets.PROJECT_ID }}
+  #         PRIVATE_KEY_ID: ${{ secrets.PRIVATE_KEY_ID }}
+  #         CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
+  #         CLIENT_ID: ${{ secrets.CLIENT_ID }}
+  #         AUTH_URI: ${{ secrets.AUTH_URI }}
+  #         TOKEN_URI: ${{ secrets.TOKEN_URI }}
+  #         AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.AUTH_PROVIDER_X509_CERT_URL }}
+  #         CLIENT_X509_CERT_URL: ${{ secrets.CLIENT_X509_CERT_URL }}
+  #         UNIVERSE_DOMAIN: ${{ secrets.UNIVERSE_DOMAIN }}
 
-      - name: Build Dockerfile
-        working-directory: ./src/chatbot
-        run: docker build -t chatbot:latest .
+  #     - name: Build Dockerfile
+  #       working-directory: ./src/chatbot
+  #       run: docker build -t chatbot:latest .
 
-      - name: Clean up Docker Compose
-        working-directory: ./src/chatbot
-        run: docker rmi chatbot:latest && docker system prune -a
+  #     - name: Clean up Docker Compose
+  #       working-directory: ./src/chatbot
+  #       run: docker rmi chatbot:latest && docker system prune -a
 
-  CI_CHATBOT:
-    runs-on: ubuntu-latest
-    needs: [TEST_CHATBOT]
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+  # CI_CHATBOT:
+  #   runs-on: ubuntu-latest
+  #   needs: [TEST_CHATBOT]
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v2
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: us-east-1
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+  #         aws-region: us-east-1
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+  #     - name: Login to Amazon ECR
+  #       id: login-ecr
+  #       uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Create .env file (ETL)
-        working-directory: ./src/chatbot
-        run: |
-          echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
-          echo "OPENAI_GPT_MODEL=$OPENAI_GPT_MODEL" >> .env
-          echo "TRANSCRIPTION_ENABLED=$TRANSCRIPTION_ENABLED" >> .env
-          echo "PROMPT_OPENAI_POINTS=$PROMPT_OPENAI_POINTS" >> .env
-          echo "PROMPT_OPENAI_TOOLS=$PROMPT_OPENAI_TOOLS" >> .env
-          echo "TRANSCRIPTION_LANGUAGE=$TRANSCRIPTION_LANGUAGE" >> .env
-          echo "TRANSCRIPTION_URL=$TRANSCRIPTION_URL" >> .env
-          echo "TTS_URL=$TTS_URL" >> .env
-          echo "TTS_ENABLED=$TTS_ENABLED" >> .env
-          echo "SOCKET_URL=$SOCKET_URL" >> .env
-          echo "DATABASE_URL=$DATABASE_URL" >> .env
-          echo PRIVATE_KEY=$PRIVATE_KEY >> .env
-          echo TYPE=$TYPE >> .env
-          echo PROJECT_ID=$PROJECT_ID >> .env
-          echo PRIVATE_KEY_ID=$PRIVATE_KEY_ID >> .env
-          echo CLIENT_EMAIL=$CLIENT_EMAIL >> .env
-          echo CLIENT_ID=$CLIENT_ID >> .env
-          echo AUTH_URI=$AUTH_URI >> .env
-          echo TOKEN_URI=$TOKEN_URI >> .env
-          echo AUTH_PROVIDER_X509_CERT_URL=$AUTH_PROVIDER_X509_CERT_URL >> .env
-          echo CLIENT_X509_CERT_URL=$CLIENT_X509_CERT_URL >> .env
-          echo UNIVERSE_DOMAIN=$UNIVERSE_DOMAIN >> .env
+  #     - name: Create .env file (ETL)
+  #       working-directory: ./src/chatbot
+  #       run: |
+  #         echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
+  #         echo "OPENAI_GPT_MODEL=$OPENAI_GPT_MODEL" >> .env
+  #         echo "TRANSCRIPTION_ENABLED=$TRANSCRIPTION_ENABLED" >> .env
+  #         echo "PROMPT_OPENAI_POINTS=$PROMPT_OPENAI_POINTS" >> .env
+  #         echo "PROMPT_OPENAI_TOOLS=$PROMPT_OPENAI_TOOLS" >> .env
+  #         echo "TRANSCRIPTION_LANGUAGE=$TRANSCRIPTION_LANGUAGE" >> .env
+  #         echo "TRANSCRIPTION_URL=$TRANSCRIPTION_URL" >> .env
+  #         echo "TTS_URL=$TTS_URL" >> .env
+  #         echo "TTS_ENABLED=$TTS_ENABLED" >> .env
+  #         echo "SOCKET_URL=$SOCKET_URL" >> .env
+  #         echo "DATABASE_URL=$DATABASE_URL" >> .env
+  #         echo PRIVATE_KEY=$PRIVATE_KEY >> .env
+  #         echo TYPE=$TYPE >> .env
+  #         echo PROJECT_ID=$PROJECT_ID >> .env
+  #         echo PRIVATE_KEY_ID=$PRIVATE_KEY_ID >> .env
+  #         echo CLIENT_EMAIL=$CLIENT_EMAIL >> .env
+  #         echo CLIENT_ID=$CLIENT_ID >> .env
+  #         echo AUTH_URI=$AUTH_URI >> .env
+  #         echo TOKEN_URI=$TOKEN_URI >> .env
+  #         echo AUTH_PROVIDER_X509_CERT_URL=$AUTH_PROVIDER_X509_CERT_URL >> .env
+  #         echo CLIENT_X509_CERT_URL=$CLIENT_X509_CERT_URL >> .env
+  #         echo UNIVERSE_DOMAIN=$UNIVERSE_DOMAIN >> .env
 
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_GPT_MODEL: ${{ secrets.OPENAI_GPT_MODEL }}
-          TRANSCRIPTION_ENABLED: ${{ secrets.TRANSCRIPTION_ENABLED }}
-          PROMPT_OPENAI_POINTS: ${{ secrets.PROMPT_OPENAI_POINTS }}
-          PROMPT_OPENAI_TOOLS: ${{ secrets.PROMPT_OPENAI_TOOLS }}
-          TRANSCRIPTION_LANGUAGE: ${{ secrets.TRANSCRIPTION_LANGUAGE }}
-          TRANSCRIPTION_URL: ${{ secrets.TRANSCRIPTION_URL }}
-          TTS_URL: ${{ secrets.TTS_URL }}
-          TTS_ENABLED: ${{ secrets.TTS_ENABLED }}
-          SOCKET_URL: ${{ secrets.SOCKET_URL }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          TYPE: ${{ secrets.TYPE }}
-          PROJECT_ID: ${{ secrets.PROJECT_ID }}
-          PRIVATE_KEY_ID: ${{ secrets.PRIVATE_KEY_ID }}
-          CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          AUTH_URI: ${{ secrets.AUTH_URI }}
-          TOKEN_URI: ${{ secrets.TOKEN_URI }}
-          AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.AUTH_PROVIDER_X509_CERT_URL }}
-          CLIENT_X509_CERT_URL: ${{ secrets.CLIENT_X509_CERT_URL }}
-          UNIVERSE_DOMAIN: ${{ secrets.UNIVERSE_DOMAIN }}
+  #       env:
+  #         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  #         OPENAI_GPT_MODEL: ${{ secrets.OPENAI_GPT_MODEL }}
+  #         TRANSCRIPTION_ENABLED: ${{ secrets.TRANSCRIPTION_ENABLED }}
+  #         PROMPT_OPENAI_POINTS: ${{ secrets.PROMPT_OPENAI_POINTS }}
+  #         PROMPT_OPENAI_TOOLS: ${{ secrets.PROMPT_OPENAI_TOOLS }}
+  #         TRANSCRIPTION_LANGUAGE: ${{ secrets.TRANSCRIPTION_LANGUAGE }}
+  #         TRANSCRIPTION_URL: ${{ secrets.TRANSCRIPTION_URL }}
+  #         TTS_URL: ${{ secrets.TTS_URL }}
+  #         TTS_ENABLED: ${{ secrets.TTS_ENABLED }}
+  #         SOCKET_URL: ${{ secrets.SOCKET_URL }}
+  #         DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  #         PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+  #         TYPE: ${{ secrets.TYPE }}
+  #         PROJECT_ID: ${{ secrets.PROJECT_ID }}
+  #         PRIVATE_KEY_ID: ${{ secrets.PRIVATE_KEY_ID }}
+  #         CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
+  #         CLIENT_ID: ${{ secrets.CLIENT_ID }}
+  #         AUTH_URI: ${{ secrets.AUTH_URI }}
+  #         TOKEN_URI: ${{ secrets.TOKEN_URI }}
+  #         AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.AUTH_PROVIDER_X509_CERT_URL }}
+  #         CLIENT_X509_CERT_URL: ${{ secrets.CLIENT_X509_CERT_URL }}
+  #         UNIVERSE_DOMAIN: ${{ secrets.UNIVERSE_DOMAIN }}
 
-      - name: Build, tag, and push image to Amazon ECR
-        working-directory: ./src/chatbot
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: chatbot
-          IMAGE_TAG: latest
-        run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+  #     - name: Build, tag, and push image to Amazon ECR
+  #       working-directory: ./src/chatbot
+  #       env:
+  #         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  #         ECR_REPOSITORY: chatbot
+  #         IMAGE_TAG: latest
+  #       run: |
+  #         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+  #         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
   CD_CHATBOT:
     runs-on: ubuntu-latest
-    needs: [CI_CHATBOT]
+    #needs: [CI_CHATBOT]
     steps:
       - uses: actions/checkout@v2
       - name: Configure AWS Credentials
@@ -177,7 +177,7 @@ jobs:
         working-directory: ./src/chatbot
         run: |
           ssh_command="${{ secrets.SSH_COMMAND_ACCESS }}"
-          $ssh_command 'chmod +x ./script.sh && bash ./script.sh'
+          $ssh_command 'ls -la && chmod +x ./script.sh && bash ./script.sh'
 
            
 
