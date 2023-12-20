@@ -5,6 +5,7 @@ import { UserService } from './user.service';
 import { ToolService } from './tool.service';
 import { LocationService } from './location.service';
 import { TranscriptionService } from './transcription.service';
+import { GPTFunctionCallingService } from './GPTFunctionCalling.service';
 
 @Module({
   providers: [
@@ -14,6 +15,7 @@ import { TranscriptionService } from './transcription.service';
     ToolService,
     LocationService,
     TranscriptionService,
+    GPTFunctionCallingService,
   ],
   exports: [
     UserService,
@@ -22,6 +24,7 @@ import { TranscriptionService } from './transcription.service';
     ToolService,
     LocationService,
     TranscriptionService,
+    GPTFunctionCallingService,
   ],
 })
 export class PrismaModule {}

@@ -11,10 +11,15 @@ import { HandleUserService } from './handle-user.service';
 import { HandleLeadService } from './handle-lead.service';
 import { HandleAdminService } from './handle-admin.service';
 import { TranscriptionService } from '../prisma/transcription.service';
-import { Transcription } from '@prisma/client';
-interface ParsedMessage {
-  role: 'user' | 'assistant';
-  content: string;
+import { Transcription, GPTFunctionCalling } from '@prisma/client';
+import { GPTFunctionCallingService } from '../prisma/GPTFunctionCalling.service';
+
+// interface para a mensagem que o GPT precisa no contexto
+interface IParsedMessage {
+  role: 'user' | 'assistant' | 'function';
+  content?: string;
+  // especificas para mensagens function
+  name?: string;
 }
 
 export class MessageIsNotAudio extends Error {
@@ -44,8 +49,9 @@ export class HandlerService {
     @Inject(HandleLeadService) private handleLeadService: HandleLeadService,
     @Inject(TranscriptionService)
     private transcriptionService: TranscriptionService,
+    @Inject(GPTFunctionCallingService)
+    private gptFunctionCallingService: GPTFunctionCallingService,
   ) {
-
     this.functionMapping = {
       USER: this.handleUserService,
       ADMIN: this.handleAdminService,
@@ -99,6 +105,7 @@ export class HandlerService {
     const parsedMessages = await this.transformConversation(
       messages,
       this.readyTimestamp,
+      await this.getFunctionCallsFromDB(message.from),
     );
 
     const toolCoordinates = await this.toolService.getAllTools();
@@ -113,7 +120,9 @@ export class HandlerService {
       UserRole,
       parsedTools,
       parsedLocations,
-      parsedMessages,
+      parsedMessages as any,
+      message.id.id,
+      userData?.id,
     );
 
     // tira o "digitando..."
@@ -135,10 +144,19 @@ export class HandlerService {
             '\x1b[0m',
           );
           console.log('arguments: \x1b[35m', res.arguments, '\x1b[0m');
-          return await this.functionMapping[UserRole][res.function](
-            message.from,
-            res.arguments && res.arguments,
-          );
+          const functionCallingRes = await this.functionMapping[UserRole][
+            res.function
+          ](message.from, res.arguments && res.arguments);
+
+          // salva a function call no banco
+          if (userData) {
+            await this.gptFunctionCallingService.addFunctionCallingResponse(
+              message.id.id,
+              functionCallingRes,
+            );
+          }
+
+          return functionCallingRes;
           // return await this[res.function](
           //   message.from,
           //   res.arguments && res.arguments,
@@ -152,8 +170,9 @@ export class HandlerService {
   private async transformConversation(
     chat: Message[],
     readyTimestamp: number,
-  ): Promise<ParsedMessage[]> {
-    const parsedMsgs: ParsedMessage[] = [];
+    DBFunctionCalls: GPTFunctionCalling[],
+  ): Promise<IParsedMessage[]> {
+    const parsedMsgs: IParsedMessage[] = [];
     const nowTimestamp = Math.floor(+new Date() / 1000);
 
     let iterations = 0;
@@ -165,7 +184,6 @@ export class HandlerService {
       // checa se a mensagem foi enviada só depois do bot estar pronto
       if (wppMessage.timestamp < readyTimestamp) continue;
       //-----------------------
-
       let messageContent = '';
 
       if (wppMessage.hasMedia) {
@@ -186,6 +204,25 @@ export class HandlerService {
       //-----------------------
       const role = wppMessage.id.fromMe ? 'assistant' : 'user';
       parsedMsgs.push({ role, content: messageContent });
+      //*****************************
+
+      // checa se a mensagem que está sendo analizada trigou uma função
+      const FunctionCalling =
+        DBFunctionCalls.find((obj) => obj.messageId === wppMessage.id.id) ||
+        null;
+
+      if (FunctionCalling) {
+        console.log('encontramos uma função para a mensagem');
+        const functionMessage = {
+          role: 'function',
+          content: FunctionCalling.functionResponse,
+          name: FunctionCalling.functionName,
+        };
+        console.log(functionMessage);
+        parsedMsgs.push(functionMessage as IParsedMessage);
+      }
+
+      //*****************************
       iterations++;
     }
     console.log(
@@ -193,8 +230,10 @@ export class HandlerService {
     );
     console.log(
       '[transformConversation] last message: \x1b[32m',
-      parsedMsgs[parsedMsgs.length - 1].content, "\x1b[0m"
+      parsedMsgs[parsedMsgs.length - 1].content,
+      '\x1b[0m',
     );
+    console.log(parsedMsgs);
     return parsedMsgs;
   }
 
@@ -227,5 +266,17 @@ export class HandlerService {
     }
 
     return;
+  }
+
+  private async getFunctionCallsFromDB(userPhone: string) {
+    try {
+      const { id } = await this.userService.getUser(userPhone);
+      return await this.gptFunctionCallingService.getFunctionCallingByUserId(
+        id,
+      );
+    } catch (e) {
+      console.log(`-> Houve um erro ao tentar pegar as functionCalls: ${e}`);
+      return [];
+    }
   }
 }
