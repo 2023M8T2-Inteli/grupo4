@@ -67,7 +67,7 @@ export class AIService {
     const res = await this.openai.createChatCompletion({
       functions: gpt_tools,
       messages: [{ role: 'system', content: system_message }, ...chatHistory],
-      model: 'gpt-4',
+      model: 'gpt-3.5-turbo-1106',
       temperature: 0.8,
     });
     if (res.data.choices[0].message?.function_call?.name) {

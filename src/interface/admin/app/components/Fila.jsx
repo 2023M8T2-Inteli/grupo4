@@ -2,8 +2,6 @@
 import formatTime from "../utils/formatTime";
 const Fila = ({queue}) => {
 
- 
-
   return (
     <div className="border-lg shadow-md w-full h-full overflow-y-auto border-gray-100 border-[2px] rounded-md p-4 text-sm">
       <h1 className="text-2xl font-semibold mb-4">Na fila</h1>

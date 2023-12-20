@@ -4,6 +4,7 @@ import { AIModule } from './AI/AI.module';
 import { WhatsappModule } from './whatsapp/whatsapp.module';
 import { HandlerModule } from './handler/handler.module';
 import { ConfigModule } from '@nestjs/config';
+import { WebsocketModule } from './websockets/websocket.module';
 
 @Module({
   imports: [
@@ -15,6 +16,8 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+
+    WebsocketModule,
   ],
 })
 export class AppModule {}

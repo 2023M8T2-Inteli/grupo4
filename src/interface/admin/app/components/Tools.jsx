@@ -21,7 +21,7 @@ const Tools = () => {
 
   const handleAddTool = async (formData) => {
     try {
-      const response = await fetch('http://localhost:5000/tools', {
+      const response = await fetch(process.env.NEXT_PUBLIC_HOST + '/tools', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ const Tools = () => {
   const fetchTools = async () => {
     try {
       // Replace this with your API endpoint or data source
-      const response = await fetch("http://localhost:5000/tools");
+      const response = await fetch(process.env.NEXT_PUBLIC_HOST + "/tools");
       const data = await response.json();
       setTools(data);
     } catch (error) {
@@ -56,7 +56,7 @@ const Tools = () => {
 
   const handleDelete = async (toolId) => {
     try {
-      const response = await fetch(`http://localhost:5000/tools/${toolId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/tools/${toolId}`, {
         method: "DELETE",
       });
 
@@ -84,7 +84,7 @@ const Tools = () => {
   const handleBlur = async () => {
     // Send the updated data to the server on blur
     try {
-      const response = await fetch(`http://localhost:5000/tools/${editingTool.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/tools/${editingTool.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -134,6 +134,7 @@ const Tools = () => {
             <th className="py-2 px-4 border-b">Preço</th>
             <th className="py-2 px-4 border-b">Quantidade mínima</th>
             <th className="py-2 px-4 border-b">Quantidade máxima</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>

@@ -3,7 +3,7 @@ import time
 import threading  # Importa o módulo threading para controle de execução
 
 # Endereço do servidor SocketIO (ajuste conforme necessário)
-SERVER_URL = "http://localhost:3000"
+SERVER_URL = "http://localhost:3030"
 
 # Cria um cliente SocketIO
 sio = socketio.Client()
@@ -22,7 +22,7 @@ def send_points():
     while running:
         time.sleep(2)
         for label in emergency.values():
-            sio.emit('enqueue', label)
+            sio.emit('"hello"', label)
             print("Enviado: ", label)
             
 # cords = {
