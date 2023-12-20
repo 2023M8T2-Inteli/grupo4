@@ -46,7 +46,7 @@ export default function Talk({ emotion, setEmotion }) {
   const saveAudioToEndpoint = async (blob) => {
     let exclamations = ["hmm", "pensada", "ponderar", "possibilidades", "ver"];
     let chosen = exclamations[Math.floor(Math.random() * exclamations.length)];
-    setAudioSrc(`/exclamations/${chosen}.mp3`);
+    setAudioSrc(`https://d17sdup6iumur7.cloudfront.net/exclamations/${chosen}.mp3`);
     console.log(audioSrc);
     const endpointUrl = process.env.NEXT_PUBLIC_HOST + "/speech/speak"; // Replace with your actual endpoint URL
 
