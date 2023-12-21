@@ -58,7 +58,6 @@ export default function Talk({ emotion, setEmotion }) {
     let exclamations = ["hmm", "pensada", "ponderar", "possibilidades", "ver"];
     let chosen = exclamations[Math.floor(Math.random() * exclamations.length)];
     setAudioSrc(`https://d17sdup6iumur7.cloudfront.net/exclamations/${chosen}.mp3`);
-    console.log(audioSrc);
     const endpointUrl = process.env.NEXT_PUBLIC_BACKEND + "/speak"; // Replace with your actual endpoint URL
 
 
@@ -83,7 +82,17 @@ export default function Talk({ emotion, setEmotion }) {
       if (response.ok) {
         console.log("Audio file sent successfully");
         const data = await response.json();
-        setEmotion(data.emotion);
+        console.log(data)
+        if (data.emotion.includes("happy")) {
+          setEmotion("happy");
+        } else if (data.emotion.includes("sad")) {
+          setEmotion("sad");
+        } else if (data.emotion.includes("superhappy")) {
+          setEmotion("superhappy");
+        } else if (data.emotion.includes("neutral")) {
+          setEmotion("neutral");
+        }
+
         setAudioSrc(`data:audio/mp3;base64,${data.base64Audio}`);
       } else {
         console.error("Failed to send audio file");
