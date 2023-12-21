@@ -19,6 +19,7 @@ const page = () => {
   }, []);
 
   const fetchOrders = async () => {
+    console.log('oi')
     console.log(process.env.NEXT_PUBLIC_BACKEND + "/orders/queue");
     const response = await fetch(
       process.env.NEXT_PUBLIC_BACKEND + "/orders/queue"
@@ -29,7 +30,7 @@ const page = () => {
     }
 
     const data = await response.json();
-    console.log(data);
+    console.log({data})
 
     if (data.length > 0) {
       for (let record of data) {
@@ -39,8 +40,17 @@ const page = () => {
       }
     }
 
-    setQueue(data.slice(1));
+    let currentQueue = []
+
+    for (let record of data) {
+
+      if (record.type === "In Progress") {
+        currentQueue.push(record)
+      }
+
+    setQueue(currentQueue);
   };
+}
 
   return (
     <div className="h-screen w-full flex">

@@ -14,7 +14,7 @@ const History = () => {
       );
       const data = await response.json();
       setHistoryData(data);
-      console.log(data);
+      
     } catch (error) {
       console.error("Error fetching history data:", error);
     }
@@ -49,7 +49,7 @@ const History = () => {
         </thead>
         <tbody className="">
           {historyData.map((item) => {
-            console.log(`HISTORY ${JSON.stringify(item)}`);
+            
             return (
               <tr key={item?.id} className="border-b text-center">
                 <td className="py-2 px-4">{item?.tool?.name}</td>

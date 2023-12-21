@@ -312,7 +312,7 @@ export class AIService {
         queue: response.data.slice(1),
         history: [],
       };
-      const history = await axios.get(
+      const history = await axios.get( 
         process.env.NEXT_PUBLIC_BACKEND + '/orders/history',
       );
       data['history'] = history.data;
