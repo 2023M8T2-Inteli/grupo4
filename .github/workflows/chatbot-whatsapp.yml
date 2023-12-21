@@ -93,32 +93,8 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Create .env file (CHATBOT)
+      - name: Build, tag, and push image to Amazon ECR
         working-directory: ./src/chatbot
-        run: |
-          echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
-          echo "OPENAI_GPT_MODEL=$OPENAI_GPT_MODEL" >> .env
-          echo "TRANSCRIPTION_ENABLED=$TRANSCRIPTION_ENABLED" >> .env
-          echo "PROMPT_OPENAI_POINTS=$PROMPT_OPENAI_POINTS" >> .env
-          echo "PROMPT_OPENAI_TOOLS=$PROMPT_OPENAI_TOOLS" >> .env
-          echo "TRANSCRIPTION_LANGUAGE=$TRANSCRIPTION_LANGUAGE" >> .env
-          echo "TRANSCRIPTION_URL=$TRANSCRIPTION_URL" >> .env
-          echo "TTS_URL=$TTS_URL" >> .env
-          echo "TTS_ENABLED=$TTS_ENABLED" >> .env
-          echo "SOCKET_URL=$SOCKET_URL" >> .env
-          echo "DATABASE_URL=$DATABASE_URL" >> .env
-          echo PRIVATE_KEY=$PRIVATE_KEY >> .env
-          echo TYPE=$TYPE >> .env
-          echo PROJECT_ID=$PROJECT_ID >> .env
-          echo PRIVATE_KEY_ID=$PRIVATE_KEY_ID >> .env
-          echo CLIENT_EMAIL=$CLIENT_EMAIL >> .env
-          echo CLIENT_ID=$CLIENT_ID >> .env
-          echo AUTH_URI=$AUTH_URI >> .env
-          echo TOKEN_URI=$TOKEN_URI >> .env
-          echo AUTH_PROVIDER_X509_CERT_URL=$AUTH_PROVIDER_X509_CERT_URL >> .env
-          echo CLIENT_X509_CERT_URL=$CLIENT_X509_CERT_URL >> .env
-          echo UNIVERSE_DOMAIN=$UNIVERSE_DOMAIN >> .env
-
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_GPT_MODEL: ${{ secrets.OPENAI_GPT_MODEL }}
@@ -142,14 +118,32 @@ jobs:
           AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.AUTH_PROVIDER_X509_CERT_URL }}
           CLIENT_X509_CERT_URL: ${{ secrets.CLIENT_X509_CERT_URL }}
           UNIVERSE_DOMAIN: ${{ secrets.UNIVERSE_DOMAIN }}
-
-      - name: Build, tag, and push image to Amazon ECR
-        working-directory: ./src/chatbot
-        env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: chatbot
           IMAGE_TAG: latest
         run: |
+          echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
+          echo "OPENAI_GPT_MODEL=$OPENAI_GPT_MODEL" >> .env
+          echo "TRANSCRIPTION_ENABLED=$TRANSCRIPTION_ENABLED" >> .env
+          echo "PROMPT_OPENAI_POINTS=$PROMPT_OPENAI_POINTS" >> .env
+          echo "PROMPT_OPENAI_TOOLS=$PROMPT_OPENAI_TOOLS" >> .env
+          echo "TRANSCRIPTION_LANGUAGE=$TRANSCRIPTION_LANGUAGE" >> .env
+          echo "TRANSCRIPTION_URL=$TRANSCRIPTION_URL" >> .env
+          echo "TTS_URL=$TTS_URL" >> .env
+          echo "TTS_ENABLED=$TTS_ENABLED" >> .env
+          echo "SOCKET_URL=$SOCKET_URL" >> .env
+          echo "DATABASE_URL=$DATABASE_URL" >> .env
+          echo PRIVATE_KEY=$PRIVATE_KEY >> .env
+          echo TYPE=$TYPE >> .env
+          echo PROJECT_ID=$PROJECT_ID >> .env
+          echo PRIVATE_KEY_ID=$PRIVATE_KEY_ID >> .env
+          echo CLIENT_EMAIL=$CLIENT_EMAIL >> .env
+          echo CLIENT_ID=$CLIENT_ID >> .env
+          echo AUTH_URI=$AUTH_URI >> .env
+          echo TOKEN_URI=$TOKEN_URI >> .env
+          echo AUTH_PROVIDER_X509_CERT_URL=$AUTH_PROVIDER_X509_CERT_URL >> .env
+          echo CLIENT_X509_CERT_URL=$CLIENT_X509_CERT_URL >> .env
+          echo UNIVERSE_DOMAIN=$UNIVERSE_DOMAIN >> .env
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
@@ -177,4 +171,3 @@ jobs:
         working-directory: ./src/chatbot
         run: |
           chmod 400 ./ec2_key_par.pem && ssh -o StrictHostKeyChecking=no -i "./ec2_key_par.pem" ubuntu@52.5.70.100 'chmod +x ./script.sh && bash ./script.sh'
-
