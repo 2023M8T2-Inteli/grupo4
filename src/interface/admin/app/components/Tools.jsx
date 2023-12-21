@@ -21,7 +21,7 @@ const Tools = () => {
 
   const handleAddTool = async (formData) => {
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_HOST + '/tools', {
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND + '/tools', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ const Tools = () => {
   const fetchTools = async () => {
     try {
       // Replace this with your API endpoint or data source
-      const response = await fetch(process.env.NEXT_PUBLIC_HOST + "/tools");
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND + "/tools");
       const data = await response.json();
       setTools(data);
     } catch (error) {
@@ -56,7 +56,7 @@ const Tools = () => {
 
   const handleDelete = async (toolId) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/tools/${toolId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/tools/${toolId}`, {
         method: "DELETE",
       });
 
@@ -85,7 +85,7 @@ const Tools = () => {
     // Send the updated data to the server on blur
     console.log(editedData)
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/tools/${editingTool.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/tools/${editingTool.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

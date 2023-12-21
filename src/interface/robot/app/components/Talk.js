@@ -59,7 +59,7 @@ export default function Talk({ emotion, setEmotion }) {
     let chosen = exclamations[Math.floor(Math.random() * exclamations.length)];
     setAudioSrc(`https://d17sdup6iumur7.cloudfront.net/exclamations/${chosen}.mp3`);
     console.log(audioSrc);
-    const endpointUrl = process.env.NEXT_PUBLIC_HOST + "/speak"; // Replace with your actual endpoint URL
+    const endpointUrl = process.env.NEXT_PUBLIC_BACKEND + "/speak"; // Replace with your actual endpoint URL
 
 
     try {

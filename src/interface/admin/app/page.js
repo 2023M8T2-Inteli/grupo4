@@ -19,8 +19,8 @@ const page = () => {
   }, [])
 
   const fetchOrders = async () => {
-    console.log(process.env.NEXT_PUBLIC_HOST + "/orders/queue")
-    const response = await fetch(process.env.NEXT_PUBLIC_HOST + "/orders/queue");
+    console.log(process.env.NEXT_PUBLIC_BACKEND + "/orders/queue")
+    const response = await fetch(process.env.NEXT_PUBLIC_BACKEND + "/orders/queue");
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);

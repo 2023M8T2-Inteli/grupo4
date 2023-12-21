@@ -20,7 +20,7 @@ const Points = () => {
 
   const handleAddPoint = async (formData) => {
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_HOST + '/points', {
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND + '/points', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ const Points = () => {
 
   const fetchPoints = async () => {
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_HOST + "/points");
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND + "/points");
       const data = await response.json();
       setPoints(data);
     } catch (error) {
@@ -66,7 +66,7 @@ const Points = () => {
 
   const handleBlur = async () => {
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_HOST +
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND +
         `/points/${editingPoint.id}`,
         {
           method: "PUT",
@@ -96,7 +96,7 @@ const Points = () => {
 
   const handleDelete = async (pointId) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/points/${pointId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/points/${pointId}`, {
         method: "DELETE",
       });
 

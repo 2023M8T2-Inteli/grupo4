@@ -7,7 +7,7 @@ const Now = ({now}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_HOST + '/websockets/battery');
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND + '/websockets/battery');
         const data = await response.json();
         console.log(data);
         setBattery(data);
