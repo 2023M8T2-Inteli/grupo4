@@ -34,7 +34,7 @@ Esta seção exibe o nível atual da bateria do robô Vallet, permitindo ao admi
 
 ### 5. QR Code
 
-Esta seção dispõe um QR Code, renderizado a cada 10 segundos, que contém o link para o chatbot no Whatsapp.
+Esta seção dispõe um QR Code, renderizado a cada 10 segundos, que contém o link para o chatbot no Whatsapp. Caso o usuário já esteja autenticado, o usuário é informado, dispensando a necessidade de exibir o qrcode. 
 
 ### 6. Botão de Parada de Emergência
 
