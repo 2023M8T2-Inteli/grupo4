@@ -6,9 +6,9 @@ from queue import Queue
 from . import socket_client
 from rclpy.node import Node
 from .streamer import Streamer
+from vallet_msgs.msg import Task
 from .publisher import Publisher
 from .subscriber import Subscriber
-from vallet_msgs.msg import Log, Task
 from std_msgs.msg import String, Int8
 from tf_transformations import quaternion_from_euler
 from geometry_msgs.msg import Pose, Point, Quaternion
