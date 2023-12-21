@@ -24,12 +24,6 @@ def generate_launch_description():
         rviz,
         Node(
             package='vallet',
-            executable='logger',
-            output='screen',
-            name="logger"
-        ),
-        Node(
-            package='vallet',
             executable='battery',
             output='screen',
             name="battery"

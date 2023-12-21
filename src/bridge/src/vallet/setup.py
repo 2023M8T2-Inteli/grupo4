@@ -26,8 +26,6 @@ setup(
             "interface=vallet.interface:main",
             "initial_pose=vallet.initial_pose:main",
             "vallet=vallet.vallet:main",
-            "battery=vallet.battery:main",
-            "logger=vallet.logger:main"
-        ],
+            "battery=vallet.battery:main"]
     },
 )

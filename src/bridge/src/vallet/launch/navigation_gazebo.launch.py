@@ -37,12 +37,6 @@ def generate_launch_description():
         ),
         Node(
             package='vallet',
-            executable='logger',
-            output='screen',
-            name="logger"
-        ),
-        Node(
-            package='vallet',
             executable='vallet',
             output='screen',
             name="vallet"

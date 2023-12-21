@@ -48,11 +48,6 @@ class TaskQueue(Node):
                                         "/emergency_stop",
                                         Int8)
 
-        self.logger = Publisher(self,
-                                "log",
-                                "/logs",
-                                Log)
-
         self.task_feedback_streamer = Streamer(self,
                                                socket_client,
                                                "/task_feedback")
@@ -108,11 +103,6 @@ class TaskQueue(Node):
             self.emergency_stop_state = EmergencyStopState.DISABLED
             self.waiting_confirmation_state = WaitingConfirmation.CONFIRMED
 
-            log_msg = Log(node_name=self.emergency_stop.name,
-                          action=f'{json_msg}',
-                          unix_time=int(self.get_clock().now().to_msg().sec))
-            self.logger.publish(log_msg)
-
             self.get_logger().info(f"{json_msg}")
         else:
             self.get_logger().info(f"Invalid emergency stop state: {json_msg}")
@@ -135,21 +125,13 @@ class TaskQueue(Node):
 
     def status_callback(self, msg: String) -> None:
         self.robot_status = RobotStatus.FREE if msg.data == "FREE" else RobotStatus.BUSY
-        self.get_logger().info(f"Robot status: {self.robot_status}")
-        self.get_logger().info(f"Emergency stop state: {self.waiting_confirmation_state}")
-        self.get_logger().info(f"Robot status: {self.emergency_stop_state}")
-        self.get_logger().info(f"Queue size: {self.queue.empty()}")
         if self.robot_status == RobotStatus.FREE and self.emergency_stop_state == EmergencyStopState.DISABLED and self.waiting_confirmation_state == WaitingConfirmation.CONFIRMED and not self.queue.empty():
             self.already_sent = False
             self.current = self.queue.get()
             time.sleep(1)
             self.dequeue.publish(self.current)
-            log_msg = Log(node_name=self.dequeue.name,
-                          action=f'{self.current}',
-                          unix_time=int(self.get_clock().now().to_msg().sec))
             if self.current.type == "DROP":
                 self.waiting_confirmation_state = WaitingConfirmation.WAITING
-            self.logger.publish(log_msg)
 
         elif self.robot_status == RobotStatus.FREE and self.waiting_confirmation_state == WaitingConfirmation.WAITING and self.already_sent == False:
             self.emergency_stop_state = EmergencyStopState.ACTIONABLE
