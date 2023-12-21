@@ -5,11 +5,10 @@ import {QRCodeSVG} from 'qrcode.react';
 const QRCodeComponent = () => {
   const [qrcodeData, setQRCodeData] = useState({});
 
-  // Function to fetch history data (replace with your actual data fetching logic)
+
   const fetchQRCode = async () => {
     try {
-      // Replace this with your API endpoint or data source
-      const response = await fetch("http://10.128.83.103:3000/qrcode")
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND + "/qrcode");
       const data = await response.json();
       console.log("console.log: ", data)
       setQRCodeData(data)
@@ -19,13 +18,8 @@ const QRCodeComponent = () => {
   };
 
   useEffect(() => {
-    // Fetch history data when the component mounts
     fetchQRCode();
-
-    // Fetch data every 1 second
     const intervalId = setInterval(fetchQRCode, 1000);
-
-    // Clear the interval when the component is unmounted
     return () => clearInterval(intervalId);
   }, []);
 

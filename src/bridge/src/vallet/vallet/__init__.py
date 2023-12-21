@@ -1,5 +1,4 @@
 import os
-import vallet
 import socketio
 
 socket_client = socketio.Client()
