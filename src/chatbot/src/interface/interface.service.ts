@@ -170,6 +170,7 @@ export class InterfaceService {
     let transcript = await this.aiService.speech2Text(audioData);
     this.conversationHistory.push({ role: 'user', content: transcript });
     let system = await this.aiService.buildInterfaceSystemMessage();
+    console.log(system)
     let response = await this.aiService.callGPTInterface(
       system,
       this.conversationHistory,

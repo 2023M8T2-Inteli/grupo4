@@ -282,74 +282,68 @@ export class AIService {
 
   // METODOS ESPECIFICOS PARA A INTERFACE WEB ---------------------------------------
 
-  filterJson(inputJson, properties) {
-    const result = {};
+  filterJson(inputJson) {
+    return `
+      ferramenta: ${inputJson?.tool?.name || ''},
+      requisitante/usuário:  ${inputJson?.user?.name || ''},
+      local/destino/ponto:  ${inputJson?.point?.name || 0},
+      data de criação:  ${inputJson?.createdAt || ''},
+      -------------------------------------------------
+    `;
+  }
 
-    function getFilteredData(data, props) {
-      const filteredData = {};
-      for (const prop of props) {
-        if (typeof prop === 'object') {
-          // Nested property
-          const [key, nestedProps] = Object.entries(prop)[0];
-          if (data?.key && typeof data[key] === 'object') {
-            filteredData[key] = getFilteredData(data[key], nestedProps);
-          }
-        } else if (data[prop] !== undefined) {
-          // Simple property
-          filteredData[prop] = data[prop];
-        }
-      }
-      return filteredData;
-    }
-
-    return getFilteredData(inputJson, properties);
+  parseOrders(inputJson) {
+    let result = '';
+    inputJson.forEach((item) => {
+      result += item;
+    });
+    return result
   }
 
   // Função que cónstroi o contexto para o GPT da interface
   // antes chamada de buildContext
   async buildInterfaceSystemMessage() {
     try {
-      const response = await axios.get('http://localhost:3000/orders/queue');
+      const response = await axios.get(
+        process.env.NEXT_PUBLIC_BACKEND + '/orders/queue',
+      );
       const data = {
         now: response.data[0],
         queue: response.data.slice(1),
         history: [],
       };
-      const history = await axios.get('http://localhost:3000/orders/history');
+      const history = await axios.get(
+        process.env.NEXT_PUBLIC_BACKEND + '/orders/history',
+      );
       data['history'] = history.data;
 
-      const selectedProperties = [
-        { tool: ['name'] },
-        { user: ['name'] },
-        { point: ['name'] },
-        'createdAt',
-      ];
-
       // Use Array.map to apply filterJson to each item in the array
-      const filteredArray = data?.queue.map((item) =>
-        this.filterJson(item, selectedProperties),
-      );
+      const filteredArray = data?.queue.map((item) => this.filterJson(item));
 
       const filteredHistory = data?.history.map((item) =>
-        this.filterJson(item, selectedProperties),
+        this.filterJson(item),
       );
+
+      
+  
+        
+    
 
       return {
         role: 'system',
         content: `
-      Você é um assistente para delivery de peças do almoxarifado na Ambev. Seu nome é Vallet. Responda as perguntas de forma simpática e divertida. Na primeira resposta, se apresente e diga o que pode fazer. Seja conciso. O "point" nos dados é o lugar para onde o itens será entregue, onde se encontra a pessoa que fez pedido. Presta atenção para não confundir fila com histórico. Se a pessoa perguntar o que falta, é a fila, se ela perguntar o que já foi entregue, é o histórico.
+      Você é um assistente para delivery de peças do almoxarifado na Ambev. Seu nome é Vallet. Responda as perguntas de forma simpática e divertida. Na primeira resposta, se apresente e diga o que pode fazer. Seja conciso. O "point" nos dados é o lugar para onde o itens será entregue, onde se encontra a pessoa que fez pedido. Presta atenção para não confundir fila com histórico. Se a pessoa perguntar o que falta, é a fila, se ela perguntar o que já foi entregue, é o histórico. Não responda com emojis. Só fale em português, não importa a língua com que falarem com você. Se algo não fizer sentido, diga que não entendeu.
       
-      PEDIDO SENDO EXECUTADO AGORA: ${JSON.stringify(
-        this.filterJson(data?.now, [
-          { tool: ['name'] },
-          { user: ['name'] },
-          { point: ['name'] },
-        ]),
+      PEDIDO SENDO EXECUTADO AGORA: ${this.filterJson(data?.now)}
+      Nº DE ITENS NA FILA (PEDIDOS QUE FALTAM SER ENTREGUES): ${
+        data?.queue.length || 'não há pedidos na fila'
+      } 
+      FILA (PEDIDOS QUE FALTAM SER ENTREGUES): ${this.parseOrders(
+        filteredArray,
       )}
-      Nº DE ITENS NA FILA (PEDIDOS QUE FALTAM SER ENTREGUES): ${data?.queue
+      Nº DE ITENS NO HISTÓRICO (PEDIDOS QUE JÁ FORAM ENTREGUES): ${data?.history
         .length}
-      FILA (PEDIDOS QUE FALTAM SER ENTREGUES): ${JSON.stringify(filteredArray)}
-      HISTÓRICO:${JSON.stringify(filteredHistory)}
+      HISTÓRICO:${this.parseOrders(filteredHistory)}
       `,
       };
     } catch (error) {
@@ -365,7 +359,7 @@ export class AIService {
         {
           role: 'system',
           content:
-            'Leia o texto abaixo e defina a emoção principal dele entre happy, superhappy, e sad. Se o usuário elogiar ou agradecer, deve ser superhappy. Se a resposta for um pedido de desculpas, deve ser triste.: ' +
+            'Leia o texto abaixo e defina a emoção principal dele entre happy, neutral, superhappy, e sad. RESPONDA APENAS COM UMA PALAVRA: happy, supperhappy, neutral ou sad. Se o usuário elogiar ou agradecer, deve ser superhappy. Se a resposta for um pedido de desculpas, deve ser triste.: ' +
             text,
         },
       ],

@@ -81,6 +81,7 @@ export class OrderService {
       include: {
         tool: true,
         point: true,
+        user: true,
       },
     });
     if (!orders) {
@@ -252,6 +253,7 @@ export class OrderService {
         include: {
           tool: true,
           point: true,
+          user: true,
         },
       });
       return orders;
@@ -272,6 +274,7 @@ export class OrderService {
         include: {
           tool: true,
           point: true,
+          user: true,
         },
       });
       return orders;

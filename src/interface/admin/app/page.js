@@ -30,19 +30,15 @@ const page = () => {
 
     const data = await response.json();
     console.log(data);
-    setNow((prev) => {
-      if (data.length > 0) {
-        for (let record of data) {
-          if (
-            record.status === "Collecting" ||
-            record.status === "To confirm"
-          ) {
-            return record;
-          }
+
+    if (data.length > 0) {
+      for (let record of data) {
+        if (record.type === "Collecting" || record.type === "To confirm") {
+          setNow(record);
         }
       }
-      return prev;
-    });
+    }
+
     setQueue(data.slice(1));
   };
 
