@@ -5,6 +5,8 @@ import { WhatsappModule } from './whatsapp/whatsapp.module';
 import { HandlerModule } from './handler/handler.module';
 import { ConfigModule } from '@nestjs/config';
 import { WebsocketModule } from './websockets/websocket.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -15,6 +17,11 @@ import { WebsocketModule } from './websockets/websocket.module';
 
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+
+
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'src/public'),
     }),
 
     WebsocketModule,

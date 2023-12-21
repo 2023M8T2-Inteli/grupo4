@@ -45,10 +45,29 @@ export class AIService {
         apiKey: process.env.OPENAI_API_KEY,
       }),
     );
-
-    const credentials = JSON.parse(
-      fs.readFileSync(path.join(__dirname, 'googlespeech.json'), 'utf-8'),
-    );
+    let credentials: any;
+    try {
+      credentials = JSON.parse(
+        fs.readFileSync(path.join(__dirname, 'googlespeech.json'), 'utf-8'),
+      );
+    } catch (e) {
+      credentials = {
+        type: process.env.TYPE,
+        project_id: process.env.PROJECT_ID,
+        private_key_id: process.env.PRIVATE_KEY_ID,
+        private_key: process.env.PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        client_email: process.env.CLIENT_EMAIL,
+        client_id: process.env.CLIENT_ID,
+        auth_uri: process.env.AUTH_URI,
+        token_uri: process.env.TOKEN_URI,
+        auth_provider_x509_cert_url: process.env.AUTH_PROVIDER_X509_CERT_URL,
+        client_x509_cert_url: process.env.CLIENT_X509_CERT_URL,
+        universe_domain: process.env.UNIVERSE_DOMAIN,
+      };
+    }
+    if (!credentials) {
+      throw new Error('GOOGLE_APPLICATION_CREDENTIALS not set');
+    }
 
     this.ttsClient = new TextToSpeechClient({
       credentials,
