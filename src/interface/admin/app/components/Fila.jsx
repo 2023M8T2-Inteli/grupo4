@@ -8,7 +8,7 @@ const Fila = ({queue}) => {
 
       <table className="min-w-full border border-gray-300">
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="bg-gray-100 text-center">
             <th className="py-2 px-4 border-b">Item</th>
             <th className="py-2 px-4 border-b">Destino</th>
             <th className="py-2 px-4 border-b">Requisitante</th>
@@ -17,7 +17,7 @@ const Fila = ({queue}) => {
         </thead>
         <tbody>
           {queue.map((item) => (
-            <tr key={item?.id} className="border-b">
+            <tr key={item?.id} className="border-b text-center">
               <td className="py-2 px-4">{item?.tool?.name}</td>
               <td className="py-2 px-4">{item?.point?.name}</td>
               <td className="py-2 px-4">
