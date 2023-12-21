@@ -1,23 +1,28 @@
 'use client'
-import React, { useEffect } from 'react';
-import {io} from 'socket.io-client';
-
+import { useEffect, useState } from 'react';
 
 const Now = ({now}) => {
-  const [battery, setBattery] = React.useState(0);
+  const [battery, setBattery] = useState(0);
 
   useEffect(() => {
-    console.log('Connecting to server...')
-    // Create a Socket.IO client and connect to the server
-    const socket = io(process.env.NEXT_PUBLIC_SOCKET); // Replace with your server URL
-    console.log(socket)
-    // Handle events from the server
-    socket.on('battery', (data) => {
-      console.log('Received message from server:', data);
-      let quantity = JSON.parse(data);
-      console.log(quantity)
-      setBattery(String(quantity.data).substring(0, 2));
-    });
+    const fetchData = async () => {
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_HOST + '/websockets/battery');
+        const data = await response.json();
+        console.log(data);
+        setBattery(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData(); // Initial fetch
+
+    // Set up interval to fetch data every 10 seconds
+    const intervalId = setInterval(fetchData, 10000);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
