@@ -8,7 +8,7 @@ const QRCode = () => {
   const fetchQRCode = async () => {
     try {
       // Replace this with your API endpoint or data source
-      const response = await fetch("http://52.5.70.100:3000/qrcode");
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND + "/qrcode");
       const data = await response.json();
       console.log(data)
       setQRCode(data)
