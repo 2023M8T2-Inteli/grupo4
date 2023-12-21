@@ -41,6 +41,7 @@ jobs:
           echo AUTH_PROVIDER_X509_CERT_URL=$AUTH_PROVIDER_X509_CERT_URL >> .env
           echo CLIENT_X509_CERT_URL=$CLIENT_X509_CERT_URL >> .env
           echo UNIVERSE_DOMAIN=$UNIVERSE_DOMAIN >> .env
+          echo NEXT_PUBLIC_BACKEND=$NEXT_PUBLIC_BACKEND >> .env
 
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -65,6 +66,7 @@ jobs:
           AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.AUTH_PROVIDER_X509_CERT_URL }}
           CLIENT_X509_CERT_URL: ${{ secrets.CLIENT_X509_CERT_URL }}
           UNIVERSE_DOMAIN: ${{ secrets.UNIVERSE_DOMAIN }}
+          NEXT_PUBLIC_BACKEND: ${{ secrets.NEXT_PUBLIC_BACKEND }}
 
       - name: Build Dockerfile
         working-directory: ./src/chatbot
@@ -118,6 +120,7 @@ jobs:
           echo AUTH_PROVIDER_X509_CERT_URL=$AUTH_PROVIDER_X509_CERT_URL >> .env
           echo CLIENT_X509_CERT_URL=$CLIENT_X509_CERT_URL >> .env
           echo UNIVERSE_DOMAIN=$UNIVERSE_DOMAIN >> .env
+          echo NEXT_PUBLIC_BACKEND=$NEXT_PUBLIC_BACKEND >> .env
 
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -142,6 +145,7 @@ jobs:
           AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.AUTH_PROVIDER_X509_CERT_URL }}
           CLIENT_X509_CERT_URL: ${{ secrets.CLIENT_X509_CERT_URL }}
           UNIVERSE_DOMAIN: ${{ secrets.UNIVERSE_DOMAIN }}
+          NEXT_PUBLIC_BACKEND: ${{ secrets.NEXT_PUBLIC_BACKEND }}
 
       - name: Build, tag, and push image to Amazon ECR
         working-directory: ./src/chatbot
