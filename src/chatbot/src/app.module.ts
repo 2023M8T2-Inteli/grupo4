@@ -8,6 +8,7 @@ import { WebsocketModule } from './websockets/websocket.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { InterfaceModule } from './interface/interface.module';
+import { appController } from './app.controller';
 
 @Module({
   imports: [
@@ -29,5 +30,6 @@ import { InterfaceModule } from './interface/interface.module';
 
     InterfaceModule,
   ],
+  controllers: [appController]
 })
 export class AppModule {}
