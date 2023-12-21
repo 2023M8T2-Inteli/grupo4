@@ -29,11 +29,11 @@ export default function Talk({ emotion, setEmotion }) {
           saveAudioToEndpoint(blob);
         }
       };
-      recorder.start(8000);
+      recorder.start();
       setIsRecording(true); // Update recording status
       setTimeout(() => {
         recorder.stop();
-      }, 5000);
+      }, 3000);
     } catch (e) {
       console.log("error getting stream", e);
       setIsRecording(false); // Update recording status in case of an error
