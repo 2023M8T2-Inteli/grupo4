@@ -37,6 +37,12 @@ def generate_launch_description():
         ),
         Node(
             package='vallet',
+            executable='battery',
+            output='screen',
+            name="battery"
+        ),
+        Node(
+            package='vallet',
             executable='vallet',
             output='screen',
             name="vallet"

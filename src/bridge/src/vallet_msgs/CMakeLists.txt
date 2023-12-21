@@ -21,7 +21,6 @@ find_package(rosidl_default_generators REQUIRED)
 # find_package(<dependency> REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-  "msg/Log.msg"
   "msg/Task.msg"
   DEPENDENCIES geometry_msgs
 )
