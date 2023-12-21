@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {QRCodeSVG} from 'qrcode.react';
 
 
-const QRCodeComponent = () => {
+const QRCode = () => {
   const [qrcodeData, setQRCodeData] = useState({});
 
 
@@ -43,4 +43,4 @@ const QRCodeComponent = () => {
   );
 };
 
-export default QRCodeComponent;
+export default QRCode;
