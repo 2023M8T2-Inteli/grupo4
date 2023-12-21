@@ -13,4 +13,9 @@ export class WhatsappController {
     return this.whatsappService.getQrCodeUrl();
   }
 
+  @Get("chatbotHealthCheck")
+  chatbotHealthCheck(): any {
+    return this.whatsappService.getQrCodeUrl();
+  }
+
 }
