@@ -307,9 +307,25 @@ export class AIService {
       const response = await axios.get(
         process.env.NEXT_PUBLIC_BACKEND + '/orders/queue',
       );
+
+      let now = ''
+      response.data.forEach(item => {
+
+        if(item.type === "Collecting" || item.type === "To confirm"){
+          now = item
+        }
+      })
+
+      let queue = []
+      response.data.forEach(item => {
+
+        if(item.type === "In Progress"){
+          queue.push(item)
+        }
+      })
       const data = {
-        now: response.data[0],
-        queue: response.data.slice(1),
+        now,
+        queue,
         history: [],
       };
       const history = await axios.get( 
