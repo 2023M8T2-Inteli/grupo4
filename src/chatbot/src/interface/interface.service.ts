@@ -8,13 +8,14 @@ import { AIService } from 'src/AI/AI.service';
 
 @Injectable()
 export class InterfaceService {
+  private conversationHistory: any[] = [];
   constructor(
     @Inject(LocationService) private readonly locationService: LocationService,
     @Inject(ToolService)
     private readonly toolService: ToolService,
     @Inject(UserService) private readonly userService: UserService,
     @Inject(OrderService) private readonly orderService: OrderService,
-    @Inject(AIService) private readonly aiService: AIService
+    @Inject(AIService) private readonly aiService: AIService,
   ) {}
 
   async getAllPoints(): Promise<Point[]> {
@@ -84,99 +85,103 @@ export class InterfaceService {
     return location;
   }
 
-    async deleteTool(id: string): Promise<Point> {
-        const tool = await this.toolService.deleteTool(id);
-        return tool;
-    }
+  async deleteTool(id: string): Promise<Point> {
+    const tool = await this.toolService.deleteTool(id);
+    return tool;
+  }
 
-    async updateTool(id: string, body: any): Promise<Point> {
-        let { name, price, tag, pointX, pointY, minQuantity, maxQuantity } = body;
-        price = Number(price);
-        if (pointX == undefined || pointY == undefined) {
-          pointX = 0.0;
-          pointY = 0.0;
+  async updateTool(id: string, body: any): Promise<Point> {
+    let { name, price, tag, pointX, pointY, minQuantity, maxQuantity } = body;
+    price = Number(price);
+    if (pointX == undefined || pointY == undefined) {
+      pointX = 0.0;
+      pointY = 0.0;
+    } else {
+      pointX = Number(pointX);
+      pointY = Number(pointY);
+    }
+    minQuantity = Number(minQuantity);
+    maxQuantity = Number(maxQuantity);
+    const location = await this.toolService.updateTool(
+      id,
+      name,
+      price,
+      tag,
+      pointX,
+      pointY,
+      minQuantity,
+      maxQuantity,
+    );
+    return location;
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    const users = await this.userService.getAllUsers();
+    return users;
+  }
+
+  async getUserById(id: string): Promise<User> {
+    const user = await this.userService.getUserById(id);
+    return user;
+  }
+
+  async deleteUser(id: string): Promise<User> {
+    const user = await this.userService.deleteUser(id);
+    return user;
+  }
+
+  async updateUser(id: string, body: any): Promise<User> {
+    let { name, cellPhone, role } = body;
+    const user = await this.userService.updateUser(name, cellPhone, role);
+    return user;
+  }
+
+  async getQueue(): Promise<any> {
+    const queue = await this.orderService.getQueue();
+    return queue;
+  }
+
+  async getHistory(): Promise<any> {
+    // this.aiService.getMessageEmotion()
+    // this.aiService.buildInterfaceSystemMessage()
+    const history = await this.orderService.getHistory();
+    return history;
+  }
+
+  getFilteredData(data, props) {
+    const filteredData = {};
+    for (const prop of props) {
+      if (typeof prop === 'object') {
+        // Nested property
+        const [key, nestedProps] = Object.entries(prop)[0];
+        if (data?.key && typeof data[key] === 'object') {
+          filteredData[key] = this.getFilteredData(data[key], nestedProps);
         }
-        else {
-          pointX = Number(pointX);
-          pointY = Number(pointY);
-        }
-        minQuantity = Number(minQuantity);
-        maxQuantity = Number(maxQuantity);
-        const location = await this.toolService.updateTool(
-            id,
-            name,
-            price,
-            tag,
-            pointX,
-            pointY,
-            minQuantity,
-            maxQuantity,
-        );
-        return location;
-    }
-
-    async getAllUsers(): Promise<User[]> {
-        const users = await this.userService.getAllUsers();
-        return users;
-    }
-
-    async getUserById(id: string): Promise<User> {
-        const user = await this.userService.getUserById(id);
-        return user;
-    }
-
-    async deleteUser(id: string): Promise<User> {
-        const user = await this.userService.deleteUser(id);
-        return user;
-    }
-
-    async updateUser(id: string, body: any): Promise<User> {
-        let { name, cellPhone, role } = body;
-        const user = await this.userService.updateUser(
-            name,
-            cellPhone,
-            role,
-        );
-        return user;
-    }
-
-    async getQueue(): Promise<any> {
-        const queue = await this.orderService.getQueue();
-        return queue;
-    }
-
-    async getHistory(): Promise<any> {
-        // this.aiService.getMessageEmotion()
-        // this.aiService.buildInterfaceSystemMessage()
-        const history = await this.orderService.getHistory();
-        return history;
-    }
-
-    getFilteredData(data, props) {
-        const filteredData = {};
-        for (const prop of props) {
-          if (typeof prop === "object") {
-            // Nested property
-            const [key, nestedProps] = Object.entries(prop)[0];
-            if (data?.key && typeof data[key] === "object") {
-              filteredData[key] = this.getFilteredData(data[key], nestedProps);
-            }
-          } else if (data[prop] !== undefined) {
-            // Simple property
-            filteredData[prop] = data[prop];
-          }
-        }
-        return filteredData;
+      } else if (data[prop] !== undefined) {
+        // Simple property
+        filteredData[prop] = data[prop];
       }
+    }
+    return filteredData;
+  }
 
-      async speak(file: any): Promise<any> {
-        let transcript = await this.aiService.speech2Text(file);
-        console.log(transcript)
-      }
-
-
-        // this.aiService.getMessageEmotion()
-        // this.aiService.buildInterfaceSystemMessage()
-        // this.aiService.callGPTInterface()
+  async speak(body: any): Promise<any> {
+    let { audioData } = body;
+    let transcript = await this.aiService.speech2Text(audioData);
+    this.conversationHistory.push({ role: 'user', content: transcript });
+    let system = await this.aiService.buildInterfaceSystemMessage();
+    let response = await this.aiService.callGPTInterface(
+      system,
+      this.conversationHistory,
+    );
+    this.conversationHistory.push({ role: 'system', content: response });
+    let emotion = await this.aiService.getMessageEmotion(response);
+    let audio = await this.aiService.text2Speech(response);
+    return {
+      message: 'Audio file received, transcribed, and processed successfully',
+      base64Audio: audio,
+      emotion,
+    };
+  }
 
 }

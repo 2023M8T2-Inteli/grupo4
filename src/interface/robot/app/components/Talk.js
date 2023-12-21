@@ -29,7 +29,7 @@ export default function Talk({ emotion, setEmotion }) {
           saveAudioToEndpoint(blob);
         }
       };
-      recorder.start(5000);
+      recorder.start(8000);
       setIsRecording(true); // Update recording status
       setTimeout(() => {
         recorder.stop();
@@ -40,6 +40,19 @@ export default function Talk({ emotion, setEmotion }) {
     }
   };
 
+  async function encodeAudioToBase64(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onloadend = () => {
+        resolve(reader.result.split(",")[1]); // Extracting the Base64 data (skip the data:image/png;base64, part)
+      };
+  
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+
   // Send the MP3 file to your endpoint
   const saveAudioToEndpoint = async (blob) => {
     let exclamations = ["hmm", "pensada", "ponderar", "possibilidades", "ver"];
@@ -48,19 +61,28 @@ export default function Talk({ emotion, setEmotion }) {
     console.log(audioSrc);
     const endpointUrl = process.env.NEXT_PUBLIC_HOST + "/speak"; // Replace with your actual endpoint URL
 
+
     try {
-      const formData = new FormData();
-      formData.append("audioFile", blob, "recorded_audio.mp3");
+      const base64Data = await encodeAudioToBase64(blob);
+
+      const dataToSend = {
+        "audioData": String(base64Data)
+      }
+
+      console.log(dataToSend);
 
       const response = await fetch(endpointUrl, {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataToSend),
       });
+
 
       if (response.ok) {
         console.log("Audio file sent successfully");
         const data = await response.json();
-        console.log(data.emotion)
         setEmotion(data.emotion);
         setAudioSrc(`data:audio/mp3;base64,${data.base64Audio}`);
       } else {

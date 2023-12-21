@@ -107,8 +107,8 @@ export class InterfaceController {
   }
 
   @Post('/speak')
-  @UseInterceptors(FileInterceptor('audioFile'))
-    async speak(@UploadedFile() file: Express.Multer.File): Promise<any> {
-        return await this.interfaceService.speak(file);
+    async speak(@Body() body: any): Promise<any> {
+      console.log({body})
+        return await this.interfaceService.speak(body);
     }
 }

@@ -192,6 +192,7 @@ export class AIService {
       const res = await this.openai.createTranscription(
         audioStream as any,
         'whisper-1',
+        'pt-BR',
       );
 
       return res.data.text;
@@ -209,9 +210,12 @@ export class AIService {
     let response;
     try {
       response = await this.ttsClient.synthesizeSpeech({
-        input: { text: text },
-        voice: { languageCode: 'pt-BR', ssmlGender: 'FEMALE' },
-        audioConfig: { audioEncoding: 'MP3' },
+        input: { text },
+        voice: {
+          languageCode: 'pt-BR',
+          name: 'pt-BR-Neural2-B',
+        },
+        audioConfig: { audioEncoding: 'MP3', pitch: 13, speakingRate: 1.2 },
       });
 
       const audioBase64 = Buffer.from(
@@ -278,48 +282,103 @@ export class AIService {
 
   // METODOS ESPECIFICOS PARA A INTERFACE WEB ---------------------------------------
 
+  filterJson(inputJson, properties) {
+    const result = {};
+
+    function getFilteredData(data, props) {
+      const filteredData = {};
+      for (const prop of props) {
+        if (typeof prop === 'object') {
+          // Nested property
+          const [key, nestedProps] = Object.entries(prop)[0];
+          if (data?.key && typeof data[key] === 'object') {
+            filteredData[key] = getFilteredData(data[key], nestedProps);
+          }
+        } else if (data[prop] !== undefined) {
+          // Simple property
+          filteredData[prop] = data[prop];
+        }
+      }
+      return filteredData;
+    }
+
+    return getFilteredData(inputJson, properties);
+  }
+
   // Função que cónstroi o contexto para o GPT da interface
   // antes chamada de buildContext
-  async buildInterfaceSystemMessage(filteredArray, filteredHistory,ordersInProgress) {
-  
-    return {
-      role: "system",
-      content: `
+  async buildInterfaceSystemMessage() {
+    try {
+      const response = await axios.get('http://localhost:3000/orders/queue');
+      const data = {
+        now: response.data[0],
+        queue: response.data.slice(1),
+        history: [],
+      };
+      const history = await axios.get('http://localhost:3000/orders/history');
+      data['history'] = history.data;
+
+      const selectedProperties = [
+        { tool: ['name'] },
+        { user: ['name'] },
+        { point: ['name'] },
+        'createdAt',
+      ];
+
+      // Use Array.map to apply filterJson to each item in the array
+      const filteredArray = data?.queue.map((item) =>
+        this.filterJson(item, selectedProperties),
+      );
+
+      const filteredHistory = data?.history.map((item) =>
+        this.filterJson(item, selectedProperties),
+      );
+
+      return {
+        role: 'system',
+        content: `
       Você é um assistente para delivery de peças do almoxarifado na Ambev. Seu nome é Vallet. Responda as perguntas de forma simpática e divertida. Na primeira resposta, se apresente e diga o que pode fazer. Seja conciso. O "point" nos dados é o lugar para onde o itens será entregue, onde se encontra a pessoa que fez pedido. Presta atenção para não confundir fila com histórico. Se a pessoa perguntar o que falta, é a fila, se ela perguntar o que já foi entregue, é o histórico.
       
-      PEDIDO SENDO EXECUTADO AGORA: ${ordersInProgress}
-      Nº DE ITENS NA FILA (PEDIDOS QUE FALTAM SER ENTREGUES): ${
-        // TODO: Esta certo?
-        filteredArray 
-      }
-      FILA (PEDIDOS QUE FALTAM SER ENTREGUES): ${filteredArray}
-      HISTÓRICO: ${filteredHistory}
+      PEDIDO SENDO EXECUTADO AGORA: ${JSON.stringify(
+        this.filterJson(data?.now, [
+          { tool: ['name'] },
+          { user: ['name'] },
+          { point: ['name'] },
+        ]),
+      )}
+      Nº DE ITENS NA FILA (PEDIDOS QUE FALTAM SER ENTREGUES): ${data?.queue
+        .length}
+      FILA (PEDIDOS QUE FALTAM SER ENTREGUES): ${JSON.stringify(filteredArray)}
+      HISTÓRICO:${JSON.stringify(filteredHistory)}
       `,
-    };
+      };
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   //função que pega a emoção de um texto para a interface
-  async getMessageEmotion(text: string){
+  async getMessageEmotion(text: string) {
     const res = await this.openai.createChatCompletion({
-      model: "gpt-3.5-turbo-1106",
+      model: 'gpt-3.5-turbo-1106',
       messages: [
         {
-          role: "system",
+          role: 'system',
           content:
-            "Leia o texto abaixo e defina a emoção principal dele entre happy, superhappy, e sad. Se o usuário elogiar ou agradecer, deve ser superhappy. Se a resposta for um pedido de desculpas, deve ser triste.: " +
+            'Leia o texto abaixo e defina a emoção principal dele entre happy, superhappy, e sad. Se o usuário elogiar ou agradecer, deve ser superhappy. Se a resposta for um pedido de desculpas, deve ser triste.: ' +
             text,
         },
-      ]
-    })
-    return res.data.choices[0].message.content
+      ],
+    });
+    return res.data.choices[0].message.content;
   }
 
   //callGPT especifico para a conversa da interface
-  async callGPTInterface(systemMessage:any, messages: Array<any>){
+  async callGPTInterface(systemMessage: any, messages: Array<any>) {
     const res = await this.openai.createChatCompletion({
-      model: "gpt-3.5-turbo-1106",
-      messages: [systemMessage, ...messages]
-    })
-    return res.data.choices[0].message.content
+      model: 'gpt-3.5-turbo-1106',
+      messages: [systemMessage, ...messages],
+    });
+    return res.data.choices[0].message.content;
   }
 }
