@@ -80,6 +80,17 @@ const sidebars = {
     },
     {
       type: "category",
+      label: "Sprint 5",
+      items: [
+        
+        "Sprint 5/Github - Actions",
+        "Sprint 5/Refinamentos da interface de admin",
+        "Sprint 5/TTS e STT com Google Cloud"
+      
+      ]
+    },
+    {
+      type: "category",
       label: "Manual do Usuário",
       items: ["Manual do Usuário/Manual do Usuário"],
     },
