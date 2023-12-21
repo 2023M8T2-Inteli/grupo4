@@ -177,4 +177,3 @@ jobs:
         working-directory: ./src/chatbot
         run: |
           chmod 400 ./ec2_key_par.pem && ssh -o StrictHostKeyChecking=no -i "./ec2_key_par.pem" ubuntu@52.5.70.100 'chmod +x ./script.sh && bash ./script.sh'
-

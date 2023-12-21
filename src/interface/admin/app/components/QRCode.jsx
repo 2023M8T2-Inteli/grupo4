@@ -1,31 +1,25 @@
 import React, { useState, useEffect } from "react";
+import {QRCodeSVG} from 'qrcode.react';
 
 
 const QRCode = () => {
-  const [qrcode, setQRCode] = useState([]);
+  const [qrcodeData, setQRCodeData] = useState({});
 
-  // Function to fetch history data (replace with your actual data fetching logic)
+
   const fetchQRCode = async () => {
     try {
-      // Replace this with your API endpoint or data source
-      const response = await fetch("http://52.5.70.100:3000/qrcode");
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND + "/qrcode");
       const data = await response.json();
-      console.log(data)
-      setQRCode(data)
-      document.getElementById('qrcode').innerHTML = data.qrcodeUrl;
+      console.log("console.log: ", data)
+      setQRCodeData(data)
     } catch (error) {
       console.error("Error fetching history data:", error);
     }
   };
 
   useEffect(() => {
-    // Fetch history data when the component mounts
     fetchQRCode();
-
-    // Fetch data every 10 seconds
-    const intervalId = setInterval(fetchQRCode, 10000);
-
-    // Clear the interval when the component is unmounted
+    const intervalId = setInterval(fetchQRCode, 1000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -35,9 +29,17 @@ const QRCode = () => {
         <h1 className="text-2xl font-semibold mb-4">QR CODE</h1>
       </span>
       <div className="flex items-center justify-center">
-        <div dangerouslySetInnerHTML={{ __html: qrcode.qrcodeUrl }} className="w-1/2"/>
+        {qrcodeData.qr 
+        ?
+        <QRCodeSVG value={qrcodeData.qr} /> 
+        :
+        qrcodeData.isAuthenticated 
+        ?
+        <p>Já autenticado.</p>
+        : 
+        <p>Ainda não foi gerado.</p>}
       </div>
-    </div>
+    </div>  
   );
 };
 

@@ -2,7 +2,6 @@ import React from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation';
 
-
 const Sidebar = () => {
   const router = useRouter();
   const goToUsers = () => {
@@ -37,7 +36,7 @@ const Sidebar = () => {
             <button className='p-2' onClick={goToTools} >Itens</button>
             <button className='p-2' onClick={goToPoints} >Destinos</button>
         </div>
-        <Image className='absolute bottom-0' src='https://d17sdup6iumur7.cloudfront.net/robot.png' width={500} height={500} />
+        <img className='absolute bottom-0' src={'https://d17sdup6iumur7.cloudfront.net/robot.png'} width={500} height={500} />
 
     </div>
   )

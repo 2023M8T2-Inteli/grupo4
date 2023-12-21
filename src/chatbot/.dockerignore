@@ -1,1 +1,5 @@
 node_modules/*
+.wwebjs_cache/*
+session/*
+dist/*
+ec2_key_par.pem

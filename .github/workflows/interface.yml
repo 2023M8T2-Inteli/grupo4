@@ -53,18 +53,22 @@ jobs:
         run: |
           echo "NEXT_PUBLIC_HOST=$NEXT_PUBLIC_HOST" >> .env
           echo "NEXT_PUBLIC_SOCKET=$NEXT_PUBLIC_SOCKET" >> .env
+          echo "NEXT_PUBLIC_BACKEND=$NEXT_PUBLIC_BACKEND" >> .env
         env:
           NEXT_PUBLIC_HOST: ${{ secrets.NEXT_PUBLIC_HOST }}
           NEXT_PUBLIC_SOCKET: ${{ secrets.NEXT_PUBLIC_SOCKET }}
+          NEXT_PUBLIC_BACKEND: ${{ secrets.NEXT_PUBLIC_BACKEND }}
 
       - name: Create .env file (ROBOT)
         working-directory: ./src/interface/robot
         run: |
           echo "NEXT_PUBLIC_HOST=$NEXT_PUBLIC_HOST" >> .env
           echo "NEXT_PUBLIC_SOCKET=$NEXT_PUBLIC_SOCKET" >> .env
+          echo "NEXT_PUBLIC_BACKEND=$NEXT_PUBLIC_BACKEND" >> .env
         env:
           NEXT_PUBLIC_HOST: ${{ secrets.NEXT_PUBLIC_HOST }}
           NEXT_PUBLIC_SOCKET: ${{ secrets.NEXT_PUBLIC_SOCKET }}
+          NEXT_PUBLIC_BACKEND: ${{ secrets.NEXT_PUBLIC_BACKEND }}
 
       - name: Configure Docker Compose
         run: |
@@ -144,18 +148,22 @@ jobs:
         run: |
           echo "NEXT_PUBLIC_HOST=$NEXT_PUBLIC_HOST" >> .env
           echo "NEXT_PUBLIC_SOCKET=$NEXT_PUBLIC_SOCKET" >> .env
+          echo "NEXT_PUBLIC_BACKEND=$NEXT_PUBLIC_BACKEND" >> .env
         env:
           NEXT_PUBLIC_HOST: ${{ secrets.NEXT_PUBLIC_HOST }}
           NEXT_PUBLIC_SOCKET: ${{ secrets.NEXT_PUBLIC_SOCKET }}
+          NEXT_PUBLIC_BACKEND: ${{ secrets.NEXT_PUBLIC_BACKEND }}
 
       - name: Create .env file (ROBOT)
         working-directory: ./src/interface/robot
         run: |
           echo "NEXT_PUBLIC_HOST=$NEXT_PUBLIC_HOST" >> .env
           echo "NEXT_PUBLIC_SOCKET=$NEXT_PUBLIC_SOCKET" >> .env
+          echo "NEXT_PUBLIC_BACKEND=$NEXT_PUBLIC_BACKEND" >> .env
         env:
           NEXT_PUBLIC_HOST: ${{ secrets.NEXT_PUBLIC_HOST }}
           NEXT_PUBLIC_SOCKET: ${{ secrets.NEXT_PUBLIC_SOCKET }}
+          NEXT_PUBLIC_BACKEND: ${{ secrets.NEXT_PUBLIC_BACKEND }}
 
       - name: Build, tag, and push image to Amazon ECR (BACKEND)
         working-directory: ./src/interface/backend
