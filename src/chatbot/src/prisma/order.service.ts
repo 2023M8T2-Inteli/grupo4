@@ -245,7 +245,9 @@ export class OrderService {
     try {
       const orders = await this.prisma.order.findMany({
         where: {
-          type: 'In Progress',
+          type: {
+            in: ['In Progress', 'Collecting', 'To confirm'],
+          },
         },
         include: {
           tool: true,
@@ -263,7 +265,9 @@ export class OrderService {
     try {
       const orders = await this.prisma.order.findMany({
         where: {
-          type: 'Completed',
+          type: {
+            in: ['Finished', 'Canceled'],
+          },
         },
         include: {
           tool: true,
