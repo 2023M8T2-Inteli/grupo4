@@ -20,25 +20,32 @@ const Points = () => {
 
   const handleAddPoint = async (formData) => {
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND + '/points', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_BACKEND + "/points",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
         // Optionally, you can handle the successful response
-        console.log('Point added successfully:', formData);
+        console.log("Point added successfully:", formData);
         fetchPoints();
       } else {
         // Handle the case where the server returned an error
-        console.error('Failed to add point:', response.status, response.statusText);
+        console.error(
+          "Failed to add point:",
+          response.status,
+          response.statusText
+        );
       }
     } catch (error) {
       // Handle network or other errors
-      console.error('Error adding point:', error);
+      console.error("Error adding point:", error);
     }
 
     // Close the modal after handling the API call
@@ -58,6 +65,7 @@ const Points = () => {
   const handleDoubleClick = (point) => {
     setEditingPoint(point);
     setEditedData({
+      name: point.name,
       pointX: point.pointX,
       pointY: point.pointY,
       pointZ: point.pointZ,
@@ -66,8 +74,8 @@ const Points = () => {
 
   const handleBlur = async () => {
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND +
-        `/points/${editingPoint.id}`,
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_BACKEND + `/points/${editingPoint.id}`,
         {
           method: "PUT",
           headers: {
@@ -96,9 +104,12 @@ const Points = () => {
 
   const handleDelete = async (pointId) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND}/points/${pointId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND}/points/${pointId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
         setPoints((prevPoints) => prevPoints.filter((p) => p.id !== pointId));
@@ -120,7 +131,7 @@ const Points = () => {
     <div className="border-lg h-full overflow-y-auto p-4 shadow-md border-gray-100 border-[2px] rounded-md mx-4">
       <span className="flex justify-between m-2">
         <h1 className="text-2xl font-semibold mb-4">Destinos</h1>
-        <DownloadButton data={points} filename={'Points'}/>
+        <DownloadButton data={points} filename={"Points"} />
       </span>
 
       <table className="min-w-full border border-gray-300">
@@ -137,15 +148,25 @@ const Points = () => {
           {points.map((point) => (
             <tr
               key={point.id}
-              className={`border-b text-center ${
-                editingPoint && editingPoint.id === point.id
-                  ? "bg-yellow-100"
-                  : ""
-              }`}
+              className={`border-b text-center`}
               onDoubleClick={() => handleDoubleClick(point)}
               tabIndex="0"
             >
-              <td className="py-2 px-4">{point.name}</td>
+              <td className="py-2 px-4">
+                {editingPoint && editingPoint.id === point.id ? (
+                  <input
+                    type="text"
+                    value={editedData.name}
+                    onChange={(e) =>
+                      setEditedData({ ...editedData, name: e.target.value })
+                    }
+                    onBlur={handleBlur}
+                    name="name"
+                  />
+                ) : (
+                  point.name
+                )}
+              </td>
               <td className="py-2 px-4">
                 {editingPoint && editingPoint.id === point.id ? (
                   <input
@@ -207,7 +228,11 @@ const Points = () => {
       >
         Adicionar Novo
       </button>
-      <PointModal isOpen={isModalOpen} onClose={handleCloseModal} onSubmit={handleAddPoint} />
+      <PointModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSubmit={handleAddPoint}
+      />
     </div>
   );
 };
