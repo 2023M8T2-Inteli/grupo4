@@ -7,9 +7,14 @@ import {
   Param,
   Post,
   Put,
+  UploadedFile,
+  UseInterceptors,
+  
 } from '@nestjs/common';
 import { InterfaceService } from './interface.service';
 import { Point, User } from '@prisma/client';
+import { Express } from 'express'
+import {FileInterceptor} from '@nestjs/platform-express'
 
 @Controller('')
 export class InterfaceController {
@@ -92,14 +97,18 @@ export class InterfaceController {
   }
 
   @Get('/orders/queue')
-    async getQueue(): Promise<any> {
-        return await this.interfaceService.getQueue();
-    }
+  async getQueue(): Promise<any> {
+    return await this.interfaceService.getQueue();
+  }
 
-    @Get('/orders/history')
-    async getHistory(): Promise<any> {
-        return await this.interfaceService.getHistory();
-    }
+  @Get('/orders/history')
+  async getHistory(): Promise<any> {
+    return await this.interfaceService.getHistory();
+  }
 
-  
+  @Post('/speak')
+  @UseInterceptors(FileInterceptor('audioFile'))
+    async speak(@UploadedFile() file: Express.Multer.File): Promise<any> {
+        return await this.interfaceService.speak(file);
+    }
 }

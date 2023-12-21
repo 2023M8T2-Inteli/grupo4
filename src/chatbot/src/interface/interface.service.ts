@@ -14,7 +14,7 @@ export class InterfaceService {
     private readonly toolService: ToolService,
     @Inject(UserService) private readonly userService: UserService,
     @Inject(OrderService) private readonly orderService: OrderService,
-    //@Inject(AIService) private readonly aiService: AIService
+    @Inject(AIService) private readonly aiService: AIService
   ) {}
 
   async getAllPoints(): Promise<Point[]> {
@@ -168,6 +168,12 @@ export class InterfaceService {
         }
         return filteredData;
       }
+
+      async speak(file: any): Promise<any> {
+        let transcript = await this.aiService.speech2Text(file);
+        console.log(transcript)
+      }
+
 
         // this.aiService.getMessageEmotion()
         // this.aiService.buildInterfaceSystemMessage()
