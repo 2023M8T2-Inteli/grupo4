@@ -16,38 +16,6 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v2
 
-      - name: Create .env file (BACKEND)
-        working-directory: ./src/interface/backend
-        run: |
-          echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
-          echo "DATABASE_URL=$DATABASE_URL" >> .env
-          echo PRIVATE_KEY=$PRIVATE_KEY >> .env
-          echo TYPE=$TYPE >> .env
-          echo PROJECT_ID=$PROJECT_ID >> .env
-          echo PRIVATE_KEY_ID=$PRIVATE_KEY_ID >> .env
-          echo CLIENT_EMAIL=$CLIENT_EMAIL >> .env
-          echo CLIENT_ID=$CLIENT_ID >> .env
-          echo AUTH_URI=$AUTH_URI >> .env
-          echo TOKEN_URI=$TOKEN_URI >> .env
-          echo AUTH_PROVIDER_X509_CERT_URL=$AUTH_PROVIDER_X509_CERT_URL >> .env
-          echo CLIENT_X509_CERT_URL=$CLIENT_X509_CERT_URL >> .env
-          echo UNIVERSE_DOMAIN=$UNIVERSE_DOMAIN >> .env
-
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          TYPE: ${{ secrets.TYPE }}
-          PROJECT_ID: ${{ secrets.PROJECT_ID }}
-          PRIVATE_KEY_ID: ${{ secrets.PRIVATE_KEY_ID }}
-          CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          AUTH_URI: ${{ secrets.AUTH_URI }}
-          TOKEN_URI: ${{ secrets.TOKEN_URI }}
-          AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.AUTH_PROVIDER_X509_CERT_URL }}
-          CLIENT_X509_CERT_URL: ${{ secrets.CLIENT_X509_CERT_URL }}
-          UNIVERSE_DOMAIN: ${{ secrets.UNIVERSE_DOMAIN }}
-
       - name: Create .env file (ADMIN)
         working-directory: ./src/interface/admin
         run: |
@@ -75,10 +43,6 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
-
-      - name: Test the Backend container
-        working-directory: ./src/interface/backend
-        run: docker-compose up -d backend
 
       - name: Test the Admin Interface container
         working-directory: ./src/interface/admin
@@ -111,38 +75,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Create .env file (BACKEND)
-        working-directory: ./src/interface/backend
-        run: |
-          echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> .env
-          echo "DATABASE_URL=$DATABASE_URL" >> .env
-          echo PRIVATE_KEY=$PRIVATE_KEY >> .env
-          echo TYPE=$TYPE >> .env
-          echo PROJECT_ID=$PROJECT_ID >> .env
-          echo PRIVATE_KEY_ID=$PRIVATE_KEY_ID >> .env
-          echo CLIENT_EMAIL=$CLIENT_EMAIL >> .env
-          echo CLIENT_ID=$CLIENT_ID >> .env
-          echo AUTH_URI=$AUTH_URI >> .env
-          echo TOKEN_URI=$TOKEN_URI >> .env
-          echo AUTH_PROVIDER_X509_CERT_URL=$AUTH_PROVIDER_X509_CERT_URL >> .env
-          echo CLIENT_X509_CERT_URL=$CLIENT_X509_CERT_URL >> .env
-          echo UNIVERSE_DOMAIN=$UNIVERSE_DOMAIN >> .env
-
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          TYPE: ${{ secrets.TYPE }}
-          PROJECT_ID: ${{ secrets.PROJECT_ID }}
-          PRIVATE_KEY_ID: ${{ secrets.PRIVATE_KEY_ID }}
-          CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          AUTH_URI: ${{ secrets.AUTH_URI }}
-          TOKEN_URI: ${{ secrets.TOKEN_URI }}
-          AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.AUTH_PROVIDER_X509_CERT_URL }}
-          CLIENT_X509_CERT_URL: ${{ secrets.CLIENT_X509_CERT_URL }}
-          UNIVERSE_DOMAIN: ${{ secrets.UNIVERSE_DOMAIN }}
-
       - name: Create .env file (ADMIN)
         working-directory: ./src/interface/admin
         run: |
@@ -164,16 +96,6 @@ jobs:
           NEXT_PUBLIC_HOST: ${{ secrets.NEXT_PUBLIC_HOST }}
           NEXT_PUBLIC_SOCKET: ${{ secrets.NEXT_PUBLIC_SOCKET }}
           NEXT_PUBLIC_BACKEND: ${{ secrets.NEXT_PUBLIC_BACKEND }}
-
-      - name: Build, tag, and push image to Amazon ECR (BACKEND)
-        working-directory: ./src/interface/backend
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: interface-backend
-          IMAGE_TAG: latest
-        run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Build, tag, and push image to Amazon ECR (ADMIN)
         working-directory: ./src/interface/admin
