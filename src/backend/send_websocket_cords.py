@@ -3,7 +3,7 @@ import time
 import threading  # Importa o módulo threading para controle de execução
 
 # Endereço do servidor SocketIO (ajuste conforme necessário)
-SERVER_URL = "http://localhost:3030"
+SERVER_URL = "http://10.128.65.252:3030"
 
 # Cria um cliente SocketIO
 sio = socketio.Client()
@@ -13,29 +13,29 @@ sio.connect(SERVER_URL)
 # Variável de controle para interromper a execução
 running = True
 
-emergency = {
-    "beats": {"stop": 0}
-    }
-
-# Função para enviar pontos a cada dois segundos
-def send_points():
-    while running:
-        time.sleep(2)
-        for label in emergency.values():
-            sio.emit('"hello"', label)
-            print("Enviado: ", label)
-            
-# cords = {
-#     "beats": {"x": 2.5, "y": 2.5},
-#     "brama": {"x": 0.0, "y": 0.0},
+# emergency = {
+#     "beats": {"emergency_stop": 0}
 #     }
 
+# # Função para enviar pontos a cada dois segundos    
 # def send_points():
 #     while running:
 #         time.sleep(2)
-#         for cord in cords.values():
-#             sio.emit('enqueue', cord)
-#             print("Enviado: ", cord)
+#         for label in emergency.values():
+#             sio.emit('emergency_stop', label)
+#             print("Enviado: ", label)
+
+cords = {
+    "beats": {"id":'1', "type": "GRAB", "x": 2.5, "y": 2.5},
+    "brama": {"id":'2', "type": "DROP","x": 0.0, "y": 0.0},
+    }
+
+def send_points():
+    while running:
+        time.sleep(2)
+        for cord in cords.values():
+            sio.emit('enqueue', cord)
+            print("Enviado: ", cord)
 
 # Conecta ao servidor
 @sio.event

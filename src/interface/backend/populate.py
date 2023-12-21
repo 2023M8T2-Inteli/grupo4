@@ -9,12 +9,13 @@ points = []
 
 def add_random_users(n):
     for i in range(n):
-        url = "http://localhost:5000/users"
+        url = "http://107.22.195.153:3000/users"
         payload = {
             "name": fake.name(),
             "cellPhone": fake.phone_number(),
         }
         response = requests.request("POST", url, json=payload)
+        print(response.json())
         users.append(response.json()["id"])
 
 
@@ -40,7 +41,7 @@ def add_random_tools(n):
         "Lima",
         "Escova de Aço",
     ]
-    url = "http://localhost:5000/tools"
+    url = "http://107.22.195.153:3000/tools"
 
     for i in range(n):
         payload = {
@@ -52,13 +53,14 @@ def add_random_tools(n):
         }
 
         response = requests.request("POST", url, json=payload)
+        print(response.json())
         tool_ids.append(response.json()["id"])
 
 
 
 def add_random_points(n):
     for i in range(n):
-        url = "http://localhost:5000/points"
+        url = "http://107.22.195.153:3000/points"
         payload = {
             "name": fake.company(),
             "pointX": random.uniform(0, 10),
@@ -70,7 +72,7 @@ def add_random_points(n):
 
 def add_random_orders(n):
     for i in range(n):
-        url = "http://localhost:5000/orders/queue"
+        url = "http://107.22.195.153:3000/orders/queue"
         payload = {
             "toolId": random.choice(tool_ids),
             "userId": random.choice(users),
@@ -82,19 +84,18 @@ def add_random_orders(n):
         
 
 def delete_all():
-    url = "http://localhost:5000/orders"
+    url = "http://107.22.195.153:5000/orders"
     response = requests.request("DELETE", url)
-    url = "http://localhost:5000/tools"
+    url = "http://107.22.195.153:5000/tools"
     response = requests.request("DELETE", url)
-    url = "http://localhost:5000/users"
+    url = "http://107.22.195.153:5000/users"
     response = requests.request("DELETE", url)
-    url = "http://localhost:5000/points"
+    url = "http://107.22.195.153:5000/points"
     response = requests.request("DELETE", url)
     
 
 
 if __name__ == "__main__":
-    add_random_users(10)
     add_random_tools(10)
     add_random_points(10)
     add_random_orders(10)

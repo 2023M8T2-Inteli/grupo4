@@ -83,6 +83,7 @@ const Tools = () => {
 
   const handleBlur = async () => {
     // Send the updated data to the server on blur
+    console.log(editedData)
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/tools/${editingTool.id}`, {
         method: "PUT",

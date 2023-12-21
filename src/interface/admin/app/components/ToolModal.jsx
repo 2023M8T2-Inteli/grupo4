@@ -7,6 +7,8 @@ const ToolModal = ({ isOpen, onClose, onSubmit }) => {
     minQuantity: "",
     maxQuantity: "",
     tag: "",
+    pointX: "",
+    pointY: "",
   });
 
   const handleChange = (e) => {
@@ -23,6 +25,8 @@ const ToolModal = ({ isOpen, onClose, onSubmit }) => {
       minQuantity: "",
       maxQuantity: "",
       tag: "",
+      pointX: "",
+      pointY: "",
     });
   };
 
@@ -84,6 +88,29 @@ const ToolModal = ({ isOpen, onClose, onSubmit }) => {
               type="text"
               name="tag"
               value={formData.tag}
+              onChange={handleChange}
+              required
+              className="border p-2 w-full"
+            />
+            </label>
+
+            <label className="block mb-2">
+            PointX:
+            <input
+              type="number"
+              name="pointX"
+              value={formData.pointX}
+              onChange={handleChange}
+              required
+              className="border p-2 w-full"
+            />
+            </label>
+            <label className="block mb-2">
+            PointY:
+            <input
+              type="number"
+              name="pointY"
+              value={formData.pointY}
               onChange={handleChange}
               required
               className="border p-2 w-full"

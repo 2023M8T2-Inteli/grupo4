@@ -8,13 +8,16 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  name         String
-  cellPhone    String   @unique
-  createdAt    DateTime @default(now())
-  requestState Int      @default(0)
-  role         Role[]   @default([LEAD])
-  Order        Order[]
+  id                  String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                String
+  cellPhone           String               @unique
+  voice               String
+  speedVoice          Float
+  requestState        Int                  @default(0)
+  role                Role                 @default(LEAD)
+  Order               Order[]
+  createdAt           DateTime             @default(now())
+  UserFunctionCalling GPTFunctionCalling[]
 }
 
 model Tool {
@@ -23,6 +26,9 @@ model Tool {
   name        String
   price       Float
   tag         String
+  pointX      Float
+  pointY      Float
+  pointZ      Float
   minQuantity Int
   maxQuantity Int
   createdAt   DateTime @default(now())
@@ -34,7 +40,7 @@ model Order {
   code      Int      @unique @default(autoincrement())
   type      String   @default("In Progress")
   toolId    String
-  userId    String
+  userId    String   @db.Uuid
   pointId   String
   createdAt DateTime @default(now())
   tool      Tool     @relation(fields: [toolId], references: [id])
@@ -50,6 +56,25 @@ model Point {
   pointZ    Float
   createdAt DateTime @default(now())
   Order     Order[]
+}
+
+model GPTFunctionCalling {
+  id                 String   @id
+  functionCallObject String
+  functionName       String
+  functionResponse   String?
+  messageId          String
+  userId             String   @db.Uuid
+  createdAt          DateTime @default(now())
+  user               User     @relation(fields: [userId], references: [id])
+}
+
+model Transcription {
+  id            String   @id @default(uuid())
+  transcription String
+  messageId     String   @unique
+  mediaId       String
+  createdAt     DateTime @default(now())
 }
 
 enum Role {

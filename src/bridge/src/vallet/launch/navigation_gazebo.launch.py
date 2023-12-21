@@ -37,27 +37,14 @@ def generate_launch_description():
         ),
         Node(
             package='vallet',
-            executable='logger',
-            output='screen',
-            name="logger"
-        ),
-        Node(
-            package='vallet',
             executable='vallet',
             output='screen',
             name="vallet"
         ),
         Node(
             package='vallet',
-            executable='pose_queue',
+            executable='task_queue',
             output='screen',
-            name="vallet"
-        ),
-        Node(
-            package='vallet',
-            executable='interface',
-            output='screen',
-            prefix="xterm -e",
-            name="vallet"
+            name="task_queue"
         )
     ])

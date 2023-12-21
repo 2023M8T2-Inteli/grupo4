@@ -29,10 +29,8 @@ export default function Talk({ emotion, setEmotion }) {
           saveAudioToEndpoint(blob);
         }
       };
-
       recorder.start(5000);
       setIsRecording(true); // Update recording status
-
       setTimeout(() => {
         recorder.stop();
       }, 2000);
@@ -46,9 +44,9 @@ export default function Talk({ emotion, setEmotion }) {
   const saveAudioToEndpoint = async (blob) => {
     let exclamations = ["hmm", "pensada", "ponderar", "possibilidades", "ver"];
     let chosen = exclamations[Math.floor(Math.random() * exclamations.length)];
-    setAudioSrc(`/exclamations/${chosen}.mp3`);
+    setAudioSrc(`https://d17sdup6iumur7.cloudfront.net/exclamations/${chosen}.mp3`);
     console.log(audioSrc);
-    const endpointUrl = process.env.NEXT_PUBLIC_HOST + "/speech/speak"; // Replace with your actual endpoint URL
+    const endpointUrl = process.env.NEXT_PUBLIC_HOST + "/speak"; // Replace with your actual endpoint URL
 
     try {
       const formData = new FormData();
