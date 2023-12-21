@@ -108,7 +108,7 @@ export class InterfaceController {
 
   @Post('/speak')
     async speak(@Body() body: any): Promise<any> {
-      console.log({body})
+      
         return await this.interfaceService.speak(body);
     }
 }

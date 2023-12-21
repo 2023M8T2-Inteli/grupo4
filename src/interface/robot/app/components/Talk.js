@@ -33,7 +33,7 @@ export default function Talk({ emotion, setEmotion }) {
       setIsRecording(true); // Update recording status
       setTimeout(() => {
         recorder.stop();
-      }, 2000);
+      }, 5000);
     } catch (e) {
       console.log("error getting stream", e);
       setIsRecording(false); // Update recording status in case of an error
