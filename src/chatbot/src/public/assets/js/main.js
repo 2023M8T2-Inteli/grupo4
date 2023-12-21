@@ -11,13 +11,14 @@ function fetchQRCode() {
     })
     .then((data) => {
       if (!data.isAuthenticated) {
+        data.qr = data.qr.join('');
         // Mostrar o QR Code se estiver presente no JSON.
-        document.getElementById('qrcode').innerHTML = data.qr;
+        document.getElementById('qrcodeElement').src = "data:image/png;base64," + data.qr;
       } else {
         // Parar de chamar a função se o status for 202 e exibir a mensagem.
         clearInterval(interval);
         callFunction = false;
-        document.getElementById('qrcode').innerHTML =
+        document.getElementById('qrcode').src =
           '<h1>Chatbot conectado!</h1>';
         return;
       }
