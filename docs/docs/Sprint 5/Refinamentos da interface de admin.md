@@ -2,8 +2,6 @@
 
 Durante a quinta sprint, concentramos nossos esforços em adicionar as últimas funcionalidades para enriquecer a interface de administração.
 
-## Hospedagem na AWS
-
 ## Integração do QR Code
 
 ## Download de dados

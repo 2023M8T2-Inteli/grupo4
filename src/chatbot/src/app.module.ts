@@ -5,6 +5,7 @@ import { WhatsappModule } from './whatsapp/whatsapp.module';
 import { HandlerModule } from './handler/handler.module';
 import { ConfigModule } from '@nestjs/config';
 import { WebsocketModule } from './websockets/websocket.module';
+import { InterfaceModule } from './interface/interface.module';
 
 @Module({
   imports: [
@@ -18,6 +19,8 @@ import { WebsocketModule } from './websockets/websocket.module';
     }),
 
     WebsocketModule,
+
+    InterfaceModule,
   ],
 })
 export class AppModule {}

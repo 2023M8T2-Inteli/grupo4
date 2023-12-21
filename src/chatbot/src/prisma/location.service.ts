@@ -94,4 +94,35 @@ export class LocationService {
 
     return location;
   }
+
+  async deleteLocation(id: string): Promise<PrismaPoint> {
+    const location = await this.prisma.point.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!location) throw new LocationDoesntExists();
+
+    return location;
+  }
+  async updateLocation(id: string, name: string, pointX: number, pointY: number): Promise<PrismaPoint> {
+    const data: Record<string, any> = {};
+
+    // Only include properties in the data object if they are provided
+    if (name !== undefined) data.name = name;
+    if (pointX !== undefined) data.pointX = pointX;
+    if (pointY !== undefined) data.pointY = pointY;
+
+    const location = await this.prisma.point.update({
+        where: {
+            id: id,
+        },
+        data: data,
+    });
+
+    if (!location) throw new LocationDoesntExists();
+
+    return location;
+}
 }

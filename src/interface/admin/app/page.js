@@ -20,6 +20,7 @@ const page = () => {
   }, [])
 
   const fetchOrders = async () => {
+    console.log(process.env.NEXT_PUBLIC_HOST + "/orders/queue")
     const response = await fetch(process.env.NEXT_PUBLIC_HOST + "/orders/queue");
 
     if (!response.ok) {

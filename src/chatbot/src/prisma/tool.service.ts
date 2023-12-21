@@ -102,4 +102,54 @@ export class ToolService {
 
     return tool;
   }
+
+  async deleteTool(id: string): Promise<PrismaTool> {
+    const tool = await this.prisma.tool.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!tool) throw new ToolDoesntExists();
+
+    return tool;
+  }
+
+  async updateTool(
+    id: string,
+    name?: string,
+    price?: number,
+    tag?: string,
+    minQuantity?: number,
+    maxQuantity?: number,
+    pointX?: number,
+    pointY?: number
+): Promise<PrismaTool> {
+    const data: Record<string, any> = {};
+
+    // Only include properties in the data object if they are provided
+    if (name !== undefined) data.name = name;
+    if (price !== undefined) data.price = price;
+    if (tag !== undefined) data.tag = tag;
+    if (pointX !== undefined) data.pointX = pointX;
+    if (pointY !== undefined) data.pointY = pointY;
+    if (minQuantity !== undefined) data.minQuantity = minQuantity;
+    if (maxQuantity !== undefined) data.maxQuantity = maxQuantity;
+
+    // Assuming 'pointZ' has a default value of 0.0
+    data.pointZ = 0.0;
+
+    const tool = await this.prisma.tool.update({
+        where: {
+            id: id,
+        },
+        data: data,
+    });
+
+    if (!tool) throw new ToolDoesntExists();
+
+    return tool;
+}
+
+
 }
