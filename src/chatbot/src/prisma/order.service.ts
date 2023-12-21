@@ -252,6 +252,7 @@ export class OrderService {
         include: {
           tool: true,
           point: true,
+          user: true,
         },
       });
       return orders;
