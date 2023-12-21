@@ -70,14 +70,6 @@ jobs:
         working-directory: ./src/chatbot
         run: docker build -t chatbot:latest .
 
-      - name: Build Dockerfile
-        working-directory: ./src/chatbot
-        run: docker run -p 3000:3000 -p 3030 chatbot:latest
-
-      - name: Stop Dockerfile
-        working-directory: ./src/chatbot
-        run: docker ps -q | xargs -r docker stop
-
       - name: Clean up Docker Compose
         working-directory: ./src/chatbot
         run: docker rmi chatbot:latest && docker system prune -a
