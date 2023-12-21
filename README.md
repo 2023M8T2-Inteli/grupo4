@@ -25,27 +25,26 @@
 
 ## :student: Integrantes:
 
-- <a href="https://www.linkedin.com/in/elisaflemer">Elisa Flemer </a>
-- <a href="http://www.linkedin.com/in/felipe-pereira-campos-250aa2231">Felipe Campos </a>
-- <a href="https://www.linkedin.com/in/gabriela-barretto-dados">Gabriela Barretto </a>
-- <a href="https://www.linkedin.com/in/gustavo-ferreira-oliveira/">Gustavo Ferreira de Oliveira </a>
-- <a href="https://www.linkedin.com/in/henriquemarlon/">Henrique Marlon Conceição Santos </a>
-- <a href="https://www.linkedin.com/in/henriquelfmatias/">Henrique Matias </a>
-- <a href="https://www.linkedin.com/in/paulo-evangelista/">Paulo Presa Evangelista </a>
-- 
+- `<a href="https://www.linkedin.com/in/elisaflemer">`Elisa Flemer `</a>`
+- `<a href="http://www.linkedin.com/in/felipe-pereira-campos-250aa2231">`Felipe Campos `</a>`
+- `<a href="https://www.linkedin.com/in/gabriela-barretto-dados">`Gabriela Barretto `</a>`
+- `<a href="https://www.linkedin.com/in/gustavo-ferreira-oliveira/">`Gustavo Ferreira de Oliveira `</a>`
+- `<a href="https://www.linkedin.com/in/henriquemarlon/">`Henrique Marlon Conceição Santos `</a>`
+- `<a href="https://www.linkedin.com/in/henriquelfmatias/">`Henrique Matias `</a>`
+- `<a href="https://www.linkedin.com/in/paulo-evangelista/">`Paulo Presa Evangelista `</a>`
 
 ## :teacher: Professores:
 
 ### Orientador(a)
 
-- <a href="https://www.linkedin.com/in/murilo-zanini-de-carvalho-0980415b/">Murilo Zanini de Carvalho </a>
+- `<a href="https://www.linkedin.com/in/murilo-zanini-de-carvalho-0980415b/">`Murilo Zanini de Carvalho `</a>`
 
 ### Instrutores
 
-- <a href="https://www.linkedin.com/in/rodrigo-mangoni-nicola-537027158/">Rodrigo Mangoni Nicola </a>
-- <a href="https://www.linkedin.com/in/ricardo-jos%C3%A9-missori/">Ricardo José Missori </a>
-- <a href="https://www.linkedin.com/in/lisane-valdo/">Lisane Valdo </a>
-- <a href="https://www.linkedin.com/in/gui-cestari/">Guilherme Cestari </a>
+- `<a href="https://www.linkedin.com/in/rodrigo-mangoni-nicola-537027158/">`Rodrigo Mangoni Nicola `</a>`
+- `<a href="https://www.linkedin.com/in/ricardo-jos%C3%A9-missori/">`Ricardo José Missori `</a>`
+- `<a href="https://www.linkedin.com/in/lisane-valdo/">`Lisane Valdo `</a>`
+- `<a href="https://www.linkedin.com/in/gui-cestari/">`Guilherme Cestari `</a>`
 
 ## 📝 Descrição
 
@@ -70,6 +69,7 @@ Dentre os arquivos presentes na raiz do projeto, definem-se:
 │   │   ├── 1. Contexto da Indústria
 │   │   ├── 2. Proposta de Solução
 │   │   ├── 3. Desenvolvimento da Solução
+│   │   ├── 4. Manual de Usuário
 │   │   └── Referências
 │   ├── src
 │   │   ├── components
@@ -81,16 +81,17 @@ Dentre os arquivos presentes na raiz do projeto, definem-se:
 │   │   └── video
 ├── infrastructure
 ├── src
+│   ├── admin-interface
+│   │   ├── next
+│   │   └── app
+│   ├── backend
 │   ├── bridge
 │   │   ├── assets
 │   │   ├── src
-│   │   │   ├── battery
-│   │   │   ├── mapping_gazebo
-│   │   │   ├── mapping_turtlebot3
-│   │   │   ├── navigation_gazebo
-│   │   │   ├── navigation_turtlebot3
-│   │   │   └── streamer
-│   │   ├── test
+│   │   │   ├── vallet
+│   │   │   ├── vallet_cpp
+│   │   │   └── vallet_msgs
+│   │   ├── vallet_scripts
 │   │   └── Dockerfile
 │   ├── chatbot
 │   │   ├── node_modules
@@ -103,10 +104,44 @@ Dentre os arquivos presentes na raiz do projeto, definem-se:
 │   │   │   ├── prisma
 │   │   │   ├── providers
 │   │   │   ├── types
+│   │   │   └── .env
+│   │   └── Dockerfile
+│   ├── express-back
+│   ├── interfaces
+│   │   ├── admin
+│   │   │   ├── next
+│   │   │   ├── app
+│   │   │   │   ├── components
+│   │   │   │   ├── locations
+│   │   │   │   ├── qrcode
+│   │   │   │   ├── tools
+│   │   │   │   ├── users
+│   │   │   │   └── utils
+│   │   │   ├── public
 │   │   │   ├── .env
 │   │   │   └── Dockerfile
-│   ├── interfaces
-│   │   └── msg
+│   │   ├── backend
+│   │   │   ├── prisma
+│   │   │   ├── routes
+│   │   │   ├── services
+│   │   │   ├── .env
+│   │   │   └── Dockerfile
+│   │   └── robot
+│   │   │   ├── app
+│   │   │   ├── public
+│   │   │   └── Dockerfile
+│   ├── TEST-microservices
+│   │   │   ├── chatbot
+│   │   │   │   ├── src
+│   │   │   │   |   ├── AI
+│   │   │   │   |   ├── handler
+│   │   │   │   |   ├── prisma
+│   │   │   │   |   ├── websockets
+│   │   │   │   |   └── whatsapp
+│   │   │   │   └── Dockerfile
+│   │   │   ├── gateway
+│   │   │   │   └── src
+│   │   │   └── Dockerfile
 └── README.md
 ```
 

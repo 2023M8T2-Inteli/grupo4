@@ -3,6 +3,7 @@
 <p align="center" display="flex" width="300">
 
 ![Alt text](../../static/img/admin-ui-home.png)
+
 </p>
 
 A Interface de Administração do sistema fornece ao administrador uma visão abrangente e detalhada do funcionamento do robô Vallet, permitindo o monitoramento e controle eficazes de diversas facetas do sistema. Esta interface é acessível exclusivamente por meio de computadores pessoais (PCs) e requer autenticação do administrador para garantir a segurança e controle de acesso.
@@ -31,44 +32,50 @@ O histórico de ordens oferece uma visão cronológica das ordens anteriores, fo
 
 Esta seção exibe o nível atual da bateria do robô Vallet, permitindo ao administrador monitorar a autonomia disponível e tomar ações preventivas, se necessário.
 
-### 5. Botão de Parada de Emergência
+### 5. QR Code
+
+Esta seção dispõe um QR Code, renderizado a cada 10 segundos, que contém o link para o chatbot no Whatsapp. Caso o usuário já esteja autenticado, o usuário é informado, dispensando a necessidade de exibir o qrcode. 
+
+### 6. Botão de Parada de Emergência
 
 O botão de parada de emergência proporciona ao administrador a capacidade de interromper imediatamente as operações do robô em situações críticas.
 
-### 6. Usuários Cadastrados
+### 7. Usuários Cadastrados
 
 A área de usuários cadastrados lista os usuários autorizados a interagir com o sistema, proporcionando ao administrador um controle granular sobre as permissões e acessos.
 
-### 7. Destinos Cadastrados
+### 8. Destinos Cadastrados
 
 Nesta seção, o administrador pode visualizar e gerenciar os destinos disponíveis para entrega, facilitando a configuração e ajuste conforme necessário.
 
-### 8. Ferramentas Cadastradas
+### 9. Ferramentas Cadastradas
 
 Exibe uma lista das ferramentas cadastradas no sistema, permitindo ao administrador monitorar o inventário e realizar atualizações conforme necessário.
 
-### 9. Log de Eventos do Sistema
+### 10. Log de Eventos do Sistema
 
 O log de eventos mantém um registro detalhado das atividades do sistema, proporcionando ao administrador insights valiosos para diagnóstico e manutenção.
+
+### 11. Botão de Download de Planilhas
+
+O download de planilhas pode ser feito no botão verde presente no canto superior direito da tela, que são baixados em arquivos com formato csv(comma-separated-values).
 
 ## Screenshots
 
 #### Home com módulos de fila, histórico e pedido atual
-
-
 
 #### Usuários
 
 <p align="center" display="flex" width="300">
 
 ![Alt text](../../static/img/admin-ui-users.png)
-</p>
 
 #### Destinos
 
 <p align="center" display="flex" width="300">
 
-![Alt text](../../static/img/admin-ui-destinations.png)
+![1703102375729](image/3.6Interfacedeadmin/1703102375729.png)
+
 </p>
 
 #### Itens
@@ -76,6 +83,8 @@ O log de eventos mantém um registro detalhado das atividades do sistema, propor
 <p align="center" display="flex" width="300">
 
 ![Alt text](../../static/img/admin-ui-items.png)
+
+![1703102390189](image/3.6Interfacedeadmin/1703102390189.png)
 
 </p>
 
@@ -94,6 +103,7 @@ npm i
 ```
 
 ### Execução do Sistema
+
 Após configurar as credenciais e instalar as dependências, inicie a interface com o seguinte comando:
 
 ```bash
