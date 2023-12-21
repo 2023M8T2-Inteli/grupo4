@@ -68,7 +68,7 @@ Em seguida, temos acesso aos itens cadastrados em nosso bando de dados, que ja a
 
 Logo abaixo na aba "Destinos", pode-se analisar todos os pontos cadastrados na solucao 
 
-![Alt text](../../static/img/admin-ui-destinations.png)
+![Alt text](../../static/img/admin-ui-destinations.jpeg)
 
 
 ### Processamento de Comandos de Voz

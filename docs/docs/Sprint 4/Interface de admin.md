@@ -70,11 +70,13 @@ O download de planilhas pode ser feito no botão verde presente no canto superio
 
 ![Alt text](../../static/img/admin-ui-users.png)
 
+</p>
+
 #### Destinos
 
 <p align="center" display="flex" width="300">
 
-![1703102375729](image/3.6Interfacedeadmin/1703102375729.png)
+![Alt text](../../static/img/admin-ui-destinations.jpeg)
 
 </p>
 
@@ -83,8 +85,6 @@ O download de planilhas pode ser feito no botão verde presente no canto superio
 <p align="center" display="flex" width="300">
 
 ![Alt text](../../static/img/admin-ui-items.png)
-
-![1703102390189](image/3.6Interfacedeadmin/1703102390189.png)
 
 </p>
 
