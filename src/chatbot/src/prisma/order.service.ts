@@ -240,4 +240,40 @@ export class OrderService {
       throw error;
     }
   }
+
+  async getQueue(): Promise<any> {
+    try {
+      const orders = await this.prisma.order.findMany({
+        where: {
+          type: 'In Progress',
+        },
+        include: {
+          tool: true,
+          point: true,
+        },
+      });
+      return orders;
+    } catch (error) {
+      console.error('An error occurred while fetching the user:', error);
+      throw error;
+    }
+  }
+
+  async getHistory(): Promise<any> {
+    try {
+      const orders = await this.prisma.order.findMany({
+        where: {
+          type: 'Completed',
+        },
+        include: {
+          tool: true,
+          point: true,
+        },
+      });
+      return orders;
+    } catch (error) {
+      console.error('An error occurred while fetching the user:', error);
+      throw error;
+    }
+  }
 }

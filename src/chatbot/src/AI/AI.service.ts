@@ -275,4 +275,51 @@ export class AIService {
         .run();
     });
   }
+
+  // METODOS ESPECIFICOS PARA A INTERFACE WEB ---------------------------------------
+
+  // Função que cónstroi o contexto para o GPT da interface
+  // antes chamada de buildContext
+  async buildInterfaceSystemMessage(filteredArray, filteredHistory,ordersInProgress) {
+  
+    return {
+      role: "system",
+      content: `
+      Você é um assistente para delivery de peças do almoxarifado na Ambev. Seu nome é Vallet. Responda as perguntas de forma simpática e divertida. Na primeira resposta, se apresente e diga o que pode fazer. Seja conciso. O "point" nos dados é o lugar para onde o itens será entregue, onde se encontra a pessoa que fez pedido. Presta atenção para não confundir fila com histórico. Se a pessoa perguntar o que falta, é a fila, se ela perguntar o que já foi entregue, é o histórico.
+      
+      PEDIDO SENDO EXECUTADO AGORA: ${ordersInProgress}
+      Nº DE ITENS NA FILA (PEDIDOS QUE FALTAM SER ENTREGUES): ${
+        // TODO: Esta certo?
+        filteredArray 
+      }
+      FILA (PEDIDOS QUE FALTAM SER ENTREGUES): ${filteredArray}
+      HISTÓRICO: ${filteredHistory}
+      `,
+    };
+  }
+
+  //função que pega a emoção de um texto para a interface
+  async getMessageEmotion(text: string){
+    const res = await this.openai.createChatCompletion({
+      model: "gpt-3.5-turbo-1106",
+      messages: [
+        {
+          role: "system",
+          content:
+            "Leia o texto abaixo e defina a emoção principal dele entre happy, superhappy, e sad. Se o usuário elogiar ou agradecer, deve ser superhappy. Se a resposta for um pedido de desculpas, deve ser triste.: " +
+            text,
+        },
+      ]
+    })
+    return res.data.choices[0].message.content
+  }
+
+  //callGPT especifico para a conversa da interface
+  async callGPTInterface(systemMessage:any, messages: Array<any>){
+    const res = await this.openai.createChatCompletion({
+      model: "gpt-3.5-turbo-1106",
+      messages: [systemMessage, ...messages]
+    })
+    return res.data.choices[0].message.content
+  }
 }

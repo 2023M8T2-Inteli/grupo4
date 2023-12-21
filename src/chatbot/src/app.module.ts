@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { WebsocketModule } from './websockets/websocket.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { InterfaceModule } from './interface/interface.module';
 
 @Module({
   imports: [
@@ -25,6 +26,8 @@ import { join } from 'path';
     }),
 
     WebsocketModule,
+
+    InterfaceModule,
   ],
 })
 export class AppModule {}

@@ -260,4 +260,63 @@ export class UserService {
       await this.prisma.$disconnect();
     }
   }
+
+  async getAllUsers(): Promise<PrismaUser[]> {
+    try {
+      const users = await this.prisma.user.findMany();
+      return users;
+    } catch (error) {
+      console.error('An error occurred while fetching the user:', error);
+      throw error;
+    } finally {
+      await this.prisma.$disconnect();
+    }
+  }
+
+  async updateUser(
+    id: string,
+    name?: string,
+    cellPhone?: string,
+    role?: Role,
+): Promise<PrismaUser> {
+    try {
+        const data: Record<string, any> = {};
+
+        // Only include properties in the data object if they are provided
+        if (name !== undefined) data.name = name;
+        if (cellPhone !== undefined) data.cellPhone = cellPhone;
+        if (role !== undefined) data.role = role;
+
+        const user = await this.prisma.user.update({
+            where: {
+                id: id,
+            },
+            data: data,
+        });
+
+        return user;
+    } catch (error) {
+        console.error('An error occurred while updating the user:', error);
+        throw error;
+    } finally {
+        await this.prisma.$disconnect();
+    }
+}
+
+async deleteUser(id: string): Promise<PrismaUser> {
+    try {
+        const user = await this.prisma.user.delete({
+            where: {
+                id: id,
+            },
+        });
+
+        return user;
+    } catch (error) {
+        console.error('An error occurred while deleting the user:', error);
+        throw error;
+    } finally {
+        await this.prisma.$disconnect();
+    }
+  }
 }
