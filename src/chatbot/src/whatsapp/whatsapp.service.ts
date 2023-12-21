@@ -38,7 +38,6 @@ export class WhatsappService {
     console.log('[whatsappService] inicializando...');
 
     this.client.on('qr', (qr: string) => {
-      console.log('NEW QR -- ' + qr);
       this.qrCodeUrl = qr;
     });
 
