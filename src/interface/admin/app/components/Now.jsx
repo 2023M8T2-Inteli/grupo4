@@ -1,11 +1,10 @@
 'use client'
-import { response } from 'express';
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Now = ({now}) => {
-  const [battery, setBattery] = React.useState(0);
+  const [battery, setBattery] = useState(0);
 
-  useEffect(async() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_HOST + '/websockets/battery');

@@ -1,6 +1,5 @@
 'use client'
-
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
 import Now from "./components/Now";
 import Fila from "./components/Fila";
