@@ -18,10 +18,10 @@ const Fila = ({queue}) => {
         <tbody>
           {queue.map((item) => (
             <tr key={item?.id} className="border-b">
-              <td className="py-2 px-4">{item?.tool.name}</td>
-              <td className="py-2 px-4">{item?.point.name}</td>
+              <td className="py-2 px-4">{item?.tool?.name}</td>
+              <td className="py-2 px-4">{item?.point?.name}</td>
               <td className="py-2 px-4">
-                <span>{item.user.name}</span>
+                <span>{item?.user?.name}</span>
               </td>
               <td className="py-2 px-4">{formatTime(item.createdAt)}</td>
             </tr>
