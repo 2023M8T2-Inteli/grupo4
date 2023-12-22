@@ -85,7 +85,7 @@ const sidebars = {
         
         "Sprint 5/Github - Actions",
         "Sprint 5/Refinamentos da interface de admin",
-        "Sprint 5/TTS e STT com Google Cloud"
+        "Sprint 5/TTS e STT com Google Cloud",
         "Sprint 5/Demo das interfaces"
       
       ]
