@@ -50,3 +50,13 @@ Aqui você pode encontrar as apresentações das revisões de todas as sprints d
 7. Próximos passos
 
 <a target="\_blank" href={require('../static/files/Apresentação-Sprint4.pdf').default}> Acessar slides de apresentação </a>
+
+## Sprint 5
+
+1. Mudança de escopo
+2. Features
+3. Terraform e AWS
+4. GitHub Actions
+5. Demo
+
+<a target="\_blank" href="https://www.canva.com/design/DAF3i27rvOQ/r6qk6Q4rh5SISCzbPLuO2Q/edit?utm_content=DAF3i27rvOQ&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"> Acessar slides de apresentação </a>
