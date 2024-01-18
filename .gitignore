@@ -19,3 +19,6 @@ src/.idea/
 *.idea
 
 googlespeech.json
+
+*.tfvars
+*.tfvars.json
