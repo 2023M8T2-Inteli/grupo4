@@ -43,11 +43,11 @@ export default function Talk({ emotion, setEmotion }) {
   async function encodeAudioToBase64(blob) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-  
+
       reader.onloadend = () => {
         resolve(reader.result.split(",")[1]); // Extracting the Base64 data (skip the data:image/png;base64, part)
       };
-  
+
       reader.onerror = reject;
       reader.readAsDataURL(blob);
     });
@@ -57,16 +57,15 @@ export default function Talk({ emotion, setEmotion }) {
   const saveAudioToEndpoint = async (blob) => {
     let exclamations = ["hmm", "pensada", "ponderar", "possibilidades", "ver"];
     let chosen = exclamations[Math.floor(Math.random() * exclamations.length)];
-    setAudioSrc(`https://d17sdup6iumur7.cloudfront.net/exclamations/${chosen}.mp3`);
+    setAudioSrc(`/exclamations/${chosen}.mp3`);
     const endpointUrl = process.env.NEXT_PUBLIC_BACKEND + "/speak"; // Replace with your actual endpoint URL
-
 
     try {
       const base64Data = await encodeAudioToBase64(blob);
 
       const dataToSend = {
-        "audioData": String(base64Data)
-      }
+        audioData: String(base64Data),
+      };
 
       console.log(dataToSend);
 
@@ -78,11 +77,10 @@ export default function Talk({ emotion, setEmotion }) {
         body: JSON.stringify(dataToSend),
       });
 
-
       if (response.ok) {
         console.log("Audio file sent successfully");
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         if (data.emotion.includes("happy")) {
           setEmotion("happy");
         } else if (data.emotion.includes("sad")) {
