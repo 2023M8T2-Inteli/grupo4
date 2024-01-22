@@ -42,6 +42,7 @@ Este fluxo de uso, desde a gravação da pergunta até a resposta audiovisual, �
 ### Perguntas Comuns
 
 Os usuários podem fazer perguntas sobre o estado do sistema, como:
+
 - Quantos itens estão na fila para entrega?
 - Quais itens estão disponíveis?
 - Qual é o histórico do dia?
@@ -63,13 +64,14 @@ Certifique-se de ter o Node.js instalado em seu ambiente. Caso ainda não o tenh
 
 ### Instalação de Dependências
 
-No diretório `src/robot-interface`, execute o seguinte comando para instalar as dependências necessárias:
+No diretório `src/interface/robot`, execute o seguinte comando para instalar as dependências necessárias:
 
 ```bash
 npm i
 ```
 
 ### Execução do Sistema
+
 Após configurar as credenciais e instalar as dependências, inicie a interface com o seguinte comando:
 
 ```bash

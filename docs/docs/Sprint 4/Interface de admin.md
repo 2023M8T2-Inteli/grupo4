@@ -34,7 +34,7 @@ Esta seção exibe o nível atual da bateria do robô Vallet, permitindo ao admi
 
 ### 5. QR Code
 
-Esta seção dispõe um QR Code, renderizado a cada 10 segundos, que contém o link para o chatbot no Whatsapp. Caso o usuário já esteja autenticado, o usuário é informado, dispensando a necessidade de exibir o qrcode. 
+Esta seção dispõe um QR Code, renderizado a cada 10 segundos, que contém o link para o chatbot no Whatsapp. Caso o usuário já esteja autenticado, o usuário é informado, dispensando a necessidade de exibir o qrcode.
 
 ### 6. Botão de Parada de Emergência
 
@@ -96,7 +96,7 @@ Certifique-se de ter o Node.js instalado em seu ambiente. Caso ainda não o tenh
 
 ### Instalação de Dependências
 
-No diretório `src/robot-interface`, execute o seguinte comando para instalar as dependências necessárias:
+No diretório `src/interface/admin`, execute o seguinte comando para instalar as dependências necessárias:
 
 ```bash
 npm i

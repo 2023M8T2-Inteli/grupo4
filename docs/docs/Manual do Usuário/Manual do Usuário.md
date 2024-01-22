@@ -8,23 +8,25 @@ A solução consiste em fornecer aos trabalhadores e técnicos da AMBEV um chatb
 
 ### Materiais e Componentes
 
-- TurtleBot 3 
+- TurtleBot 3
 - LCD (HDMI e Cabo USB)
 - Telefone celular com Whatsapp
 - Computador conectado à internet
 
 ### Funcionalidades do Sistema
+
 Considerando o fluxo de nossa solução, existem algumas features que valem a pena ser avaliadas mais a fundo sobre como as desenvolvemos:
 
 - [Mapeamento e navegação](https://2023m8t2-inteli.github.io/grupo4/docs/Desenvolvimento%20da%20Solu%C3%A7%C3%A3o/3.2%20Mapeamento%20e%20navega%C3%A7%C3%A3o)
 - [Chatbot](https://2023m8t2-inteli.github.io/grupo4/docs/Desenvolvimento%20da%20Solu%C3%A7%C3%A3o/3.3%20Chatbot)
 - [LLM](https://2023m8t2-inteli.github.io/grupo4/docs/Desenvolvimento%20da%20Solu%C3%A7%C3%A3o/3.5%20LLM)
 - [WebSocket](https://2023m8t2-inteli.github.io/grupo4/docs/Desenvolvimento%20da%20Solu%C3%A7%C3%A3o/3.6%20Interface%20de%20admin)
-- [Interface Admin](https://2023m8t2-inteli.github.io/grupo4/docs/Desenvolvimento%20da%20Solu%C3%A7%C3%A3o/3.6%20Interface%20de%20admin) 
+- [Interface Admin](https://2023m8t2-inteli.github.io/grupo4/docs/Desenvolvimento%20da%20Solu%C3%A7%C3%A3o/3.6%20Interface%20de%20admin)
 
 ## Interfaces
 
 ### Novo user:
+
 Os primeiros passos de um novo user será entrar em contato com o chat, que irá perguntar algumas informacoes para realizar seu devido cadastro e solicitar acesso a um administrador.
 
 ![Alt text](../../static/img/chatbot-start.png)
@@ -35,7 +37,7 @@ Em seguida o usuário poderá personalizar seu chatbot com o tipo de voz e veloc
 
 ### User:
 
-O User cadastrado, terá algumas opções de ações que pode realizar, sendo solicitacao de peça e acompnhamento as principais features da solução. Em seguida, ele será guiado pelo chatbot para realizar seu pedido, podendo responder em áudio ao chatbot. 
+O User cadastrado, terá algumas opções de ações que pode realizar, sendo solicitacao de peça e acompnhamento as principais features da solução. Em seguida, ele será guiado pelo chatbot para realizar seu pedido, podendo responder em áudio ao chatbot.
 
 ![Alt text](../../static/img/user.png)
 
@@ -51,7 +53,6 @@ No caso do admin. Ele poderá liberar acessos e cadastrar novos pontos de rotas 
 
 O Admin deve escolher sua opção e será guiado pelo chatbot para completar as informações e realizar sua alteração.
 
-
 ### Interface web Admin:
 
 Aqui o usúario conta com uma interface intuitva. com menu á esquerda dando acesso ao QR code do chatbot e outras abas de controle e dashboards interativos para observar o andamento de ocorrências e transações na fábrica.
@@ -66,10 +67,9 @@ Em seguida, temos acesso aos itens cadastrados em nosso bando de dados, que ja a
 
 ![Alt text](../../static/img/admin-ui-items.png)
 
-Logo abaixo na aba "Destinos", pode-se analisar todos os pontos cadastrados na solucao 
+Logo abaixo na aba "Destinos", pode-se analisar todos os pontos cadastrados na solucao
 
 ![Alt text](../../static/img/admin-ui-destinations.jpeg)
-
 
 ### Processamento de Comandos de Voz
 
@@ -88,6 +88,7 @@ Para rodar o ChatBot e o Robô, siga as instruções abaixo com atenção. Estes
 ### Passo a Passo
 
 1. **Baixar a Imagem do Container**
+
    - Primeiro, o cliente precisa baixar a imagem do container do registro onde ela está hospedada. Se for o Docker Hub, o comando será algo como:
      ```
      docker pull nome_do_usuario/nome_da_imagem:tag
@@ -95,6 +96,7 @@ Para rodar o ChatBot e o Robô, siga as instruções abaixo com atenção. Estes
      Aqui, `nome_do_usuario` é seu nome de usuário no Docker Hub, `nome_da_imagem` é o nome que você deu para a imagem, e `tag` é a tag específica da versão da imagem (por exemplo, `latest`).
 
 2. **Executar o Container**
+
    - Após baixar a imagem, o cliente pode executar a aplicação com o seguinte comando:
      ```
      docker run -p 3000:3000 nome_do_usuario/nome_da_imagem:tag
@@ -110,16 +112,25 @@ Para rodar o ChatBot e o Robô, siga as instruções abaixo com atenção. Estes
 
 Certifique-se de ter o Node.js instalado em seu ambiente. Caso ainda não o tenha, você pode fazer o download em [Node.js website](https://nodejs.org/).
 
-#### Instalação de Dependências
+#### Instalação de Dependências do Painel Administrativo
 
-No diretório `src/robot-interface`, execute o seguinte comando para instalar as dependências necessárias:
+No diretório `src/interface/admin`, execute o seguinte comando para instalar as dependências necessárias:
+
+```bash
+npm i
+```
+
+#### Instalação de Dependências da Interface de Usuário no Robô
+
+No diretório `src/interface/robot`, execute o seguinte comando para instalar as dependências necessárias:
 
 ```bash
 npm i
 ```
 
 #### Execução do Sistema
-Após configurar as credenciais e instalar as dependências, inicie a interface com o seguinte comando:
+
+Após configurar as credenciais e instalar as dependências, inicie ambas as interfaces com o seguinte comando:
 
 ```bash
 npm run dev
@@ -127,4 +138,4 @@ npm run dev
 
 ### 11. Conclusão e Contatos
 
-Com esses passos e direcionamento anteriores, o cliente pode começar a utlizar e adaptar nossa solução a seu ambiente e logística. Tratando-se de um MVP, nossa solução conta com alguns passos de execução com a utilização do Docker. Porém ja demonstra praticidade e confiabilidade por parte do cliente em interações nos encontro. Por fim, nossa solução foi bem vista pelos representantes da AMBEV e com nossa base pode-se surgir um novo metodo, escalavel e confivel, de indoor delivery nos ambientes industriais.
+Com esses passos e direcionamento anteriores, o cliente pode começar a utilizar e adaptar nossa solução a seu ambiente e logística. Tratando-se de um MVP, nossa solução conta com alguns passos de execução com a utilização do Docker. Porém ja demonstra praticidade e confiabilidade por parte do cliente em interações nos encontro. Por fim, nossa solução foi bem vista pelos representantes da AMBEV e com nossa base pode-se surgir um novo método, escalável e confiável, de indoor delivery nos ambientes industriais.
