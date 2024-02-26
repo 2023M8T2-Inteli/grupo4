@@ -11,12 +11,6 @@
 <a href= "https://www.inteli.edu.br/"><img src="docs/static/img/inteli.png" alt="Inteli - Instituto de Tecnologia e Liderança" border="0"></a>
 </p>
 
-# Vallet
-
-<!-- <p align="center">
-<img src="documentos/image/capa-solucao.png" alt="Bleedwatch - Solução" border="0">
-</p> -->
-
 ## The Manobristas
 
 <p align="center">
@@ -25,26 +19,26 @@
 
 ## :student: Integrantes:
 
-- `<a href="https://www.linkedin.com/in/elisaflemer">`Elisa Flemer `</a>`
-- `<a href="http://www.linkedin.com/in/felipe-pereira-campos-250aa2231">`Felipe Campos `</a>`
-- `<a href="https://www.linkedin.com/in/gabriela-barretto-dados">`Gabriela Barretto `</a>`
-- `<a href="https://www.linkedin.com/in/gustavo-ferreira-oliveira/">`Gustavo Ferreira de Oliveira `</a>`
-- `<a href="https://www.linkedin.com/in/henriquemarlon/">`Henrique Marlon Conceição Santos `</a>`
-- `<a href="https://www.linkedin.com/in/henriquelfmatias/">`Henrique Matias `</a>`
-- `<a href="https://www.linkedin.com/in/paulo-evangelista/">`Paulo Presa Evangelista `</a>`
+- [Elisa Flemer](https://www.linkedin.com/in/elisaflemer)
+- [Felipe Campos](http://www.linkedin.com/in/felipe-pereira-campos-250aa2231)
+- [Gabriela Barretto](https://www.linkedin.com/in/gabriela-barretto-dados)
+- [Gustavo Ferreira de Oliveira](https://www.linkedin.com/in/gustavo-ferreira-oliveira)
+- [Henrique Marlon Conceição Santos](https://www.linkedin.com/in/henriquemarlon/)
+- [Henrique Matias](https://www.linkedin.com/in/henriquelfmatias/)
+- [Paulo Presa Evangelista](https://www.linkedin.com/in/paulo-evangelista/)
 
 ## :teacher: Professores:
 
 ### Orientador(a)
 
-- `<a href="https://www.linkedin.com/in/murilo-zanini-de-carvalho-0980415b/">`Murilo Zanini de Carvalho `</a>`
+- [Murilo Zanini de Carvalho](https://www.linkedin.com/in/murilo-zanini-de-carvalho-0980415b/)
 
 ### Instrutores
 
-- `<a href="https://www.linkedin.com/in/rodrigo-mangoni-nicola-537027158/">`Rodrigo Mangoni Nicola `</a>`
-- `<a href="https://www.linkedin.com/in/ricardo-jos%C3%A9-missori/">`Ricardo José Missori `</a>`
-- `<a href="https://www.linkedin.com/in/lisane-valdo/">`Lisane Valdo `</a>`
-- `<a href="https://www.linkedin.com/in/gui-cestari/">`Guilherme Cestari `</a>`
+- [Rodrigo Mangoni Nicola](https://www.linkedin.com/in/rodrigo-mangoni-nicola-537027158/)
+- [Ricardo José Missori](https://www.linkedin.com/in/ricardo-jos%C3%A9-missori/)
+- [Lisane Valdo](https://www.linkedin.com/in/lisane-valdo/)
+- [Guilherme Cestari](https://www.linkedin.com/in/gui-cestari/)
 
 ## 📝 Descrição
 
